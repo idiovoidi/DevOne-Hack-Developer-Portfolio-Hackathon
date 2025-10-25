@@ -194,7 +194,9 @@
   - Add toggle to disable if performance issues detected
   - _Requirements: 10.1, 10.4_
 
-- [-] 14. Optimize images and performance
+- [x] 14. Optimize images and performance
+
+
 
 
 

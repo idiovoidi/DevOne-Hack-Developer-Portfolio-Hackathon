@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
 const VoidEyeball: React.FC = () => {
-  const [glitchTrigger, setGlitchTrigger] = useState(0);
-
   // Chaotic movement with jittery spring
   const eyeX = useMotionValue(0);
   const eyeY = useMotionValue(0);
@@ -24,17 +22,9 @@ const VoidEyeball: React.FC = () => {
       eyeY.set(deltaY * maxMove);
     };
 
-    // Random glitch triggers
-    const glitchInterval = setInterval(() => {
-      if (Math.random() > 0.7) {
-        setGlitchTrigger((prev) => prev + 1);
-      }
-    }, 2000);
-
     window.addEventListener("mousemove", handleMouseMove);
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
-      clearInterval(glitchInterval);
     };
   }, [eyeX, eyeY]);
 
@@ -51,13 +41,10 @@ const VoidEyeball: React.FC = () => {
       }}
     >
       <motion.div
-        key={glitchTrigger}
         initial={{ scale: 0, opacity: 0 }}
         animate={{
           scale: 1,
           opacity: 0.35,
-          filter:
-            glitchTrigger % 2 === 0 ? "hue-rotate(0deg)" : "hue-rotate(10deg)",
         }}
         transition={{ duration: 2, ease: "easeOut" }}
         style={{
@@ -75,34 +62,54 @@ const VoidEyeball: React.FC = () => {
             height: "100%",
           }}
         >
-          {/* Glitch scan lines */}
-          {[0, 1, 2, 3].map((i) => (
-            <motion.div
-              key={`scanline-${i}`}
-              animate={{
-                scaleX: [0, 1, 0],
-                opacity: [0, 0.6, 0],
-                rotate: i * 45,
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: i * 0.5,
-              }}
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                width: "100%",
-                height: "2px",
-                background:
-                  "linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.8), transparent)",
-                filter: "blur(1px)",
-              }}
-            />
-          ))}
+          {/* Floating void particles */}
+          {Array.from({ length: 30 }).map((_, i) => {
+            const angle = (i / 30) * Math.PI * 2;
+            const distance = 120 + (i % 4) * 40;
+            const size = 2 + (i % 3);
+            const isSquare = i % 4 === 0;
+
+            return (
+              <motion.div
+                key={`particle-${i}`}
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  width: `${size}px`,
+                  height: `${size}px`,
+                  borderRadius: isSquare ? "0%" : "50%",
+                  background: `rgba(${
+                    i % 2 === 0 ? "167, 139, 250" : "236, 72, 153"
+                  }, ${0.7 + (i % 3) * 0.1})`,
+                  boxShadow: `0 0 ${
+                    8 + (i % 3) * 4
+                  }px rgba(167, 139, 250, 0.8)`,
+                }}
+                animate={{
+                  x: [
+                    Math.cos(angle) * distance,
+                    Math.cos(angle + Math.PI * 0.5) * (distance * 0.6),
+                    Math.cos(angle + Math.PI) * (distance * 0.4),
+                  ],
+                  y: [
+                    Math.sin(angle) * distance,
+                    Math.sin(angle + Math.PI * 0.5) * (distance * 0.6),
+                    Math.sin(angle + Math.PI) * (distance * 0.4),
+                  ],
+                  scale: [1, 0.6, 0.2],
+                  opacity: [0.8, 0.5, 0],
+                  rotate: [0, 180, 360],
+                }}
+                transition={{
+                  duration: 4 + (i % 3) * 2,
+                  repeat: Infinity,
+                  ease: "easeIn",
+                  delay: (i * 0.15) % 3,
+                }}
+              />
+            );
+          })}
 
           {/* Chaotic void core with RGB split */}
           <motion.div

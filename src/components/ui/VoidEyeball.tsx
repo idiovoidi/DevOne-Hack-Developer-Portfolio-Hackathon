@@ -75,104 +75,6 @@ const VoidEyeball: React.FC = () => {
             height: "100%",
           }}
         >
-          {/* Glitched fragmented arcs */}
-          {[0, 1, 2, 3, 4].map((i) => {
-            const size = 90 - i * 18;
-            const rotation = i * 72;
-            return (
-              <motion.div
-                key={`glitch-arc-${i}`}
-                animate={{
-                  rotate: [rotation, rotation + (i % 2 === 0 ? 360 : -360)],
-                  opacity: [0.2, 0.5, 0.1, 0.4],
-                }}
-                transition={{
-                  rotate: {
-                    duration: 20 - i * 3,
-                    repeat: Infinity,
-                    ease: "linear",
-                  },
-                  opacity: {
-                    duration: 1.2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  },
-                }}
-                style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  width: `${size}%`,
-                  height: `${size}%`,
-                  borderRadius: "50%",
-                  background: `conic-gradient(
-                    from 0deg,
-                    transparent 0deg,
-                    rgba(124, 58, 237, 0.3) 30deg,
-                    transparent 60deg,
-                    transparent 120deg,
-                    rgba(167, 139, 250, 0.25) 150deg,
-                    transparent 180deg,
-                    transparent 240deg,
-                    rgba(124, 58, 237, 0.2) 270deg,
-                    transparent 300deg
-                  )`,
-                  filter: `blur(${3 + i * 2}px)`,
-                  mixBlendMode: "screen",
-                }}
-              />
-            );
-          })}
-
-          {/* Corrupted data particles */}
-          {Array.from({ length: 50 }).map((_, i) => {
-            const angle = Math.random() * Math.PI * 2;
-            const distance = 100 + Math.random() * 200;
-            const isSquare = i % 3 === 0;
-
-            return (
-              <motion.div
-                key={`corrupt-${i}`}
-                style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  width: `${2 + Math.random() * 4}px`,
-                  height: `${2 + Math.random() * 4}px`,
-                  borderRadius: isSquare ? "0%" : "50%",
-                  background: `rgba(${
-                    i % 2 === 0 ? "167, 139, 250" : "236, 72, 153"
-                  }, ${0.7 + Math.random() * 0.3})`,
-                  boxShadow: `0 0 ${
-                    8 + Math.random() * 8
-                  }px rgba(167, 139, 250, 0.8)`,
-                }}
-                animate={{
-                  x: [
-                    Math.cos(angle) * distance,
-                    Math.cos(angle + Math.PI * 0.5) * (distance * 0.5),
-                    Math.cos(angle + Math.PI) * (distance * 0.3),
-                  ],
-                  y: [
-                    Math.sin(angle) * distance,
-                    Math.sin(angle + Math.PI * 0.5) * (distance * 0.5),
-                    Math.sin(angle + Math.PI) * (distance * 0.3),
-                  ],
-                  scale: [1, 0.5, 0],
-                  opacity: [0.8, 0.4, 0],
-                  rotate: [0, 180, 360],
-                }}
-                transition={{
-                  duration: 3 + Math.random() * 3,
-                  repeat: Infinity,
-                  ease: "easeIn",
-                  delay: Math.random() * 2,
-                }}
-              />
-            );
-          })}
-
           {/* Glitch scan lines */}
           {[0, 1, 2, 3].map((i) => (
             <motion.div
@@ -274,9 +176,10 @@ const VoidEyeball: React.FC = () => {
 
           {/* Digital corruption artifacts */}
           {[0, 1, 2, 3, 4, 5, 6].map((i) => {
-            const width = 20 + Math.random() * 60;
-            const height = 2 + Math.random() * 4;
+            const width = 30 + i * 8;
+            const height = 2 + (i % 3);
             const angle = (i / 7) * 360;
+            const xOffset = i % 2 === 0 ? 10 : -10;
 
             return (
               <motion.div
@@ -284,14 +187,14 @@ const VoidEyeball: React.FC = () => {
                 animate={{
                   opacity: [0, 0.6, 0],
                   scaleX: [0, 1, 0],
-                  x: [0, Math.random() * 20 - 10],
+                  x: [0, xOffset],
                 }}
                 transition={{
-                  duration: 0.3 + Math.random() * 0.3,
+                  duration: 0.4 + i * 0.05,
                   repeat: Infinity,
                   ease: "easeInOut",
-                  delay: Math.random() * 3,
-                  repeatDelay: 2 + Math.random() * 3,
+                  delay: i * 0.4,
+                  repeatDelay: 2.5 + i * 0.3,
                 }}
                 style={{
                   position: "absolute",

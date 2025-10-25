@@ -55,6 +55,11 @@ export const useTilt = (options: TiltOptions = {}) => {
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
 
+      // Only calculate if mouse is within bounds
+      if (x < 0 || x > rect.width || y < 0 || y > rect.height) {
+        return;
+      }
+
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
 
@@ -101,9 +106,10 @@ export const useTilt = (options: TiltOptions = {}) => {
     };
   }, [maxTilt, perspective, scale, speed, glare, maxGlare, disabled]);
 
-  const tiltStyle = {
-    transform: `perspective(${perspective}px) rotateX(${tiltState.rotateX}deg) rotateY(${tiltState.rotateY}deg) scale(${tiltState.scale})`,
+  const tiltStyle = disabled ? {} : {
+    transform: `perspective(${perspective}px) rotateX(${tiltState.rotateX}deg) rotateY(${tiltState.rotateY}deg) scale3d(${tiltState.scale}, ${tiltState.scale}, ${tiltState.scale})`,
     transition: `transform ${speed}ms cubic-bezier(0.03, 0.98, 0.52, 0.99)`,
+    willChange: 'transform',
   };
 
   const glareStyle = glare

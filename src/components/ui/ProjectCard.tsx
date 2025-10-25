@@ -36,17 +36,25 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, disableTilt =
 
   return (
     <>
-      <motion.div
+      <div
         ref={tiltRef}
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-50px' }}
-        transition={{ duration: 0.5, delay: index * 0.1 }}
-        className="group relative bg-surface rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300"
-        style={tiltStyle}
+        style={{
+          ...tiltStyle,
+          transformStyle: 'preserve-3d',
+        }}
       >
-        {/* Glare Effect Overlay */}
-        {glareStyle && <div style={glareStyle} />}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-50px' }}
+          transition={{ duration: 0.5, delay: index * 0.1 }}
+          className="group relative bg-surface rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300"
+          style={{
+            transformStyle: 'preserve-3d',
+          }}
+        >
+          {/* Glare Effect Overlay */}
+          {glareStyle && <div style={glareStyle} />}
         {/* Image Container */}
         <div className="relative w-full aspect-video overflow-hidden bg-background">
           {!imageLoaded && (
@@ -147,7 +155,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, disableTilt =
             ))}
           </div>
         </div>
-      </motion.div>
+        </motion.div>
+      </div>
 
       {/* Embedded Demo Modal */}
       {project.embedUrl && (

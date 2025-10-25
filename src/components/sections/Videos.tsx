@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { FaYoutube } from "react-icons/fa";
 import { TextEffect } from "../ui";
+import { CRTEffect } from "../ui/CRTEffect";
 
 /**
  * Videos Section Component
@@ -42,10 +43,13 @@ export const Videos = () => {
   return (
     <section
       id="videos"
-      className="relative pt-12 pb-20 px-4 sm:px-6 lg:px-8"
+      className="relative pt-12 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden"
       style={{ backgroundColor: "var(--color-background)" }}
     >
-      <div className="max-w-7xl mx-auto">
+      {/* CRT Film Effect Background */}
+      <CRTEffect />
+
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Header */}
         <motion.div
           ref={ref}

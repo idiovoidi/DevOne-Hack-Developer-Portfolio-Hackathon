@@ -36,44 +36,59 @@ const ArtPieceCard: React.FC<ArtPieceCardProps> = ({
       }}
       aria-label={`View ${artwork.title} in full size`}
     >
-      {/* Outer holographic frame */}
-      <div className="relative p-1 bg-gradient-to-br from-purple-500/30 via-cyan-500/30 to-pink-500/30 rounded-sm">
-        {/* Animated corner accents */}
-        <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-cyan-400 group-hover:border-purple-400 transition-colors duration-300" />
-        <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-cyan-400 group-hover:border-purple-400 transition-colors duration-300" />
-        <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-cyan-400 group-hover:border-purple-400 transition-colors duration-300" />
-        <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-cyan-400 group-hover:border-purple-400 transition-colors duration-300" />
+      {/* Void frame with organic texture */}
+      <div className="relative p-[3px] bg-gradient-to-br from-stone-800/40 via-purple-900/30 to-stone-900/40 rounded">
+        {/* Subtle corner markers - organic style */}
+        <div className="absolute -top-1 -left-1 w-3 h-3 border-t border-l border-stone-500/50 group-hover:border-purple-400/60 transition-colors duration-500" />
+        <div className="absolute -top-1 -right-1 w-3 h-3 border-t border-r border-stone-500/50 group-hover:border-purple-400/60 transition-colors duration-500" />
+        <div className="absolute -bottom-1 -left-1 w-3 h-3 border-b border-l border-stone-500/50 group-hover:border-purple-400/60 transition-colors duration-500" />
+        <div className="absolute -bottom-1 -right-1 w-3 h-3 border-b border-r border-stone-500/50 group-hover:border-purple-400/60 transition-colors duration-500" />
 
-        {/* Glowing border effect */}
+        {/* Soft ambient glow */}
         <motion.div
-          className="absolute inset-0 rounded-sm opacity-0 group-hover:opacity-100"
+          className="absolute inset-0 rounded opacity-0 group-hover:opacity-100"
           animate={isHovered ? {
             boxShadow: [
-              "0 0 20px rgba(139, 92, 246, 0.5)",
-              "0 0 30px rgba(6, 182, 212, 0.5)",
-              "0 0 20px rgba(139, 92, 246, 0.5)",
+              "0 0 15px rgba(88, 28, 135, 0.3)",
+              "0 0 25px rgba(88, 28, 135, 0.4)",
+              "0 0 15px rgba(88, 28, 135, 0.3)",
             ],
           } : {}}
-          transition={{ duration: 2, repeat: Infinity }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         />
 
-        {/* Inner frame */}
-        <div className="relative bg-black/80 backdrop-blur-sm rounded-sm overflow-hidden">
-          {/* Scanning line effect */}
+        {/* Inner void */}
+        <div className="relative bg-black/90 backdrop-blur-sm rounded overflow-hidden shadow-2xl">
+          {/* Subtle dust particles on hover */}
           {isHovered && (
-            <motion.div
-              className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400 to-transparent z-20"
-              initial={{ top: "0%" }}
-              animate={{ top: "100%" }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-            />
+            <>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute w-px h-px bg-purple-300/40 rounded-full"
+                  style={{
+                    left: `${20 + i * 15}%`,
+                    top: `${10 + i * 20}%`,
+                  }}
+                  animate={{
+                    y: [0, -30, -60],
+                    opacity: [0, 0.6, 0],
+                  }}
+                  transition={{
+                    duration: 2 + i * 0.3,
+                    repeat: Infinity,
+                    delay: i * 0.2,
+                  }}
+                />
+              ))}
+            </>
           )}
 
           {/* Image Container */}
           <div className="relative w-full aspect-square overflow-hidden">
             {!imageLoaded && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-                <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
+                <div className="w-8 h-8 border-4 border-purple-800 border-t-transparent rounded-full animate-spin" />
               </div>
             )}
             <img
@@ -81,58 +96,57 @@ const ArtPieceCard: React.FC<ArtPieceCardProps> = ({
               alt={artwork.title}
               loading="lazy"
               onLoad={() => setImageLoaded(true)}
-              className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-105 ${
+              className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-110 ${
                 imageLoaded ? "opacity-100" : "opacity-0"
               }`}
             />
 
-            {/* Holographic overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            {/* Void overlay - deep space feel */}
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-950/20 via-transparent to-stone-950/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-            {/* Info panel */}
+            {/* Info panel - earthy void style */}
             <motion.div
               initial={{ y: "100%" }}
               animate={isHovered ? { y: 0 } : { y: "100%" }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-              className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/95 to-transparent p-4 border-t border-cyan-500/30"
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-stone-950/98 to-transparent p-4 border-t border-stone-700/30"
             >
-              {/* Title with glow */}
-              <h3 className="text-white font-bold text-lg mb-1 drop-shadow-[0_0_8px_rgba(139,92,246,0.5)]">
+              {/* Title with soft glow */}
+              <h3 className="text-stone-100 font-bold text-lg mb-1 drop-shadow-[0_2px_8px_rgba(88,28,135,0.4)]">
                 {artwork.title}
               </h3>
               
               {/* Medium */}
-              <p className="text-cyan-300 text-sm mb-2 font-mono">{artwork.medium}</p>
+              <p className="text-stone-400 text-sm mb-2">{artwork.medium}</p>
               
-              {/* Tools badges */}
+              {/* Tools badges - organic style */}
               <div className="flex flex-wrap gap-1">
                 {artwork.tools.slice(0, 3).map((tool) => (
                   <span
                     key={tool}
-                    className="text-xs px-2 py-1 bg-purple-500/20 border border-purple-500/40 rounded text-purple-200 font-mono"
+                    className="text-xs px-2 py-1 bg-stone-800/60 border border-stone-700/50 rounded text-stone-300"
                   >
                     {tool}
                   </span>
                 ))}
                 {artwork.tools.length > 3 && (
-                  <span className="text-xs px-2 py-1 bg-cyan-500/20 border border-cyan-500/40 rounded text-cyan-200 font-mono">
+                  <span className="text-xs px-2 py-1 bg-purple-950/60 border border-purple-900/50 rounded text-purple-300">
                     +{artwork.tools.length - 3}
                   </span>
                 )}
               </div>
             </motion.div>
 
-            {/* Status indicator */}
-            <div className="absolute top-2 right-2 flex items-center gap-1">
+            {/* Subtle presence indicator */}
+            <div className="absolute top-2 right-2">
               <motion.div
-                className="w-2 h-2 rounded-full bg-cyan-400"
+                className="w-1.5 h-1.5 rounded-full bg-purple-400/60"
                 animate={{
-                  opacity: [1, 0.3, 1],
-                  scale: [1, 0.8, 1],
+                  opacity: [0.4, 0.8, 0.4],
+                  scale: [1, 1.2, 1],
                 }}
-                transition={{ duration: 2, repeat: Infinity }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
               />
-              <span className="text-xs text-cyan-400 font-mono">ACTIVE</span>
             </div>
           </div>
         </div>

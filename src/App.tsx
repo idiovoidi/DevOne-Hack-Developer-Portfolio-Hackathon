@@ -1,5 +1,5 @@
 import { Header, Footer } from './components/layout';
-import { Hero, Projects, ArtGallery, Skills, Contact } from './components/sections';
+import { Hero, Projects, ArtGallery, Music, Skills, Contact } from './components/sections';
 import { ScrollProgress, CosmicBackground } from './components/ui';
 
 function App() {
@@ -29,6 +29,9 @@ function App() {
 
         {/* Art Gallery Section */}
         <ArtGallery />
+
+        {/* Music Section */}
+        <Music />
 
         {/* Skills Section */}
         <Skills />

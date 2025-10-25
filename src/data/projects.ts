@@ -85,10 +85,6 @@ export const projects: Project[] = [
       {
         image: '/projects/social-content-manager-6.webp',
         caption: 'Settings panel for platform integrations and automation rules'
-      },
-      {
-        image: '/projects/social-content-manager-7.webp',
-        caption: 'Ethical posting guidelines and content moderation tools'
       }
     ],
     technologies: ['Python', 'PyQt6', 'MongoDB', 'REST APIs'],

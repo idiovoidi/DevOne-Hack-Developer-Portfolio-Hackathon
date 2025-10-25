@@ -48,12 +48,11 @@ export const Videos = () => {
             as="h2"
             className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 bg-clip-text text-transparent"
           >
-            VIDEOS
+            VIÐɆ0
           </TextEffect>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-            Visual stories from the{" "}
             <TextEffect effect="flicker" className="font-bold text-orange-400">
-              digital realm
+              Transmissions from the void
             </TextEffect>
           </p>
         </motion.div>

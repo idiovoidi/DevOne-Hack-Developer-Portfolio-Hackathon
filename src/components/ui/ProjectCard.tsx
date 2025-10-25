@@ -67,7 +67,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           {/* Glare Effect Overlay */}
           {glareStyle && <div style={glareStyle} />}
           {/* Image Container */}
-          <div className="relative w-full aspect-video overflow-hidden bg-background">
+          <div className="relative w-full aspect-video overflow-hidden bg-background border-2 border-primary/30 group-hover:border-primary/60 transition-colors duration-300">
             {!imageLoaded && (
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />

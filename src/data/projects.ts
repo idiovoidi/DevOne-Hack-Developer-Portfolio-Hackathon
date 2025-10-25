@@ -48,7 +48,7 @@ export const projects: Project[] = [
     id: "zombie-tower-defence",
     title: "Zombie Tower Defence",
     description:
-      "A strategic tower defense game where you defend against waves of zombies. Features multiple tower types, upgrade systems, and challenging gameplay mechanics.",
+      "A simple Zombie Tower Defence game used to learn the core concepts of game design in a rapidly iterable browser environment",
     image: "/projects/zombie-td-thumb.png",
     technologies: ["TypeScript", "Pixi.js", "HTML5 Canvas", "Vite"],
     liveUrl: "https://idiovoidi.github.io/Zombie_Tower_Defence-OS2",

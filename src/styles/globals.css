@@ -1,0 +1,62 @@
+/* CSS Reset and Global Styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Primary Brand Colors */
+  --color-primary: #3b82f6;
+  --color-primary-dark: #2563eb;
+  --color-primary-light: #60a5fa;
+  
+  /* Accent Colors */
+  --color-accent: #8b5cf6;
+  --color-accent-dark: #7c3aed;
+  
+  /* Neutral Colors */
+  --color-background: #ffffff;
+  --color-surface: #f9fafb;
+  --color-text-primary: #111827;
+  --color-text-secondary: #6b7280;
+  --color-border: #e5e7eb;
+  
+  /* Semantic Colors */
+  --color-success: #10b981;
+  --color-error: #ef4444;
+  --color-warning: #f59e0b;
+  
+  /* Font Stack */
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-heading: 'Poppins', 'Inter', sans-serif;
+  --font-mono: 'Fira Code', 'Courier New', monospace;
+}
+
+body {
+  font-family: var(--font-primary);
+  color: var(--color-text-primary);
+  background-color: var(--color-background);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}

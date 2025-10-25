@@ -1,6 +1,9 @@
 # Implementation Plan
 
-- [ ] 1. Initialize project with Vite, React, and TypeScript
+- [-] 1. Initialize project with Vite, React, and TypeScript
+
+
+
   - Create new Vite project with React-TS template
   - Install core dependencies: react, react-dom, typescript
   - Configure TypeScript with strict mode enabled
@@ -9,6 +12,7 @@
   - _Requirements: 9.3, 9.5_
 
 - [ ] 2. Configure Tailwind CSS and styling foundation
+
   - Install and configure Tailwind CSS with PostCSS
   - Create tailwind.config.js with custom theme (colors, fonts, breakpoints)
   - Set up global styles in src/styles/globals.css with CSS custom properties
@@ -17,6 +21,7 @@
   - _Requirements: 1.5, 5.1, 10.3_
 
 - [ ] 3. Create data files for portfolio content
+
   - Create src/data/personal.ts with PersonalInfo interface and placeholder data
   - Create src/data/projects.ts with Project interface (including embedUrl and category fields) and at least 3 sample projects
   - Create src/data/artworks.ts with ArtPiece interface for art portfolio pieces

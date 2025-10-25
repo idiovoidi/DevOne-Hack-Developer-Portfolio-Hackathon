@@ -1,5 +1,8 @@
 Must support various digital formats such as 
 Image files .png + .jpg
+Local files of artwork currently reside here:
+"C:\Users\Mitchell\Desktop\Temp Upload Folder"
+
 
 Music files or easier Spotify/Youtube embeds 
 

@@ -63,14 +63,15 @@ export const Hero = () => {
           maxWidth: '900px',
         }}
       >
-        {/* Name with fade-in animation */}
+        {/* Name with glitch effect */}
         <motion.h1
           variants={itemVariants}
-          className="text-gradient"
+          className="glitch-text text-gradient"
+          data-text={personalInfo.name}
           style={{
             fontSize: 'clamp(2.5rem, 8vw, 4rem)',
-            fontFamily: 'var(--font-heading)',
-            fontWeight: 'bold',
+            fontFamily: 'var(--font-glitch)',
+            fontWeight: 700,
             marginBottom: '1rem',
             lineHeight: '1.2',
           }}

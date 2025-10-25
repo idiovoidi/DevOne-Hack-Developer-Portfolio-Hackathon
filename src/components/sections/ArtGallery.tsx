@@ -90,7 +90,7 @@ const ArtGallery: React.FC = () => {
           >
             <motion.button
               onClick={handleLoadMore}
-              className="group relative mx-auto px-10 py-5 bg-gradient-to-r from-purple-900/30 via-stone-900/40 to-purple-900/30 border-2 border-purple-500/30 rounded-lg overflow-hidden cursor-pointer"
+              className="group relative mx-auto px-8 py-3 bg-gradient-to-r from-purple-900/30 via-stone-900/40 to-purple-900/30 border-2 border-purple-500/30 rounded-lg overflow-hidden cursor-pointer"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               aria-label="Load more artworks"
@@ -109,12 +109,12 @@ const ArtGallery: React.FC = () => {
               />
 
               {/* Button content */}
-              <div className="relative flex flex-col items-center justify-center gap-1">
+              <div className="relative flex flex-col items-center justify-center gap-0.5">
                 {/* Eyes row */}
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
                   {/* Left eye */}
                   <motion.div
-                    className="text-3xl"
+                    className="text-2xl"
                     animate={{
                       rotateY: [0, 180, 360],
                     }}
@@ -128,13 +128,19 @@ const ArtGallery: React.FC = () => {
                   </motion.div>
 
                   {/* Text */}
-                  <span className="text-lg font-semibold text-purple-200 group-hover:text-purple-100 transition-colors">
+                  <span
+                    className="text-base font-light tracking-[0.2em] uppercase text-purple-200 group-hover:text-purple-100 transition-colors"
+                    style={{
+                      fontFamily: "'Courier New', monospace",
+                      letterSpacing: "0.25em",
+                    }}
+                  >
                     Reveal More
                   </span>
 
                   {/* Right eye */}
                   <motion.div
-                    className="text-3xl"
+                    className="text-2xl"
                     animate={{
                       rotateY: [360, 180, 0],
                     }}
@@ -150,7 +156,7 @@ const ArtGallery: React.FC = () => {
 
                 {/* Mouth */}
                 <motion.div
-                  className="text-2xl"
+                  className="text-xl"
                   animate={{
                     scale: [1, 1.1, 1],
                   }}

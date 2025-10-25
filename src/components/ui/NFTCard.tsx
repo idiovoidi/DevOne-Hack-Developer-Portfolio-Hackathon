@@ -27,10 +27,10 @@ const NFTCard: React.FC<NFTCardProps> = ({ nft, index, onClick }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.1 }}
-      className="group relative bg-surface border border-accent-primary/20 rounded-lg overflow-hidden hover:border-accent-primary/50 transition-all duration-300 cursor-pointer"
+      className="group relative bg-black/40 backdrop-blur-sm border border-purple-500/20 rounded-lg overflow-hidden hover:border-purple-500/50 transition-all duration-300 cursor-pointer"
       onClick={onClick}
       style={{
-        boxShadow: '0 0 20px rgba(139, 92, 246, 0.1)',
+        boxShadow: '0 0 20px rgba(168, 85, 247, 0.15)',
       }}
     >
       {/* NFT Image */}
@@ -44,7 +44,7 @@ const NFTCard: React.FC<NFTCardProps> = ({ nft, index, onClick }) => {
         
         {/* Hover Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4 pointer-events-none">
-          <span className="text-accent-primary font-medium">View NFT</span>
+          <span className="text-purple-400 font-medium">View NFT</span>
         </div>
 
         {/* Blockchain Badge */}
@@ -56,7 +56,7 @@ const NFTCard: React.FC<NFTCardProps> = ({ nft, index, onClick }) => {
 
       {/* NFT Info */}
       <div className="p-4">
-        <h3 className="text-lg font-semibold text-text-primary mb-1 group-hover:text-accent-primary transition-colors duration-300">
+        <h3 className="text-lg font-semibold text-text-primary mb-1 group-hover:text-purple-400 transition-colors duration-300">
           {nft.title}
         </h3>
         
@@ -73,7 +73,7 @@ const NFTCard: React.FC<NFTCardProps> = ({ nft, index, onClick }) => {
 
       {/* Glow Effect on Hover */}
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-accent-primary/10 via-transparent to-accent-secondary/10" />
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-pink-500/10" />
       </div>
     </motion.div>
   );

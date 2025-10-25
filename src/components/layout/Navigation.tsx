@@ -6,15 +6,16 @@ interface NavLink {
   id: string;
   label: string;
   href: string;
+  isArtGroup?: boolean;
 }
 
 const navLinks: NavLink[] = [
   { id: "home", label: "Home", href: "#home" },
   { id: "projects", label: "Projects", href: "#projects" },
-  { id: "art-gallery", label: "Art", href: "#art-gallery" },
-  { id: "nft-gallery", label: "NFTs", href: "#nft-gallery" },
-  { id: "music", label: "Music", href: "#music" },
-  { id: "videos", label: "Videos", href: "#videos" },
+  { id: "art-gallery", label: "Art", href: "#art-gallery", isArtGroup: true },
+  { id: "nft-gallery", label: "NFTs", href: "#nft-gallery", isArtGroup: true },
+  { id: "music", label: "Music", href: "#music", isArtGroup: true },
+  { id: "videos", label: "Videos", href: "#videos", isArtGroup: true },
   { id: "skills", label: "Skills", href: "#skills" },
   { id: "contact", label: "Contact", href: "#contact" },
 ];
@@ -80,35 +81,67 @@ const Navigation: React.FC = () => {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-8">
-          {navLinks.map((link) => (
-            <a
-              key={link.id}
-              href={link.href}
-              onClick={(e) => handleNavClick(e, link.href)}
-              className={`relative text-base font-medium transition-colors duration-200 focus-visible-ring ${
-                activeSection === link.id
-                  ? "text-primary"
-                  : "text-text-secondary hover:text-primary"
-              }`}
-              style={{
-                color:
-                  activeSection === link.id
-                    ? "var(--color-primary)"
-                    : "var(--color-text-secondary)",
-              }}
-            >
-              {link.label}
-              {activeSection === link.id && (
-                <motion.div
-                  layoutId="activeSection"
-                  className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary"
-                  style={{ backgroundColor: "var(--color-primary)" }}
-                  initial={false}
-                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                />
-              )}
-            </a>
-          ))}
+          {navLinks.map((link, index) => {
+            const prevLink = navLinks[index - 1];
+            const isFirstArtItem = link.isArtGroup && !prevLink?.isArtGroup;
+            const isLastArtItem = link.isArtGroup && !navLinks[index + 1]?.isArtGroup;
+            
+            return (
+              <div
+                key={link.id}
+                className={`relative flex items-center ${
+                  link.isArtGroup ? (index > 0 && prevLink?.isArtGroup ? '-ml-4' : '') : ''
+                }`}
+              >
+                {/* Art group visual bracket - left side */}
+                {isFirstArtItem && (
+                  <div 
+                    className="absolute -left-3 top-1/2 -translate-y-1/2 w-1 h-8 rounded-l-full opacity-40"
+                    style={{
+                      background: 'linear-gradient(to bottom, var(--color-primary), var(--color-accent))',
+                    }}
+                  />
+                )}
+                
+                <a
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
+                  className={`relative text-base font-medium transition-colors duration-200 focus-visible-ring ${
+                    activeSection === link.id
+                      ? "text-primary"
+                      : "text-text-secondary hover:text-primary"
+                  } ${link.isArtGroup ? 'px-3' : ''}`}
+                  style={{
+                    color:
+                      activeSection === link.id
+                        ? "var(--color-primary)"
+                        : "var(--color-text-secondary)",
+                  }}
+                >
+                  {link.label}
+                  {activeSection === link.id && (
+                    <motion.div
+                      layoutId="activeSection"
+                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary"
+                      style={{ backgroundColor: "var(--color-primary)" }}
+                      initial={false}
+                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                    />
+                  )}
+                </a>
+
+                {/* Art group visual bracket - right side */}
+                {isLastArtItem && (
+                  <div 
+                    className="absolute -right-3 top-1/2 -translate-y-1/2 w-1 h-8 rounded-r-full opacity-40"
+                    style={{
+                      background: 'linear-gradient(to bottom, var(--color-primary), var(--color-accent))',
+                    }}
+                  />
+                )}
+              </div>
+            );
+          })}
         </div>
 
         {/* Mobile Menu Button */}
@@ -178,36 +211,56 @@ const Navigation: React.FC = () => {
               }}
             >
               <div className="flex flex-col p-6 space-y-6">
-                {navLinks.map((link, index) => (
-                  <motion.a
-                    key={link.id}
-                    href={link.href}
-                    onClick={(e) => handleNavClick(e, link.href)}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className={`text-lg font-medium transition-colors duration-200 focus-visible-ring ${
-                      activeSection === link.id
-                        ? "text-primary"
-                        : "text-text-secondary hover:text-primary"
-                    }`}
-                    style={{
-                      color:
-                        activeSection === link.id
-                          ? "var(--color-primary)"
-                          : "var(--color-text-secondary)",
-                    }}
-                  >
-                    {link.label}
-                    {activeSection === link.id && (
-                      <motion.div
-                        layoutId="activeSectionMobile"
-                        className="h-0.5 bg-primary mt-1"
-                        style={{ backgroundColor: "var(--color-primary)" }}
-                      />
-                    )}
-                  </motion.a>
-                ))}
+                {navLinks.map((link, index) => {
+                  const prevLink = navLinks[index - 1];
+                  const isFirstArtItem = link.isArtGroup && !prevLink?.isArtGroup;
+                  const isLastArtItem = link.isArtGroup && !navLinks[index + 1]?.isArtGroup;
+                  
+                  return (
+                    <div key={link.id} className="relative">
+                      {/* Art group label for mobile */}
+                      {isFirstArtItem && (
+                        <div 
+                          className="text-xs uppercase tracking-wider mb-2 opacity-50"
+                          style={{ color: 'var(--color-primary)' }}
+                        >
+                          Creative Works
+                        </div>
+                      )}
+                      
+                      <motion.a
+                        href={link.href}
+                        onClick={(e) => handleNavClick(e, link.href)}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className={`block text-lg font-medium transition-colors duration-200 focus-visible-ring ${
+                          activeSection === link.id
+                            ? "text-primary"
+                            : "text-text-secondary hover:text-primary"
+                        } ${link.isArtGroup ? 'pl-4' : ''}`}
+                        style={{
+                          color:
+                            activeSection === link.id
+                              ? "var(--color-primary)"
+                              : "var(--color-text-secondary)",
+                        }}
+                      >
+                        {link.label}
+                        {activeSection === link.id && (
+                          <motion.div
+                            layoutId="activeSectionMobile"
+                            className="h-0.5 bg-primary mt-1"
+                            style={{ backgroundColor: "var(--color-primary)" }}
+                          />
+                        )}
+                      </motion.a>
+                      
+                      {/* Spacing after art group */}
+                      {isLastArtItem && <div className="h-2" />}
+                    </div>
+                  );
+                })}
               </div>
             </motion.div>
           </>

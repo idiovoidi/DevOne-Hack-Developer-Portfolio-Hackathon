@@ -96,6 +96,43 @@ export const projects: Project[] = [
     featured: true,
   },
   {
+    id: "stardew-gift-tracker",
+    title: "Stardew Valley Gift Tracker",
+    description:
+      "A PyQt6 desktop application for tracking villager gift preferences in Stardew Valley. Features character cards, gift recommendations, inventory sync, and multiple view modes for efficient gift planning.",
+    image: "/projects/stardew-gift-tracker-villagers.png",
+    screenshots: [
+      {
+        image: "/projects/stardew-gift-tracker-villagers.png",
+        caption: "Villagers list ordered by relationship status and gift history",
+      },
+      {
+        image: "/projects/stardew-gift-tracker-most-liked.png",
+        caption: "Most-liked gifts view for quick reference and planning",
+      },
+      {
+        image: "/projects/stardew-gift-tracker-gift-card.png",
+        caption: "Detailed gift card showing preferences and reactions",
+      },
+      {
+        image: "/projects/stardew-gift-tracker-inventory.png",
+        caption: "Inventory sync feature for tracking available gifts",
+      },
+      {
+        image: "/projects/stardew-gift-tracker-character.png",
+        caption: "Character card with detailed relationship information",
+      },
+      {
+        image: "/projects/stardew-gift-tracker-alt-view.png",
+        caption: "Alternative view mode for compact information display",
+      },
+    ],
+    technologies: ["Python", "PyQt6", "SQLite", "Qt Designer"],
+    githubUrl: "https://github.com/idiovoidi/Stardew_Valley_Gift_Tracker",
+    category: "development",
+    featured: true,
+  },
+  {
     id: "task-management-app",
     title: "Task Management App",
     description:

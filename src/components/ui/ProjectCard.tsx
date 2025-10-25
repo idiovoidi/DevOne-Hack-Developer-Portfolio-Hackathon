@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { FaGithub, FaExternalLinkAlt, FaGamepad } from "react-icons/fa";
+import { FiImage } from "react-icons/fi";
 import { Project } from "../../data/projects";
 import SkillBadge from "./SkillBadge";
 import EmbeddedDemo from "./EmbeddedDemo";
+import ScreenshotCarousel from "./ScreenshotCarousel";
 import Button from "./Button";
 import { useTilt } from "../../hooks/useTilt";
 
@@ -19,6 +21,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   disableTilt = false,
 }) => {
   const [isEmbedOpen, setIsEmbedOpen] = useState(false);
+  const [isCarouselOpen, setIsCarouselOpen] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
 
   // 3D Tilt effect
@@ -86,7 +89,19 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               whileHover={{ opacity: 1 }}
               className="absolute inset-0 bg-linear-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-4"
             >
-              <div className="flex gap-2 mb-2">
+              <div className="flex gap-2 mb-2 flex-wrap justify-center">
+                {project.screenshots && project.screenshots.length > 0 && (
+                  <Button
+                    variant="primary"
+                    size="small"
+                    onClick={() => setIsCarouselOpen(true)}
+                    aria-label={`View ${project.title} screenshots`}
+                    className="flex items-center gap-2"
+                  >
+                    <FiImage size={16} />
+                    <span>Screenshots ({project.screenshots.length})</span>
+                  </Button>
+                )}
                 {project.embedUrl && (
                   <Button
                     variant="primary"
@@ -175,6 +190,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           </div>
         </motion.div>
       </div>
+
+      {/* Screenshot Carousel Modal */}
+      {project.screenshots && project.screenshots.length > 0 && (
+        <ScreenshotCarousel
+          isOpen={isCarouselOpen}
+          onClose={() => setIsCarouselOpen(false)}
+          screenshots={project.screenshots}
+          projectTitle={project.title}
+        />
+      )}
 
       {/* Embedded Demo Modal */}
       {project.embedUrl && (

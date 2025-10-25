@@ -23,11 +23,17 @@
  *    }
  */
 
+export interface ProjectScreenshot {
+  image: string;
+  caption: string;
+}
+
 export interface Project {
   id: string;
   title: string;
   description: string;
   image: string;
+  screenshots?: ProjectScreenshot[];  // Optional: Additional screenshots with captions
   technologies: string[];
   liveUrl?: string;
   githubUrl?: string;
@@ -51,13 +57,42 @@ export const projects: Project[] = [
     featured: true
   },
   {
-    id: 'ecommerce-platform',
-    title: 'E-Commerce Platform',
-    description: 'A full-stack online store with product catalog, shopping cart, and secure payment integration using Stripe API.',
-    image: '/projects/placeholder.svg', // Replace with: /projects/ecommerce-thumb.webp
-    technologies: ['React', 'Node.js', 'Express', 'MongoDB', 'Stripe', 'Tailwind CSS'],
-    liveUrl: 'https://ecommerce-demo.vercel.app',
-    githubUrl: 'https://github.com/yourusername/ecommerce-platform',
+    id: 'social-content-manager',
+    title: 'Social Content Manager',
+    description: 'A desktop application for organizing and scheduling artwork posts across social media platforms with ethical posting practices and automated workflows.',
+    image: '/projects/social-content-manager-1.webp',
+    screenshots: [
+      {
+        image: '/projects/social-content-manager-1.webp',
+        caption: 'Main dashboard showing content queue and scheduling overview'
+      },
+      {
+        image: '/projects/social-content-manager-2.webp',
+        caption: 'Content library with artwork organization and tagging system'
+      },
+      {
+        image: '/projects/social-content-manager-3.webp',
+        caption: 'Post composer with platform-specific formatting and preview'
+      },
+      {
+        image: '/projects/social-content-manager-4.webp',
+        caption: 'Analytics dashboard tracking engagement and posting metrics'
+      },
+      {
+        image: '/projects/social-content-manager-5.webp',
+        caption: 'Schedule calendar view with drag-and-drop functionality'
+      },
+      {
+        image: '/projects/social-content-manager-6.webp',
+        caption: 'Settings panel for platform integrations and automation rules'
+      },
+      {
+        image: '/projects/social-content-manager-7.webp',
+        caption: 'Ethical posting guidelines and content moderation tools'
+      }
+    ],
+    technologies: ['Python', 'PyQt6', 'MongoDB', 'REST APIs'],
+    // Private/unreleased project - no live URL or GitHub repo
     category: 'development',
     featured: true
   },

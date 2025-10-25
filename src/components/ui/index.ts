@@ -30,3 +30,6 @@ export { TextEffect } from './TextEffect';
 export type { TextEffectType } from './TextEffect';
 
 export { PerformanceToggle } from './PerformanceToggle';
+
+export { default as ScreenshotCarousel } from './ScreenshotCarousel';
+export type { ScreenshotCarouselProps } from './ScreenshotCarousel';

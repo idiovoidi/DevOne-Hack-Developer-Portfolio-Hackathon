@@ -4,9 +4,13 @@ import { ContactForm, ContactFormData, SocialLinks, SocialLink } from '../ui';
 import { personalInfo } from '../../data/personal';
 import { sendContactEmail, mockSendEmail, isEmailServiceConfigured } from '../../utils';
 import { FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
+import { useInView } from '../../hooks';
 
 const Contact: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { ref: headerRef, inView: headerInView } = useInView({ threshold: 0.2 });
+  const { ref: formRef, inView: formInView } = useInView({ threshold: 0.1 });
+  const { ref: infoRef, inView: infoInView } = useInView({ threshold: 0.1 });
 
   const handleSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true);
@@ -31,13 +35,6 @@ const Contact: React.FC = () => {
     label: `Visit ${link.platform}`,
   }));
 
-  const fadeInUp = {
-    initial: { opacity: 0, y: 60 },
-    whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true, margin: '-100px' },
-    transition: { duration: 0.6 },
-  };
-
   return (
     <section 
       id="contact" 
@@ -50,7 +47,10 @@ const Contact: React.FC = () => {
       <div className="container-custom">
         {/* Section Header */}
         <motion.div
-          {...fadeInUp}
+          ref={headerRef}
+          initial={{ opacity: 0, y: 30 }}
+          animate={headerInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
           className="text-center mb-16"
         >
           <h2 className="section-heading">Get In Touch</h2>
@@ -66,10 +66,10 @@ const Contact: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
           {/* Contact Form */}
           <motion.div
-            initial={{ opacity: 0, y: 60 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ delay: 0.2, duration: 0.6 }}
+            ref={formRef}
+            initial={{ opacity: 0, y: 40 }}
+            animate={formInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+            transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
             className="card p-8"
           >
             <h3 
@@ -105,10 +105,10 @@ const Contact: React.FC = () => {
 
           {/* Contact Information */}
           <motion.div
-            initial={{ opacity: 0, y: 60 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ delay: 0.4, duration: 0.6 }}
+            ref={infoRef}
+            initial={{ opacity: 0, y: 40 }}
+            animate={infoInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+            transition={{ duration: 0.6, delay: 0.4, ease: 'easeOut' }}
             className="space-y-8"
           >
             {/* Contact Details Card */}

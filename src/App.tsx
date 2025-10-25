@@ -1,5 +1,6 @@
-import { Header } from './components/layout';
+import { Header, Footer } from './components/layout';
 import { Hero, Projects, ArtGallery, Skills, Contact } from './components/sections';
+import { ScrollProgress } from './components/ui';
 
 function App() {
   return (
@@ -8,6 +9,9 @@ function App() {
       backgroundColor: 'var(--color-background)',
       color: 'var(--color-text-primary)'
     }}>
+      {/* Scroll Progress Indicator */}
+      <ScrollProgress />
+      
       <Header />
       
       {/* Hero Section */}
@@ -24,6 +28,9 @@ function App() {
 
       {/* Contact Section */}
       <Contact />
+
+      {/* Footer */}
+      <Footer />
     </div>
   )
 }

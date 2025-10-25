@@ -21,3 +21,5 @@ export type { ArtPieceCardProps } from './ArtPieceCard';
 
 export { default as ContactForm } from './ContactForm';
 export type { ContactFormProps, ContactFormData } from './ContactForm';
+
+export { default as ScrollProgress } from './ScrollProgress';

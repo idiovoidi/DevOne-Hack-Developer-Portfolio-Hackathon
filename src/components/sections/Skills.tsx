@@ -2,22 +2,26 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { skillsData } from '../../data/skills';
 import SkillBadge from '../ui/SkillBadge';
+import { useInView } from '../../hooks';
 
 const Skills: React.FC = () => {
+  const { ref: headerRef, inView: headerInView } = useInView({ threshold: 0.2 });
+  const { ref: skillsRef, inView: skillsInView } = useInView({ threshold: 0.1 });
+
   // Animation variants for container
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: 0.15,
       },
     },
   };
 
   // Animation variants for category groups
   const categoryVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
       y: 0,
@@ -33,10 +37,10 @@ const Skills: React.FC = () => {
       <div className="container-custom">
         {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          ref={headerRef}
+          initial={{ opacity: 0, y: 30 }}
+          animate={headerInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
           className="text-center mb-16"
         >
           <h2 className="section-heading">Skills & Technologies</h2>
@@ -47,10 +51,10 @@ const Skills: React.FC = () => {
 
         {/* Skills Grid by Category */}
         <motion.div
+          ref={skillsRef}
           variants={containerVariants}
           initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-100px' }}
+          animate={skillsInView ? "visible" : "hidden"}
           className="space-y-12"
         >
           {skillsData.map((group) => (

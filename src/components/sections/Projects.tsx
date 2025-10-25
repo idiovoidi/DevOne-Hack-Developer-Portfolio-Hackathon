@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { projects } from '../../data/projects';
 import { ProjectCard } from '../ui';
+import { useInView } from '../../hooks';
 
 type CategoryFilter = 'all' | 'development' | 'game' | 'art' | 'design';
 
@@ -15,6 +16,8 @@ const categories: { value: CategoryFilter; label: string }[] = [
 
 const Projects: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>('all');
+  const { ref: headerRef, inView: headerInView } = useInView({ threshold: 0.2 });
+  const { ref: filtersRef, inView: filtersInView } = useInView({ threshold: 0.2 });
 
   // Filter projects based on active category
   const filteredProjects = useMemo(() => {
@@ -29,10 +32,10 @@ const Projects: React.FC = () => {
       <div className="container-custom">
         {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          ref={headerRef}
+          initial={{ opacity: 0, y: 30 }}
+          animate={headerInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
           className="text-center mb-12"
         >
           <h2 className="section-heading">Projects</h2>
@@ -43,10 +46,10 @@ const Projects: React.FC = () => {
 
         {/* Category Filter Tabs */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1 }}
+          ref={filtersRef}
+          initial={{ opacity: 0, y: 30 }}
+          animate={filtersInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
           className="flex flex-wrap justify-center gap-3 mb-12"
         >
           {categories.map((category) => (

@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { artworks } from '../../data/artworks';
-import ArtPieceCard from '../ui/ArtPieceCard';
-import Lightbox from '../ui/Lightbox';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { artworks } from "../../data/artworks";
+import ArtPieceCard from "../ui/ArtPieceCard";
+import Lightbox from "../ui/Lightbox";
+import { useInView } from "../../hooks";
 
 const ArtGallery: React.FC = () => {
   const [selectedArtwork, setSelectedArtwork] = useState<number | null>(null);
+  const { ref: headerRef, inView: headerInView } = useInView({
+    threshold: 0.2,
+  });
 
   const handleArtworkClick = (index: number) => {
     setSelectedArtwork(index);
@@ -15,17 +19,22 @@ const ArtGallery: React.FC = () => {
     setSelectedArtwork(null);
   };
 
-  const currentArtwork = selectedArtwork !== null ? artworks[selectedArtwork] : null;
+  const currentArtwork =
+    selectedArtwork !== null ? artworks[selectedArtwork] : null;
 
   return (
-    <section id="art-gallery" className="section" style={{ backgroundColor: 'var(--color-background)' }}>
+    <section
+      id="art-gallery"
+      className="section"
+      style={{ backgroundColor: "var(--color-background)" }}
+    >
       <div className="container-custom">
         {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          ref={headerRef}
+          initial={{ opacity: 0, y: 30 }}
+          animate={headerInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           className="text-center mb-12"
         >
           <h2 className="section-heading">Art Gallery</h2>

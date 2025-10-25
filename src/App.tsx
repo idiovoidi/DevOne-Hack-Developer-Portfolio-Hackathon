@@ -1,5 +1,5 @@
 import { Header } from './components/layout';
-import { Hero } from './components/sections';
+import { Hero, Projects, ArtGallery } from './components/sections';
 
 function App() {
   return (
@@ -14,22 +14,10 @@ function App() {
       <Hero />
 
       {/* Projects Section */}
-      <section id="projects" className="section" style={{ minHeight: '100vh', backgroundColor: 'var(--color-surface)' }}>
-        <div className="container-custom">
-          <h2 className="section-heading">Projects</h2>
-          <p className="section-subheading">
-            This is a placeholder for the projects section.
-          </p>
-          <div className="card card-hover" style={{ maxWidth: '28rem' }}>
-            <h3 style={{ fontSize: '1.5rem', fontWeight: '600', marginBottom: '0.5rem' }}>
-              Project Card
-            </h3>
-            <p style={{ color: 'var(--color-text-secondary)' }}>
-              Project cards will be displayed here.
-            </p>
-          </div>
-        </div>
-      </section>
+      <Projects />
+
+      {/* Art Gallery Section */}
+      <ArtGallery />
 
       {/* Skills Section */}
       <section id="skills" className="section" style={{ minHeight: '100vh' }}>

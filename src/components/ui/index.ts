@@ -9,3 +9,12 @@ export type { LightboxProps } from './Lightbox';
 
 export { default as EmbeddedDemo } from './EmbeddedDemo';
 export type { EmbeddedDemoProps } from './EmbeddedDemo';
+
+export { default as SkillBadge } from './SkillBadge';
+export type { SkillBadgeProps } from './SkillBadge';
+
+export { default as ProjectCard } from './ProjectCard';
+export type { ProjectCardProps } from './ProjectCard';
+
+export { default as ArtPieceCard } from './ArtPieceCard';
+export type { ArtPieceCardProps } from './ArtPieceCard';

@@ -105,7 +105,13 @@
   - Implement smooth scroll behavior
   - _Requirements: 1.1, 1.2, 1.3, 6.1, 6.2, 10.4_
 
-- [ ] 7. Create Projects section with grid layout
+
+
+- [-] 7. Create Projects section with grid layout
+
+
+
+
 
 
   - [ ] 7.1 Build ProjectCard component
@@ -115,6 +121,8 @@
     - Implement hover overlay effect with Framer Motion
     - Add "View Demo", "View Code", and "Play Demo" buttons (conditional based on project type)
     - Add support for opening EmbeddedDemo modal when embedUrl exists
+
+
     - Ensure responsive image sizing
     - _Requirements: 2.2, 2.3, 2.4, 6.5, 10.1_
 
@@ -122,6 +130,8 @@
 
     - Create responsive grid (1 col mobile, 2 col tablet, 3 col desktop)
     - Add filter/category tabs (All, Development, Games, Art/Design)
+
+
     - Map through filtered projects data to render ProjectCard components
     - Add staggered fade-in animation on scroll
     - Implement lazy loading for project images

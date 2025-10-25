@@ -88,16 +88,18 @@ const Navigation: React.FC = () => {
 
             // Render art group as a single block
             if (isFirstArtItem) {
-              const artLinks = navLinks.filter(l => l.isArtGroup);
+              const artLinks = navLinks.filter((l) => l.isArtGroup);
               return (
                 <div key="art-group" className="relative">
                   {/* Void-themed container block */}
-                  <div 
+                  <div
                     className="relative px-4 py-2 rounded-lg"
                     style={{
-                      background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(236, 72, 153, 0.08))',
-                      border: '1px solid rgba(168, 85, 247, 0.2)',
-                      boxShadow: '0 0 20px rgba(168, 85, 247, 0.15), inset 0 0 20px rgba(168, 85, 247, 0.05)',
+                      background:
+                        "linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(236, 72, 153, 0.08))",
+                      border: "1px solid rgba(168, 85, 247, 0.2)",
+                      boxShadow:
+                        "0 0 20px rgba(168, 85, 247, 0.15), inset 0 0 20px rgba(168, 85, 247, 0.05)",
                     }}
                   >
                     {/* Cosmic particles */}
@@ -188,41 +190,90 @@ const Navigation: React.FC = () => {
               return null;
             }
 
-            // Render non-art items normally
+            // Render non-art items with special styling for Home and Contact
+            const isHomeOrContact = link.id === "home" || link.id === "contact";
+
             return (
-              <a
-                key={link.id}
-                href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
-                className={`relative text-base font-medium transition-all duration-300 focus-visible-ring ${
-                  activeSection === link.id
-                    ? "text-primary"
-                    : "text-text-secondary hover:text-primary"
-                }`}
-                style={{
-                  color:
-                    activeSection === link.id
-                      ? "var(--color-primary)"
-                      : "var(--color-text-secondary)",
-                }}
-              >
-                {link.label}
-                {activeSection === link.id && (
-                  <motion.div
-                    layoutId="activeSection"
-                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary"
-                    style={{
-                      backgroundColor: "var(--color-primary)",
-                    }}
-                    initial={false}
-                    transition={{
-                      type: "spring",
-                      stiffness: 380,
-                      damping: 30,
-                    }}
-                  />
+              <div key={link.id} className="relative">
+                {isHomeOrContact && (
+                  <>
+                    {/* Lightweight glow effect */}
+                    <motion.div
+                      className="absolute inset-0 rounded-lg pointer-events-none"
+                      style={{
+                        background:
+                          link.id === "home"
+                            ? "radial-gradient(circle, rgba(59, 130, 246, 0.15), transparent 70%)"
+                            : "radial-gradient(circle, rgba(34, 197, 94, 0.15), transparent 70%)",
+                        filter: "blur(8px)",
+                      }}
+                      animate={{
+                        opacity:
+                          activeSection === link.id ? [0.5, 0.8, 0.5] : 0.3,
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                    />
+                  </>
                 )}
-              </a>
+
+                <a
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
+                  className={`relative text-base font-medium transition-all duration-300 focus-visible-ring px-3 py-1.5 rounded-lg ${
+                    activeSection === link.id
+                      ? "text-primary"
+                      : "text-text-secondary hover:text-primary"
+                  } ${isHomeOrContact ? "hover:scale-105" : ""}`}
+                  style={{
+                    color:
+                      activeSection === link.id
+                        ? link.id === "home"
+                          ? "#3b82f6"
+                          : link.id === "contact"
+                          ? "#22c55e"
+                          : "var(--color-primary)"
+                        : "var(--color-text-secondary)",
+                    textShadow:
+                      isHomeOrContact && activeSection === link.id
+                        ? link.id === "home"
+                          ? "0 0 10px rgba(59, 130, 246, 0.6)"
+                          : "0 0 10px rgba(34, 197, 94, 0.6)"
+                        : "none",
+                    border: isHomeOrContact
+                      ? link.id === "home"
+                        ? "1px solid rgba(59, 130, 246, 0.2)"
+                        : "1px solid rgba(34, 197, 94, 0.2)"
+                      : "none",
+                    background:
+                      isHomeOrContact && activeSection === link.id
+                        ? link.id === "home"
+                          ? "rgba(59, 130, 246, 0.1)"
+                          : "rgba(34, 197, 94, 0.1)"
+                        : "transparent",
+                  }}
+                >
+                  {link.label}
+                  {activeSection === link.id && !isHomeOrContact && (
+                    <motion.div
+                      layoutId="activeSection"
+                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary"
+                      style={{
+                        backgroundColor: "var(--color-primary)",
+                      }}
+                      initial={false}
+                      transition={{
+                        type: "spring",
+                        stiffness: 380,
+                        damping: 30,
+                      }}
+                    />
+                  )}
+                </a>
+              </div>
             );
           })}
         </div>
@@ -365,7 +416,7 @@ const Navigation: React.FC = () => {
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.1 }}
-                        className={`block text-lg font-medium transition-all duration-200 focus-visible-ring ${
+                        className={`block text-lg font-medium transition-all duration-200 focus-visible-ring rounded-lg px-3 py-2 ${
                           activeSection === link.id
                             ? "text-primary"
                             : "text-text-secondary hover:text-primary"
@@ -373,12 +424,34 @@ const Navigation: React.FC = () => {
                         style={{
                           color:
                             activeSection === link.id
-                              ? "var(--color-primary)"
+                              ? link.id === "home"
+                                ? "#3b82f6"
+                                : link.id === "contact"
+                                ? "#22c55e"
+                                : "var(--color-primary)"
                               : "var(--color-text-secondary)",
                           textShadow:
                             link.isArtGroup && activeSection === link.id
                               ? "0 0 8px var(--color-primary)"
+                              : link.id === "home" && activeSection === link.id
+                              ? "0 0 10px rgba(59, 130, 246, 0.6)"
+                              : link.id === "contact" &&
+                                activeSection === link.id
+                              ? "0 0 10px rgba(34, 197, 94, 0.6)"
                               : "none",
+                          border:
+                            link.id === "home" || link.id === "contact"
+                              ? link.id === "home"
+                                ? "1px solid rgba(59, 130, 246, 0.2)"
+                                : "1px solid rgba(34, 197, 94, 0.2)"
+                              : "none",
+                          background:
+                            (link.id === "home" || link.id === "contact") &&
+                            activeSection === link.id
+                              ? link.id === "home"
+                                ? "rgba(59, 130, 246, 0.1)"
+                                : "rgba(34, 197, 94, 0.1)"
+                              : "transparent",
                         }}
                       >
                         {/* Void dot indicator for art items */}
@@ -397,6 +470,40 @@ const Navigation: React.FC = () => {
                               opacity: 0.7,
                             }}
                           />
+                        )}
+
+                        {/* Special icon indicators for Home and Contact */}
+                        {link.id === "home" && (
+                          <motion.span
+                            className="inline-block mr-2"
+                            animate={{
+                              scale:
+                                activeSection === link.id ? [1, 1.2, 1] : 1,
+                            }}
+                            transition={{
+                              duration: 2,
+                              repeat: Infinity,
+                              ease: "easeInOut",
+                            }}
+                          >
+                            🏠
+                          </motion.span>
+                        )}
+                        {link.id === "contact" && (
+                          <motion.span
+                            className="inline-block mr-2"
+                            animate={{
+                              scale:
+                                activeSection === link.id ? [1, 1.2, 1] : 1,
+                            }}
+                            transition={{
+                              duration: 2,
+                              repeat: Infinity,
+                              ease: "easeInOut",
+                            }}
+                          >
+                            💬
+                          </motion.span>
                         )}
 
                         {link.label}

@@ -40,7 +40,17 @@ const NFTGallery: React.FC = () => {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 bg-clip-text text-transparent void-text">
+          <h2 
+            className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent"
+            style={{
+              backgroundImage: 'linear-gradient(90deg, #a855f7, #3b82f6, #ec4899, #ef4444, #a855f7, #3b82f6)',
+              backgroundSize: '200% 100%',
+              animation: 'voidFloat 6s ease-in-out infinite, voidGradientShift 8s ease-in-out infinite',
+              textShadow: '0 0 20px rgba(168, 85, 247, 0.6), 0 0 40px rgba(236, 72, 153, 0.4), 0 0 60px rgba(59, 130, 246, 0.3)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}
+          >
             NFT COLLECTION
           </h2>
           <p className="text-lg max-w-2xl mx-auto">

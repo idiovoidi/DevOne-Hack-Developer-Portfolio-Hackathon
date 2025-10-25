@@ -1,6 +1,6 @@
 # Product Overview
 
-This is a personal developer portfolio website being built for the DevOne Hackathon 2025. The portfolio serves as a modern, interactive digital identity showcasing the developer's projects, technical skills, and creative work.
+Personal developer portfolio website being built for the DevOne Hackathon 2025. Portfolio will be built on a Windows 11 PC before being deployed to Github Pages/Vercel
 
 ## Purpose
 

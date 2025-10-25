@@ -123,6 +123,8 @@ export const useTilt = (options: TiltOptions = {}) => {
         pointerEvents: 'none' as const,
         transition: `opacity ${speed}ms ease`,
         opacity: tiltState.glareOpacity > 0 ? 1 : 0,
+        zIndex: 10,
+        borderRadius: 'inherit',
       }
     : null;
 

@@ -39,14 +39,14 @@ export interface Project {
 // Add your projects here
 export const projects: Project[] = [
   {
-    id: 'tower-defense-game',
-    title: 'Tower Defense Game',
-    description: 'An interactive browser-based tower defense game built with TypeScript and Pixi.js. Features multiple tower types, enemy waves, and strategic gameplay.',
-    image: '/projects/placeholder.svg', // Replace with: /projects/tower-defense-thumb.webp
+    id: 'zombie-tower-defence',
+    title: 'Zombie Tower Defence',
+    description: 'A strategic tower defense game where you defend against waves of zombies. Features multiple tower types, upgrade systems, and challenging gameplay mechanics.',
+    image: '/projects/zombie-td-thumb.svg', // TODO: Replace with actual screenshot (.webp or .png)
     technologies: ['TypeScript', 'Pixi.js', 'HTML5 Canvas', 'Vite'],
-    liveUrl: 'https://yourusername.github.io/tower-defense',
-    githubUrl: 'https://github.com/yourusername/tower-defense',
-    embedUrl: 'https://yourusername.github.io/tower-defense', // Allows playing directly in portfolio
+    liveUrl: 'https://idiovoidi.github.io/Zombie_Tower_Defence-OS2',
+    githubUrl: 'https://github.com/idiovoidi/Zombie_Tower_Defence-OS2',
+    embedUrl: 'https://idiovoidi.github.io/Zombie_Tower_Defence-OS2', // Allows playing directly in portfolio
     category: 'game',
     featured: true
   },

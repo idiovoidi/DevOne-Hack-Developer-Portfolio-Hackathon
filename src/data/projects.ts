@@ -18,7 +18,7 @@
  *      liveUrl: 'https://your-demo.com',        // Optional
  *      githubUrl: 'https://github.com/user/repo', // Optional
  *      embedUrl: 'https://game-url.com',         // Optional: for embedded demos
- *      category: 'development',                   // 'development' | 'game' | 'art' | 'design'
+ *      category: 'development',                   // 'development' | 'game'
  *      featured: true                             // Optional: highlight important projects
  *    }
  */
@@ -38,7 +38,7 @@ export interface Project {
   liveUrl?: string;
   githubUrl?: string;
   embedUrl?: string; // For embedded interactive demos (games, web apps)
-  category: "development" | "game" | "art" | "design";
+  category: "development" | "game";
   featured?: boolean;
 }
 
@@ -100,7 +100,7 @@ export const projects: Project[] = [
     title: "ID:I/O VIEW",
     description:
       "Organizational media library & Viewer for curation and sorting of media assets, features advanced metadata and JSON parsing for working with large libraries of both traditional and generative AI based metadata",
-    image: "/projects/idioview-2-main.webp",
+    image: "/projects/idioview-1-metadata.png",
     screenshots: [
       {
         image: "/projects/idioview-1-metadata.png",
@@ -172,39 +172,26 @@ export const projects: Project[] = [
     featured: true,
   },
   {
-    id: "task-management-app",
-    title: "Task Management App",
+    id: "gta-classic-arcade",
+    title: "GTA Classic Arcade",
     description:
-      "A collaborative task management application with real-time updates, drag-and-drop functionality, and team collaboration features.",
-    image: "/projects/placeholder.svg", // Replace with: /projects/task-app-thumb.webp
-    technologies: [
-      "React",
-      "TypeScript",
-      "Firebase",
-      "React DnD",
-      "Material-UI",
-    ],
-    liveUrl: "https://task-manager-demo.netlify.app",
-    githubUrl: "https://github.com/yourusername/task-manager",
-    category: "development",
+      "GTA2 inspired arcade demo created with basic Javascript with no additional libraries as a learning experience.",
+    image: "/projects/gta-classic-arcade-thumb.png",
+    technologies: ["JavaScript", "HTML5 Canvas"],
+    liveUrl: "https://idiovoidi.github.io/GTA_Classic_Arcade/",
+    githubUrl: "https://github.com/idiovoidi/GTA_Classic_Arcade",
+    category: "game",
     featured: false,
   },
   {
-    id: "weather-dashboard",
-    title: "Weather Dashboard",
+    id: "fish-evo",
+    title: "Fish Evo",
     description:
-      "A responsive weather application that displays current conditions and forecasts using the OpenWeather API with beautiful data visualizations.",
-    image: "/projects/placeholder.svg", // Replace with: /projects/weather-thumb.webp
-    technologies: [
-      "React",
-      "TypeScript",
-      "Chart.js",
-      "OpenWeather API",
-      "CSS Modules",
-    ],
-    liveUrl: "https://weather-dashboard-demo.vercel.app",
-    githubUrl: "https://github.com/yourusername/weather-dashboard",
-    category: "development",
+      "An evolutionary simulation game where fish compete for survival. Features genetic algorithms, predator-prey dynamics, and natural selection mechanics in an aquatic ecosystem.",
+    image: "/projects/fish-evo-thumb.png",
+    technologies: ["JavaScript", "Babylon.js", "Yuka", "ECSY", "Recast.js"],
+    githubUrl: "https://github.com/idiovoidi/Fish_Evo",
+    category: "game",
     featured: false,
   },
 ];

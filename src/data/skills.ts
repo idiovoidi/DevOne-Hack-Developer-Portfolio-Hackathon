@@ -102,7 +102,6 @@ export const skillsData: SkillGroup[] = [
         icon: "SiBlender",
         proficiency: 75,
       },
-      { name: "ZBrush", category: "design", proficiency: 70 },
       {
         name: "Adobe Photoshop",
         category: "design",
@@ -121,25 +120,12 @@ export const skillsData: SkillGroup[] = [
         icon: "SiUnrealengine",
         proficiency: 65,
       },
-    ],
-  },
-  {
-    name: "Music Production",
-    skills: [
       {
         name: "Cubase",
-        category: "other",
+        category: "design",
         icon: "SiSteinberg",
         proficiency: 85,
       },
-      { name: "Studio One", category: "other", proficiency: 80 },
-      {
-        name: "Ableton Live",
-        category: "other",
-        icon: "SiAbleton",
-        proficiency: 75,
-      },
-      { name: "Bitwig Studio", category: "other", proficiency: 70 },
     ],
   },
 ];

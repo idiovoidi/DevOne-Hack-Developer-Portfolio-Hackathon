@@ -5,14 +5,12 @@ import { ProjectCard } from '../ui';
 import { useInView } from '../../hooks';
 import { usePerformance } from '../../contexts/PerformanceContext';
 
-type CategoryFilter = 'all' | 'development' | 'game' | 'art' | 'design';
+type CategoryFilter = 'all' | 'development' | 'game';
 
 const categories: { value: CategoryFilter; label: string }[] = [
   { value: 'all', label: 'All' },
   { value: 'development', label: 'Development' },
   { value: 'game', label: 'Games' },
-  { value: 'art', label: 'Art' },
-  { value: 'design', label: 'Design' },
 ];
 
 const Projects: React.FC = () => {

@@ -75,31 +75,25 @@ const VoidEyeball: React.FC = () => {
             height: "100%",
           }}
         >
-          {/* Glitched fragmented rings */}
-          {[0, 1, 2, 3, 4, 5].map((i) => {
-            const size = 100 - i * 15;
-            const segments = 8 + i * 2;
+          {/* Glitched fragmented arcs */}
+          {[0, 1, 2, 3, 4].map((i) => {
+            const size = 90 - i * 18;
+            const rotation = i * 72;
             return (
               <motion.div
-                key={`glitch-ring-${i}`}
+                key={`glitch-arc-${i}`}
                 animate={{
-                  rotate: [0, i % 2 === 0 ? 360 : -360],
-                  scale: [1, 1.05, 0.95, 1],
-                  opacity: [0.3, 0.6, 0.2, 0.5],
+                  rotate: [rotation, rotation + (i % 2 === 0 ? 360 : -360)],
+                  opacity: [0.2, 0.5, 0.1, 0.4],
                 }}
                 transition={{
                   rotate: {
-                    duration: 15 - i * 2,
+                    duration: 20 - i * 3,
                     repeat: Infinity,
                     ease: "linear",
                   },
-                  scale: {
-                    duration: 1.5 + Math.random(),
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  },
                   opacity: {
-                    duration: 1 + Math.random() * 0.5,
+                    duration: 1.2,
                     repeat: Infinity,
                     ease: "easeInOut",
                   },
@@ -113,14 +107,18 @@ const VoidEyeball: React.FC = () => {
                   height: `${size}%`,
                   borderRadius: "50%",
                   background: `conic-gradient(
-                    ${Array.from({ length: segments }, (_, j) => {
-                      const isVisible = Math.random() > 0.3;
-                      return `rgba(${
-                        j % 2 === 0 ? "124, 58, 237" : "167, 139, 250"
-                      }, ${isVisible ? 0.4 : 0}) ${(j / segments) * 100}%`;
-                    }).join(", ")}
+                    from 0deg,
+                    transparent 0deg,
+                    rgba(124, 58, 237, 0.3) 30deg,
+                    transparent 60deg,
+                    transparent 120deg,
+                    rgba(167, 139, 250, 0.25) 150deg,
+                    transparent 180deg,
+                    transparent 240deg,
+                    rgba(124, 58, 237, 0.2) 270deg,
+                    transparent 300deg
                   )`,
-                  filter: `blur(${2 + i}px) contrast(1.2)`,
+                  filter: `blur(${3 + i * 2}px)`,
                   mixBlendMode: "screen",
                 }}
               />
@@ -316,37 +314,6 @@ const VoidEyeball: React.FC = () => {
               />
             );
           })}
-
-          {/* Erratic energy bursts */}
-          {[0, 1, 2].map((i) => (
-            <motion.div
-              key={`burst-${i}`}
-              animate={{
-                scale: [0, 2, 0],
-                opacity: [0, 0.4, 0],
-                rotate: [0, 180],
-              }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                ease: "easeOut",
-                delay: i * 2,
-                repeatDelay: 4,
-              }}
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                width: "40%",
-                height: "40%",
-                borderRadius: "50%",
-                border: "3px solid rgba(167, 139, 250, 0.6)",
-                boxShadow:
-                  "0 0 40px rgba(167, 139, 250, 0.8), inset 0 0 40px rgba(124, 58, 237, 0.4)",
-              }}
-            />
-          ))}
 
           {/* Distortion field with noise */}
           <motion.div

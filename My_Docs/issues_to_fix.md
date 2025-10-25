@@ -1,0 +1,1 @@
+NFT featured links dont align perfectly, also they should instantly open in new tab 

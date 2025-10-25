@@ -47,7 +47,12 @@
     - Ensure links open in new tab with rel="noopener noreferrer"
     - _Requirements: 4.2, 4.5, 6.5_
 
-  - [ ] 4.3 Create Lightbox component for art gallery
+  - [x] 4.3 Create Lightbox component for art gallery
+
+
+
+
+
 
     - Build modal overlay with backdrop
     - Add image display with responsive sizing
@@ -58,14 +63,23 @@
     - Prevent body scroll when lightbox is open
     - _Requirements: 6.1, 6.5, 10.1_
 
-  - [ ] 4.4 Create EmbeddedDemo component for game/demo iframes
+
+  - [x] 4.4 Create EmbeddedDemo component for game/demo iframes
+
+
+
+
     - Build iframe wrapper with responsive aspect ratio
     - Add fullscreen toggle button
     - Implement loading state indicator
     - Add error handling for failed iframe loads
     - _Requirements: 2.3, 6.5, 10.1_
 
-- [ ] 5. Implement Navigation component with mobile menu
+
+- [x] 5. Implement Navigation component with mobile menu
+
+
+
 
   - Create Header component with fixed positioning
   - Implement desktop navigation with smooth scroll links
@@ -75,7 +89,12 @@
   - Implement active section highlighting
   - _Requirements: 1.4, 5.2, 6.1, 6.5_
 
-- [ ] 6. Build Hero section with animations
+- [x] 6. Build Hero section with animations
+
+
+
+
+
 
   - Install framer-motion package
   - Create Hero component with full viewport height
@@ -87,6 +106,7 @@
   - _Requirements: 1.1, 1.2, 1.3, 6.1, 6.2, 10.4_
 
 - [ ] 7. Create Projects section with grid layout
+
 
   - [ ] 7.1 Build ProjectCard component
 

@@ -24,9 +24,9 @@ export interface PersonalInfo {
 
 // Update this data with your personal information
 export const personalInfo: PersonalInfo = {
-  name: 'Your Name',
-  title: 'Full Stack Developer',
-  tagline: 'Building beautiful and functional web experiences',
+  name: 'idiovoidi',
+  title: 'Full Stack Developer & Digital Artist',
+  tagline: 'Crafting immersive experiences from the void of imagination',
   bio: 'I am a passionate developer with experience in modern web technologies. I love creating interactive applications and bringing ideas to life through code.',
   email: 'your.email@example.com',
   location: 'Your City, Country',

@@ -45,12 +45,13 @@ export const Videos = () => {
         >
           <div className="relative inline-block">
             {/* Void connection indicator */}
-            <div 
+            <div
               className="absolute -top-3 left-0 right-0 h-[2px] rounded-full mx-auto"
               style={{
-                width: '60%',
-                background: 'linear-gradient(90deg, transparent, var(--color-primary) 30%, var(--color-accent) 70%, transparent)',
-                boxShadow: '0 0 6px var(--color-primary)',
+                width: "60%",
+                background:
+                  "linear-gradient(90deg, transparent, #f97316 30%, #ea580c 70%, transparent)",
+                boxShadow: "0 0 6px #f97316",
                 opacity: 0.4,
               }}
             />
@@ -59,22 +60,24 @@ export const Videos = () => {
               as="h2"
               className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent"
               style={{
-                backgroundImage: 'linear-gradient(90deg, var(--color-primary), var(--color-accent), var(--color-primary))',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                textShadow: '0 0 15px rgba(168, 85, 247, 0.4), 0 0 30px rgba(236, 72, 153, 0.3)',
+                backgroundImage:
+                  "linear-gradient(90deg, #f97316, #ea580c, #f97316)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                textShadow:
+                  "0 0 15px rgba(249, 115, 22, 0.4), 0 0 30px rgba(234, 88, 12, 0.3)",
               }}
             >
               VIÐɆ0
             </TextEffect>
           </div>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-            <TextEffect 
-              effect="flicker" 
+            <TextEffect
+              effect="flicker"
               className="font-bold"
               style={{
-                color: 'var(--color-primary)',
-                textShadow: '0 0 8px var(--color-primary)',
+                color: "#f97316",
+                textShadow: "0 0 8px #f97316, 0 0 15px rgba(249, 115, 22, 0.5)",
               }}
             >
               Transmissions from the void
@@ -93,7 +96,10 @@ export const Videos = () => {
               className="relative group"
             >
               <div className="relative overflow-hidden rounded-lg bg-black/40 backdrop-blur-sm border border-orange-500/20 hover:border-orange-500/50 transition-all duration-300">
-                <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
+                <div
+                  className="relative w-full"
+                  style={{ paddingBottom: "56.25%" }}
+                >
                   <iframe
                     src={`https://www.youtube.com/embed/${video.id}`}
                     className="absolute top-0 left-0 w-full h-full rounded-lg"

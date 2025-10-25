@@ -23,6 +23,15 @@
 - React Icons or Lucide React for iconography
 - Optimized WebP images with fallbacks
 
+## Image Processing
+
+**ImageMagick:**
+- Used for batch image optimization and WebP conversion
+- **Important:** Use ImageMagick-7.1.2-Q16 (NOT Q16-HDRI) to avoid color/quality issues
+- Install via Chocolatey: `choco install imagemagick`
+- Or download Q16 version from: https://imagemagick.org/script/download.php#windows
+- PowerShell scripts in `scripts/` folder automate photo processing
+
 ## Deployment
 
 **Hosting Options:**

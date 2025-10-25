@@ -19,15 +19,18 @@
 
 ### Install ImageMagick (Required)
 
-**Option 1: Direct Download**
-1. Download from: https://imagemagick.org/script/download.php#windows
+**IMPORTANT:** Use the Q16 version (NOT Q16-HDRI) to avoid color/quality issues with photos.
+
+**Option 1: Direct Download (Recommended)**
+1. Download **ImageMagick-7.x.x-Q16-x64-dll.exe** from: https://imagemagick.org/script/download.php#windows
 2. Run installer (choose "Install legacy utilities" option)
 3. Restart PowerShell
 
-**Option 2: Chocolatey (Recommended)**
+**Option 2: Chocolatey**
 ```powershell
 choco install imagemagick
 ```
+Note: Chocolatey may install HDRI version. If images look "deep fried", uninstall and use Option 1.
 
 **Verify Installation:**
 ```powershell

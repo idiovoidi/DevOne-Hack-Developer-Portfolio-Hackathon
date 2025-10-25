@@ -26,24 +26,34 @@ Write-Host "Source: $SourceFolder" -ForegroundColor Yellow
 Write-Host "Output: $OutputFolder" -ForegroundColor Yellow
 Write-Host ""
 
-# Check if ImageMagick is installed
-$magickPath = Get-Command magick -ErrorAction SilentlyContinue
+# Check if ImageMagick is installed - prefer Q16 over Q16-HDRI
+$magickPath = $null
 
-# If not in PATH, check common installation locations
+# First, check for Q16 (non-HDRI) version in common locations
+$preferredPaths = @(
+    "C:\Program Files\ImageMagick-7.1.2-Q16\magick.exe",
+    "C:\Program Files\ImageMagick-7.1.1-Q16\magick.exe",
+    "C:\Program Files\ImageMagick-7.1.0-Q16\magick.exe"
+)
+
+foreach ($path in $preferredPaths) {
+    if (Test-Path $path) {
+        $magickPath = $path
+        Write-Host "Found ImageMagick Q16 at: $magickPath" -ForegroundColor Green
+        break
+    }
+}
+
+# If Q16 not found, check PATH (but warn if it's HDRI)
 if (-not $magickPath) {
-    $possiblePaths = @(
-        "C:\Program Files\ImageMagick-7.1.2-Q16-HDRI\magick.exe",
-        "C:\Program Files\ImageMagick-7.1.2-Q16\magick.exe",
-        "C:\Program Files\ImageMagick*\magick.exe"
-    )
-    
-    foreach ($path in $possiblePaths) {
-        $found = Get-Item $path -ErrorAction SilentlyContinue | Select-Object -First 1
-        if ($found) {
-            $magickPath = $found.FullName
-            Write-Host "Found ImageMagick at: $magickPath" -ForegroundColor Green
-            break
+    $pathCmd = Get-Command magick -ErrorAction SilentlyContinue
+    if ($pathCmd) {
+        $magickPath = $pathCmd.Source
+        if ($magickPath -match "HDRI") {
+            Write-Host "WARNING: Using HDRI version - images may look 'deep fried'" -ForegroundColor Yellow
+            Write-Host "Consider installing Q16 version instead" -ForegroundColor Yellow
         }
+        Write-Host "Found ImageMagick at: $magickPath" -ForegroundColor Green
     }
 }
 

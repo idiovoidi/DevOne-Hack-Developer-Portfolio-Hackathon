@@ -1,23 +1,26 @@
-import emailjs from '@emailjs/browser';
-import type { ContactFormData } from '../components/ui/ContactForm';
+import emailjs from "@emailjs/browser";
+import type { ContactFormData } from "../components/ui/ContactForm";
 
 /**
  * Email Service Configuration
- * 
+ *
+ * Template variables used:
+ * - {{name}} - Sender's name
+ * - {{from_email}} - Sender's email (for reply-to)
+ * - {{message}} - The message content
+ * - {{time}} - Timestamp when message was sent
+ *
  * To set up EmailJS:
  * 1. Create an account at https://www.emailjs.com/
  * 2. Create an email service (Gmail, Outlook, etc.)
- * 3. Create an email template with variables: {{from_name}}, {{from_email}}, {{message}}
+ * 3. Create an email template using the variables above
  * 4. Get your Public Key from Account settings
- * 5. Create a .env file in the root directory with:
- *    VITE_EMAILJS_SERVICE_ID=your_service_id
- *    VITE_EMAILJS_TEMPLATE_ID=your_template_id
- *    VITE_EMAILJS_PUBLIC_KEY=your_public_key
+ * 5. Add credentials to .env file (see .env.example)
  */
 
-const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || '';
-const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || '';
-const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || '';
+const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "";
+const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "";
+const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "";
 
 /**
  * Check if EmailJS is properly configured
@@ -32,17 +35,32 @@ export const isEmailServiceConfigured = (): boolean => {
  * @returns Promise that resolves when email is sent
  * @throws Error if EmailJS is not configured or sending fails
  */
-export const sendContactEmail = async (formData: ContactFormData): Promise<void> => {
+export const sendContactEmail = async (
+  formData: ContactFormData
+): Promise<void> => {
   if (!isEmailServiceConfigured()) {
-    throw new Error('Email service is not configured. Please set up environment variables.');
+    throw new Error(
+      "Email service is not configured. Please set up environment variables."
+    );
   }
 
   try {
+    // Get current timestamp for the email
+    const now = new Date();
+    const timeString = now.toLocaleString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+
     const templateParams = {
-      from_name: formData.name,
-      from_email: formData.email,
-      message: formData.message,
-      to_name: 'Portfolio Owner', // You can customize this
+      name: formData.name, // Matches {{name}} in your template
+      from_email: formData.email, // For reply-to functionality
+      message: formData.message, // Matches {{message}} in your template
+      time: timeString, // Matches {{time}} in your template
     };
 
     const response = await emailjs.send(
@@ -53,10 +71,10 @@ export const sendContactEmail = async (formData: ContactFormData): Promise<void>
     );
 
     if (response.status !== 200) {
-      throw new Error('Failed to send email');
+      throw new Error("Failed to send email");
     }
   } catch (error) {
-    console.error('EmailJS Error:', error);
+    console.error("EmailJS Error:", error);
     throw error;
   }
 };
@@ -65,12 +83,14 @@ export const sendContactEmail = async (formData: ContactFormData): Promise<void>
  * Alternative: Mock email sending for development/testing
  * Use this when EmailJS is not configured
  */
-export const mockSendEmail = async (formData: ContactFormData): Promise<void> => {
-  console.log('Mock email sent:', formData);
-  
+export const mockSendEmail = async (
+  formData: ContactFormData
+): Promise<void> => {
+  console.log("Mock email sent:", formData);
+
   // Simulate network delay
-  await new Promise(resolve => setTimeout(resolve, 1500));
-  
+  await new Promise((resolve) => setTimeout(resolve, 1500));
+
   // Simulate success
   return Promise.resolve();
 };

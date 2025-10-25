@@ -6,7 +6,16 @@
  */
 
 export interface SocialLink {
-  platform: "github" | "linkedin" | "twitter" | "instagram" | "email" | "spotify" | "youtube" | "tumblr" | "other";
+  platform:
+    | "github"
+    | "linkedin"
+    | "twitter"
+    | "instagram"
+    | "email"
+    | "spotify"
+    | "youtube"
+    | "tumblr"
+    | "other";
   url: string;
   username: string;
   icon?: string; // Optional: Custom icon name from react-icons
@@ -29,8 +38,8 @@ export const personalInfo: PersonalInfo = {
   title: "Full Stack Developer & Digital Artist",
   tagline: "Crafting immersive experiences from the void of imagination",
   bio: "I am a passionate developer with experience in modern web technologies. I love creating interactive applications and bringing ideas to life through code.",
-  email: "your.email@example.com",
-  location: "Your City, Country",
+  email: "idiovoidi@gmail.com", // Update this with your actual email
+  location: undefined, // Optional: Add your location if you want to display it
   resumeUrl: "/resume.pdf", // Optional: Add your resume PDF to the public folder
   social: [
     {

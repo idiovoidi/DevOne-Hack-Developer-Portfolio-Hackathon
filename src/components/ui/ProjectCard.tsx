@@ -51,7 +51,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
           <motion.div
             initial={{ opacity: 0 }}
             whileHover={{ opacity: 1 }}
-            className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-4"
+            className="absolute inset-0 bg-linear-to-t from-black via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-4"
           >
             <div className="flex gap-2 mb-2">
               {project.embedUrl && (

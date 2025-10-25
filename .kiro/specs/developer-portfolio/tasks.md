@@ -49,25 +49,15 @@
 
   - [x] 4.3 Create Lightbox component for art gallery
 
-
-
-
-
-
     - Build modal overlay with backdrop
     - Add image display with responsive sizing
-
 
     - Implement close button and ESC key handler
     - Add click-outside-to-close functionality
     - Prevent body scroll when lightbox is open
     - _Requirements: 6.1, 6.5, 10.1_
 
-
   - [x] 4.4 Create EmbeddedDemo component for game/demo iframes
-
-
-
 
     - Build iframe wrapper with responsive aspect ratio
     - Add fullscreen toggle button
@@ -75,11 +65,7 @@
     - Add error handling for failed iframe loads
     - _Requirements: 2.3, 6.5, 10.1_
 
-
 - [x] 5. Implement Navigation component with mobile menu
-
-
-
 
   - Create Header component with fixed positioning
   - Implement desktop navigation with smooth scroll links
@@ -91,11 +77,6 @@
 
 - [x] 6. Build Hero section with animations
 
-
-
-
-
-
   - Install framer-motion package
   - Create Hero component with full viewport height
   - Implement animated name/title with fade-in effect
@@ -105,16 +86,9 @@
   - Implement smooth scroll behavior
   - _Requirements: 1.1, 1.2, 1.3, 6.1, 6.2, 10.4_
 
+- [x] 7. Create Projects section with grid layout
 
-
-- [-] 7. Create Projects section with grid layout
-
-
-
-
-
-
-  - [ ] 7.1 Build ProjectCard component
+  - [x] 7.1 Build ProjectCard component
 
     - Create card with image, title, description layout
     - Add technology badges using SkillBadge component
@@ -122,22 +96,24 @@
     - Add "View Demo", "View Code", and "Play Demo" buttons (conditional based on project type)
     - Add support for opening EmbeddedDemo modal when embedUrl exists
 
-
     - Ensure responsive image sizing
     - _Requirements: 2.2, 2.3, 2.4, 6.5, 10.1_
 
-  - [ ] 7.2 Implement Projects section container
+  - [x] 7.2 Implement Projects section container
 
     - Create responsive grid (1 col mobile, 2 col tablet, 3 col desktop)
     - Add filter/category tabs (All, Development, Games, Art/Design)
 
-
     - Map through filtered projects data to render ProjectCard components
     - Add staggered fade-in animation on scroll
+
     - Implement lazy loading for project images
     - _Requirements: 2.1, 2.5, 5.1, 6.2, 7.4_
 
+  - [x] 7.3 Build Art Gallery section (optional separate section)
+
   - [ ] 7.3 Build Art Gallery section (optional separate section)
+
     - Create ArtPieceCard component with image and hover overlay
     - Implement masonry or grid layout for artwork display
     - Add click handler to open Lightbox with full-size image
@@ -146,7 +122,7 @@
     - Implement lazy loading for art images
     - _Requirements: 2.1, 2.4, 5.1, 6.2, 10.1, 10.4_
 
-- [ ] 8. Build Skills section with categorized display
+- [x] 8. Build Skills section with categorized display
 
   - Create SkillBadge component with icon and label
   - Implement Skills section with category grouping
@@ -156,12 +132,14 @@
   - Ensure responsive layout across device sizes
   - _Requirements: 3.1, 3.2, 3.3, 3.5, 5.1, 6.1, 6.5_
 
-- [ ] 9. Implement Contact section with form
+- [x] 9. Implement Contact section with form
 
-  - [ ] 9.1 Create contact form with validation
+
+  - [x] 9.1 Create contact form with validation
 
     - Install react-hook-form package
     - Create form with Name, Email, Message fields
+
     - Implement client-side validation (required fields, email format)
     - Add inline error messages below fields
     - Style form inputs with Tailwind (focus states, error states)
@@ -170,13 +148,15 @@
   - [ ] 9.2 Integrate form submission service
 
     - Choose and set up EmailJS or Formspree
+
     - Implement form submission handler
     - Add loading state to submit button
     - Create success/error toast notifications
     - Add fallback email display if service fails
     - _Requirements: 4.3, 4.4_
 
-  - [ ] 9.3 Build contact info display
+  - [x] 9.3 Build contact info display
+
     - Create two-column layout (form + contact info)
     - Display email with mailto link
     - Add SocialLinks component

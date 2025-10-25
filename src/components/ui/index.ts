@@ -18,3 +18,6 @@ export type { ProjectCardProps } from './ProjectCard';
 
 export { default as ArtPieceCard } from './ArtPieceCard';
 export type { ArtPieceCardProps } from './ArtPieceCard';
+
+export { default as ContactForm } from './ContactForm';
+export type { ContactFormProps, ContactFormData } from './ContactForm';

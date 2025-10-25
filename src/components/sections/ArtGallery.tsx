@@ -106,6 +106,8 @@ const ArtGallery: React.FC = () => {
           imageSrc={currentArtwork.fullImage || currentArtwork.image}
           imageAlt={currentArtwork.title}
           title={`${currentArtwork.title} - ${currentArtwork.medium}`}
+          embedUrl={currentArtwork.embedUrl}
+          nftUrl={currentArtwork.nftUrl}
         />
       )}
     </section>

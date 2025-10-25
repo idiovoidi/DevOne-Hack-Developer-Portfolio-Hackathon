@@ -7,6 +7,8 @@ export interface LightboxProps {
   imageSrc: string;
   imageAlt?: string;
   title?: string;
+  embedUrl?: string; // Optional: For NFT or other embeddable content
+  nftUrl?: string; // Optional: Link to NFT marketplace
 }
 
 const Lightbox: React.FC<LightboxProps> = ({
@@ -15,6 +17,8 @@ const Lightbox: React.FC<LightboxProps> = ({
   imageSrc,
   imageAlt = 'Lightbox image',
   title,
+  embedUrl,
+  nftUrl,
 }) => {
   useEffect(() => {
     if (isOpen) {
@@ -63,7 +67,7 @@ const Lightbox: React.FC<LightboxProps> = ({
         <IoClose size={32} />
       </button>
       
-      {/* Image container */}
+      {/* Content container */}
       <div className="relative max-w-7xl max-h-[90vh] w-full h-full flex flex-col items-center justify-center">
         {title && (
           <h3 className="text-white text-xl font-semibold mb-4 text-center">
@@ -71,12 +75,35 @@ const Lightbox: React.FC<LightboxProps> = ({
           </h3>
         )}
         
-        <img
-          src={imageSrc}
-          alt={imageAlt}
-          className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
-          onClick={(e) => e.stopPropagation()}
-        />
+        {/* NFT Embed or Regular Image */}
+        {embedUrl ? (
+          <div className="w-full max-w-2xl" onClick={(e) => e.stopPropagation()}>
+            <iframe
+              src={embedUrl}
+              className="w-full h-[600px] rounded-lg shadow-2xl border-2 border-primary/30"
+              title={title || 'NFT Artwork'}
+              loading="lazy"
+              sandbox="allow-scripts allow-same-origin allow-popups"
+            />
+            {nftUrl && (
+              <a
+                href={nftUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-block text-primary hover:text-primary/80 transition-colors duration-200 underline"
+              >
+                View on objkt.com →
+              </a>
+            )}
+          </div>
+        ) : (
+          <img
+            src={imageSrc}
+            alt={imageAlt}
+            className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          />
+        )}
       </div>
     </div>
   );

@@ -13,9 +13,10 @@ Tezos symbol next to "Explore Full Collections" We can later implement it as a w
 
 Add a giant eyeball in the middle of the landing page
 
-Neural brain section theme for the Skills and tech section
+When you hover the button in Art Gallery the button should come up with a preview saying "Oh yes, please click me 👁️👅👁️"
 
 ---
 
 Implemented
 Add pulsing beats effect for the music section
+Neural brain section theme for the Skills and tech section

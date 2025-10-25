@@ -1,6 +1,7 @@
-import { motion } from 'framer-motion';
-import { personalInfo } from '../../data/personal';
-import { FiChevronDown } from 'react-icons/fi';
+import { motion } from "framer-motion";
+import { personalInfo } from "../../data/personal";
+import { FiChevronDown } from "react-icons/fi";
+import VoidEyeball from "../ui/VoidEyeball";
 
 export const Hero = () => {
   // Animation variants
@@ -22,7 +23,7 @@ export const Hero = () => {
       y: 0,
       transition: {
         duration: 0.6,
-        ease: 'easeOut' as const,
+        ease: "easeOut" as const,
       },
     },
   };
@@ -36,7 +37,7 @@ export const Hero = () => {
 
       window.scrollTo({
         top: offsetPosition,
-        behavior: 'smooth',
+        behavior: "smooth",
       });
     }
   };
@@ -46,21 +47,27 @@ export const Hero = () => {
       id="home"
       className="section"
       style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative',
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        position: "relative",
+        overflow: "hidden",
       }}
     >
+      {/* Giant Eyeball Background */}
+      <VoidEyeball />
+
       <motion.div
         className="container-custom"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
         style={{
-          textAlign: 'center',
-          maxWidth: '900px',
+          textAlign: "center",
+          maxWidth: "900px",
+          position: "relative",
+          zIndex: 10,
         }}
       >
         {/* Name with glitch effect */}
@@ -69,13 +76,14 @@ export const Hero = () => {
           className="glitch-text text-gradient"
           data-text={personalInfo.name}
           style={{
-            fontSize: 'clamp(2.5rem, 8vw, 4.5rem)',
-            fontFamily: 'var(--font-glitch)',
+            fontSize: "clamp(2.5rem, 8vw, 4.5rem)",
+            fontFamily: "var(--font-glitch)",
             fontWeight: 900,
-            letterSpacing: '0.05em',
-            marginBottom: '1rem',
-            lineHeight: '1.2',
-            textTransform: 'uppercase',
+            letterSpacing: "0.05em",
+            marginBottom: "1rem",
+            lineHeight: "1.2",
+            textTransform: "uppercase",
+            color: "#ffffff",
           }}
         >
           {personalInfo.name}
@@ -85,10 +93,10 @@ export const Hero = () => {
         <motion.h2
           variants={itemVariants}
           style={{
-            fontSize: 'clamp(1.5rem, 4vw, 2.25rem)',
-            fontWeight: '600',
-            color: 'var(--color-text-primary)',
-            marginBottom: '1.5rem',
+            fontSize: "clamp(1.5rem, 4vw, 2.25rem)",
+            fontWeight: "600",
+            color: "#e2e8f0",
+            marginBottom: "1.5rem",
           }}
         >
           {personalInfo.title}
@@ -98,13 +106,13 @@ export const Hero = () => {
         <motion.p
           variants={itemVariants}
           style={{
-            fontSize: 'clamp(1rem, 2vw, 1.25rem)',
-            color: 'var(--color-text-secondary)',
-            marginBottom: '3rem',
-            maxWidth: '700px',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            lineHeight: '1.6',
+            fontSize: "clamp(1rem, 2vw, 1.25rem)",
+            color: "#94a3b8",
+            marginBottom: "3rem",
+            maxWidth: "700px",
+            marginLeft: "auto",
+            marginRight: "auto",
+            lineHeight: "1.6",
           }}
         >
           {personalInfo.tagline}
@@ -114,28 +122,28 @@ export const Hero = () => {
         <motion.div
           variants={itemVariants}
           style={{
-            display: 'flex',
-            gap: '1rem',
-            justifyContent: 'center',
-            flexWrap: 'wrap',
+            display: "flex",
+            gap: "1rem",
+            justifyContent: "center",
+            flexWrap: "wrap",
           }}
         >
           <button
             className="btn btn-primary"
-            onClick={() => scrollToSection('projects')}
+            onClick={() => scrollToSection("projects")}
             style={{
-              padding: '0.75rem 2rem',
-              fontSize: '1.125rem',
+              padding: "0.75rem 2rem",
+              fontSize: "1.125rem",
             }}
           >
             View Projects
           </button>
           <button
             className="btn btn-outline"
-            onClick={() => scrollToSection('contact')}
+            onClick={() => scrollToSection("contact")}
             style={{
-              padding: '0.75rem 2rem',
-              fontSize: '1.125rem',
+              padding: "0.75rem 2rem",
+              fontSize: "1.125rem",
             }}
           >
             Contact Me
@@ -151,22 +159,23 @@ export const Hero = () => {
           duration: 0.6,
           delay: 1.5,
           repeat: Infinity,
-          repeatType: 'reverse',
+          repeatType: "reverse",
           repeatDelay: 0.5,
         }}
         style={{
-          position: 'absolute',
-          bottom: '2rem',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          cursor: 'pointer',
+          position: "absolute",
+          bottom: "2rem",
+          left: "50%",
+          transform: "translateX(-50%)",
+          cursor: "pointer",
+          zIndex: 10,
         }}
-        onClick={() => scrollToSection('projects')}
+        onClick={() => scrollToSection("projects")}
       >
         <FiChevronDown
           size={32}
           style={{
-            color: 'var(--color-text-secondary)',
+            color: "var(--color-text-secondary)",
           }}
         />
       </motion.div>

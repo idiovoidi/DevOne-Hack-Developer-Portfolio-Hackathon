@@ -44,57 +44,61 @@ export const Music = () => {
       {/* Pulsing Beats Background Effect */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Beat circles - different sizes and speeds */}
-        <div 
+        <div
           className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full opacity-20"
           style={{
-            background: 'radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, transparent 70%)',
-            animation: 'musicPulse 2s ease-in-out infinite',
+            background:
+              "radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, transparent 70%)",
+            animation: "musicPulse 2s ease-in-out infinite",
           }}
         />
-        <div 
+        <div
           className="absolute top-1/3 right-1/4 w-96 h-96 rounded-full opacity-15"
           style={{
-            background: 'radial-gradient(circle, rgba(236, 72, 153, 0.3) 0%, transparent 70%)',
-            animation: 'musicPulse 2.5s ease-in-out infinite 0.3s',
+            background:
+              "radial-gradient(circle, rgba(236, 72, 153, 0.3) 0%, transparent 70%)",
+            animation: "musicPulse 2.5s ease-in-out infinite 0.3s",
           }}
         />
-        <div 
+        <div
           className="absolute bottom-1/4 left-1/3 w-80 h-80 rounded-full opacity-10"
           style={{
-            background: 'radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%)',
-            animation: 'musicPulse 3s ease-in-out infinite 0.6s',
+            background:
+              "radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%)",
+            animation: "musicPulse 3s ease-in-out infinite 0.6s",
           }}
         />
-        <div 
+        <div
           className="absolute top-1/2 right-1/3 w-72 h-72 rounded-full opacity-15"
           style={{
-            background: 'radial-gradient(circle, rgba(168, 85, 247, 0.35) 0%, transparent 70%)',
-            animation: 'musicPulse 2.2s ease-in-out infinite 0.9s',
+            background:
+              "radial-gradient(circle, rgba(168, 85, 247, 0.35) 0%, transparent 70%)",
+            animation: "musicPulse 2.2s ease-in-out infinite 0.9s",
           }}
         />
-        
+
         {/* Soundwave lines */}
         <div className="absolute left-0 top-1/2 w-full h-1 opacity-10">
-          <div 
+          <div
             className="h-full bg-gradient-to-r from-transparent via-purple-500 to-transparent"
             style={{
-              animation: 'soundwave 4s ease-in-out infinite',
+              animation: "soundwave 4s ease-in-out infinite",
             }}
           />
         </div>
         <div className="absolute left-0 top-1/3 w-full h-1 opacity-10">
-          <div 
+          <div
             className="h-full bg-gradient-to-r from-transparent via-pink-500 to-transparent"
             style={{
-              animation: 'soundwave 3.5s ease-in-out infinite 0.5s',
+              animation: "soundwave 3.5s ease-in-out infinite 0.5s",
             }}
           />
         </div>
         <div className="absolute left-0 top-2/3 w-full h-1 opacity-10">
-          <div 
+          <div
             className="h-full bg-gradient-to-r from-transparent via-cyan-500 to-transparent"
             style={{
-              animation: 'soundwave 4.5s ease-in-out infinite 1s',
+              animation: "soundwave 4.5s ease-in-out infinite 1s",
             }}
           />
         </div>
@@ -111,12 +115,13 @@ export const Music = () => {
         >
           <div className="relative inline-block">
             {/* Void connection indicator */}
-            <div 
+            <div
               className="absolute -top-3 left-0 right-0 h-[2px] rounded-full mx-auto"
               style={{
-                width: '60%',
-                background: 'linear-gradient(90deg, transparent, var(--color-primary) 30%, var(--color-accent) 70%, transparent)',
-                boxShadow: '0 0 6px var(--color-primary)',
+                width: "60%",
+                background:
+                  "linear-gradient(90deg, transparent, var(--color-primary) 30%, var(--color-accent) 70%, transparent)",
+                boxShadow: "0 0 6px var(--color-primary)",
                 opacity: 0.4,
               }}
             />
@@ -125,23 +130,25 @@ export const Music = () => {
               as="h2"
               className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent"
               style={{
-                backgroundImage: 'linear-gradient(90deg, var(--color-primary), var(--color-accent), var(--color-primary))',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                textShadow: '0 0 15px rgba(168, 85, 247, 0.4), 0 0 30px rgba(236, 72, 153, 0.3)',
+                backgroundImage:
+                  "linear-gradient(90deg, var(--color-primary), var(--color-accent), var(--color-primary))",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                textShadow:
+                  "0 0 15px rgba(168, 85, 247, 0.4), 0 0 30px rgba(236, 72, 153, 0.3)",
               }}
             >
               MUSIC
             </TextEffect>
           </div>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-            Ｓｏｕｎｄｓ　ｆｒｏｍ　ｔｈｅ　   {" "}
-            <TextEffect 
-              effect="flicker" 
+            Ｓｏｕｎｄｓ　ｆｒｏｍ　ｔｈｅ　{" "}
+            <TextEffect
+              effect="flicker"
               className="font-bold"
               style={{
-                color: 'var(--color-primary)',
-                textShadow: '0 0 8px var(--color-primary)',
+                color: "var(--color-primary)",
+                textShadow: "0 0 8px var(--color-primary)",
               }}
             >
               ＶＯＩＤ
@@ -189,7 +196,7 @@ export const Music = () => {
             className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/50"
           >
             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+              <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z" />
             </svg>
             View All Music on Spotify
           </a>

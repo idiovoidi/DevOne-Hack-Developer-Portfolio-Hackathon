@@ -62,6 +62,44 @@ export const projects: Project[] = [
     title: "Social Content Manager",
     description:
       "A desktop application for organizing and scheduling artwork posts across social media platforms with ethical posting practices and automated workflows.",
+    image: "/projects/social-content-manager-1.webp",
+    screenshots: [
+      {
+        image: "/projects/social-content-manager-1.webp",
+        caption: "Main dashboard showing content queue and scheduling overview",
+      },
+      {
+        image: "/projects/social-content-manager-2.webp",
+        caption: "Content library with artwork organization and tagging system",
+      },
+      {
+        image: "/projects/social-content-manager-3.webp",
+        caption: "Post composer with platform-specific formatting and preview",
+      },
+      {
+        image: "/projects/social-content-manager-4.webp",
+        caption: "Analytics dashboard tracking engagement and posting metrics",
+      },
+      {
+        image: "/projects/social-content-manager-5.webp",
+        caption: "Schedule calendar view with drag-and-drop functionality",
+      },
+      {
+        image: "/projects/social-content-manager-6.webp",
+        caption:
+          "Settings panel for platform integrations and automation rules",
+      },
+    ],
+    technologies: ["Python", "PyQt6", "MongoDB", "REST APIs"],
+    // Private/unreleased project - no live URL or GitHub repo
+    category: "development",
+    featured: true,
+  },
+  {
+    id: "idioview",
+    title: "ID:I/O VIEW",
+    description:
+      "A comprehensive image metadata viewer and editor for artists and photographers. Features advanced metadata parsing, batch processing, and detailed EXIF/IPTC data management.",
     image: "/projects/idioview-2-main.webp",
     screenshots: [
       {
@@ -70,27 +108,27 @@ export const projects: Project[] = [
       },
       {
         image: "/projects/idioview-2-main.webp",
-        caption: "Main dashboard showing content queue and scheduling overview",
+        caption: "Main interface with image preview and metadata display",
       },
       {
         image: "/projects/idioview-3-gallery.webp",
-        caption: "Content library with artwork organization and tagging system",
+        caption: "Gallery view with thumbnail navigation and filtering",
       },
       {
         image: "/projects/idioview-4-details.webp",
-        caption: "Detailed view with platform-specific formatting options",
+        caption: "Detailed metadata editor with field validation",
       },
       {
         image: "/projects/idioview-5-settings.webp",
-        caption: "Settings panel for platform integrations and automation rules",
+        caption:
+          "Settings panel for customizing metadata fields and preferences",
       },
       {
         image: "/projects/idioview-6-preview.webp",
-        caption: "Post preview with multi-platform compatibility check",
+        caption: "Preview mode with metadata overlay and export options",
       },
     ],
-    technologies: ["Python", "PyQt6", "MongoDB", "REST APIs"],
-    // Private/unreleased project - no live URL or GitHub repo
+    technologies: ["Python", "PyQt6", "Pillow", "ExifTool"],
     category: "development",
     featured: true,
   },
@@ -103,7 +141,8 @@ export const projects: Project[] = [
     screenshots: [
       {
         image: "/projects/stardew-gift-tracker-villagers.png",
-        caption: "Villagers list ordered by relationship status and gift history",
+        caption:
+          "Villagers list ordered by relationship status and gift history",
       },
       {
         image: "/projects/stardew-gift-tracker-most-liked.png",

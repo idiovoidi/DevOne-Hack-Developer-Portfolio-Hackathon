@@ -27,15 +27,15 @@ export interface NFT {
 export const nfts: NFT[] = [
   {
     id: "nft-1",
-    title: "NFT #15", // TODO: Add actual NFT title from objkt.com
-    description: "", // TODO: Add description if available
+    title: ".Br!†h._//",
+    description: "",
     image:
       "https://assets.objkt.media/file/assets-003/QmbtUvGdxFuaauaYYSBnySzEYqruaMdJ6p74kAhr5A7TN5/artifact",
     collection: "𖣐ƿ℮ɲ ΣĐ!էὶꝋn",
     blockchain: "Tezos",
     contractAddress: "KT1SJawrAnz4qnt3XLGa924WQR5Jkp95UL9K",
     tokenId: "15",
-    mintDate: "2024-01-01", // TODO: Add actual mint date
+    mintDate: "2024-01-01",
     marketplaceUrl:
       "https://objkt.com/tokens/KT1SJawrAnz4qnt3XLGa924WQR5Jkp95UL9K/15",
     embedUrl:
@@ -43,15 +43,15 @@ export const nfts: NFT[] = [
   },
   {
     id: "nft-2",
-    title: "NFT #15", // TODO: Add actual NFT title from objkt.com
-    description: "", // TODO: Add description if available
+    title: "₦ɄⱠⱠ{E₦₮ⱤɎ",
+    description: "",
     image:
       "https://assets.objkt.media/file/assets-003/QmW66bkjRdN65RtuwFmVNQtJX57zwhbCjVmqRSC5jxuYk3/artifact",
     collection: "M¡ɲƋ_Ƌ∆T∆_",
     blockchain: "Tezos",
     contractAddress: "KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew",
     tokenId: "15",
-    mintDate: "2024-01-01", // TODO: Add actual mint date
+    mintDate: "2024-01-01",
     marketplaceUrl:
       "https://objkt.com/tokens/KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew/15",
     embedUrl:
@@ -59,15 +59,15 @@ export const nfts: NFT[] = [
   },
   {
     id: "nft-3",
-    title: "NFT #11", // TODO: Add actual NFT title from objkt.com
-    description: "", // TODO: Add description if available
+    title: "E҉Я҉丨҉\\҉",
+    description: "",
     image:
       "https://assets.objkt.media/file/assets-003/QmXRLk4VACrzL6z1u3eAy8ffwdiXH7mjPtxkDc48xUh3fp/artifact",
     collection: "𐌼!ɳɖ~ʍɛꝆ₸Ɀ",
     blockchain: "Tezos",
     contractAddress: "KT1EQFjF1qDm99nkZvqNtw14kNb6YJAnDM5M",
     tokenId: "11",
-    mintDate: "2024-01-01", // TODO: Add actual mint date
+    mintDate: "2024-01-01",
     marketplaceUrl:
       "https://objkt.com/tokens/KT1EQFjF1qDm99nkZvqNtw14kNb6YJAnDM5M/11",
     embedUrl:
@@ -75,15 +75,15 @@ export const nfts: NFT[] = [
   },
   {
     id: "nft-4",
-    title: "NFT #12", // TODO: Add actual NFT title from objkt.com
-    description: "", // TODO: Add description if available
+    title: "†ЯΞΞ|_1N3.ΔΞ]",
+    description: "",
     image:
       "https://assets.objkt.media/file/assets-003/bafybeihh6ms2oqiwjav4l5vqy7edomdt5wz36hpzbhkjxpu23tznlqgf6a/artifact",
     collection: "M¡ɲƋ_Ƌ∆T∆_",
     blockchain: "Tezos",
     contractAddress: "KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew",
     tokenId: "12",
-    mintDate: "2024-01-01", // TODO: Add actual mint date
+    mintDate: "2024-01-01",
     marketplaceUrl:
       "https://objkt.com/tokens/KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew/12",
     embedUrl:

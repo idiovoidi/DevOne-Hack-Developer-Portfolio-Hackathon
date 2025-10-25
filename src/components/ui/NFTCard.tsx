@@ -65,20 +65,10 @@ const NFTCard: React.FC<NFTCardProps> = ({ nft, index, onClick }) => {
         </p>
 
         {nft.description && (
-          <p className="text-sm text-text-secondary line-clamp-2 mb-3">
+          <p className="text-sm text-text-secondary line-clamp-2">
             {nft.description}
           </p>
         )}
-
-        {/* Token Info */}
-        <div className="flex items-center justify-between text-xs text-text-secondary">
-          <span>Token #{nft.tokenId}</span>
-          {nft.sold && (
-            <span className="px-2 py-1 bg-accent-primary/20 text-accent-primary rounded">
-              Sold
-            </span>
-          )}
-        </div>
       </div>
 
       {/* Glow Effect on Hover */}

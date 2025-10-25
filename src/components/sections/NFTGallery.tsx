@@ -4,7 +4,6 @@ import { nfts, nftCollections } from "../../data/nfts";
 import NFTCard from "../ui/NFTCard";
 import Lightbox from "../ui/Lightbox";
 import { useInView } from "../../hooks";
-import { RiNftLine } from "react-icons/ri";
 import { FiExternalLink } from "react-icons/fi";
 
 const NFTGallery: React.FC = () => {
@@ -41,12 +40,11 @@ const NFTGallery: React.FC = () => {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="text-center mb-12"
         >
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <RiNftLine className="text-accent-primary" size={32} />
-            <h2 className="section-heading">NFT Collection</h2>
-          </div>
-          <p className="section-subheading max-w-2xl mx-auto">
-            <span className="text-gradient font-bold text-xl">Featured:</span>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-600 via-fuchsia-500 to-pink-600 bg-clip-text text-transparent">
+            NFT COLLECTION
+          </h2>
+          <p className="text-lg max-w-2xl mx-auto">
+            <span className="font-bold text-xl bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Featured:</span>
           </p>
         </motion.div>
 
@@ -76,7 +74,7 @@ const NFTGallery: React.FC = () => {
             <span className="text-3xl font-bold" style={{ color: "#0d61ff" }}>
               ꜩ
             </span>
-            <h3 className="text-2xl font-bold text-text-primary text-center">
+            <h3 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent text-center">
               Explore Full Collections
             </h3>
           </div>
@@ -95,9 +93,9 @@ const NFTGallery: React.FC = () => {
                     : { opacity: 0, y: 20 }
                 }
                 transition={{ duration: 0.4, delay: index * 0.1 }}
-                className="group relative bg-surface border border-accent-primary/20 rounded-lg overflow-hidden hover:border-accent-primary/50 transition-all duration-300"
+                className="group relative bg-black/40 backdrop-blur-sm border border-purple-500/20 rounded-lg overflow-hidden hover:border-purple-500/50 transition-all duration-300"
                 style={{
-                  boxShadow: "0 0 20px rgba(139, 92, 246, 0.1)",
+                  boxShadow: "0 0 20px rgba(168, 85, 247, 0.15)",
                 }}
               >
                 {/* Collection Cover */}
@@ -114,11 +112,11 @@ const NFTGallery: React.FC = () => {
                 {/* Collection Info */}
                 <div className="p-6">
                   <div className="flex items-center justify-between">
-                    <h4 className="text-lg font-semibold text-text-primary group-hover:text-accent-primary transition-colors duration-300">
+                    <h4 className="text-lg font-semibold text-text-primary group-hover:text-purple-400 transition-colors duration-300">
                       {collection.name}
                     </h4>
                     <FiExternalLink
-                      className="text-accent-primary shrink-0 ml-2"
+                      className="text-purple-400 shrink-0 ml-2"
                       size={20}
                     />
                   </div>
@@ -126,7 +124,7 @@ const NFTGallery: React.FC = () => {
 
                 {/* Hover Glow */}
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                  <div className="absolute inset-0 bg-gradient-to-br from-accent-primary/10 via-transparent to-accent-secondary/10" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-pink-500/10" />
                 </div>
               </motion.a>
             ))}

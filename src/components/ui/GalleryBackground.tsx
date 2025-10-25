@@ -2,121 +2,144 @@ import React from "react";
 import { motion } from "framer-motion";
 
 const GalleryBackground: React.FC = () => {
-  // Generate floating frame positions
-  const frames = Array.from({ length: 8 }, (_, i) => ({
+  // Generate organic void elements
+  const voidClouds = Array.from({ length: 5 }, (_, i) => ({
     id: i,
     x: Math.random() * 100,
     y: Math.random() * 100,
-    size: 60 + Math.random() * 80,
-    delay: Math.random() * 2,
-    duration: 15 + Math.random() * 10,
+    size: 200 + Math.random() * 300,
+    delay: Math.random() * 3,
+    duration: 20 + Math.random() * 15,
   }));
 
   return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-purple-900/10 via-transparent to-blue-900/10" />
-      
-      {/* Grid pattern */}
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* CSS-based noise/grain texture */}
       <div 
-        className="absolute inset-0 opacity-20"
+        className="absolute inset-0 opacity-40"
         style={{
           backgroundImage: `
-            linear-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(139, 92, 246, 0.1) 1px, transparent 1px)
+            repeating-linear-gradient(
+              0deg,
+              transparent,
+              transparent 2px,
+              rgba(88, 28, 135, 0.03) 2px,
+              rgba(88, 28, 135, 0.03) 4px
+            ),
+            repeating-linear-gradient(
+              90deg,
+              transparent,
+              transparent 2px,
+              rgba(68, 64, 60, 0.03) 2px,
+              rgba(68, 64, 60, 0.03) 4px
+            )
           `,
-          backgroundSize: '80px 80px',
+          backgroundSize: '4px 4px',
+          filter: 'contrast(1.2) brightness(0.9)',
         }}
       />
 
-      {/* Floating gallery frames */}
-      {frames.map((frame) => (
+      {/* Organic gradient layers */}
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-950/20 via-transparent to-stone-900/20" />
+      <div className="absolute inset-0 bg-gradient-to-tl from-purple-900/10 via-transparent to-stone-950/15" />
+      
+      {/* Floating void clouds */}
+      {voidClouds.map((cloud) => (
         <motion.div
-          key={frame.id}
-          className="absolute border border-purple-500/20 rounded-sm"
+          key={cloud.id}
+          className="absolute rounded-full blur-3xl"
           style={{
-            left: `${frame.x}%`,
-            top: `${frame.y}%`,
-            width: `${frame.size}px`,
-            height: `${frame.size * 1.2}px`,
+            left: `${cloud.x}%`,
+            top: `${cloud.y}%`,
+            width: `${cloud.size}px`,
+            height: `${cloud.size}px`,
+            background: `radial-gradient(circle, rgba(88, 28, 135, 0.15) 0%, transparent 70%)`,
           }}
-          initial={{ opacity: 0, scale: 0.8 }}
           animate={{
-            opacity: [0, 0.4, 0],
-            scale: [0.8, 1, 0.8],
-            y: [0, -30, 0],
+            x: [0, 30, 0],
+            y: [0, -20, 0],
+            opacity: [0.3, 0.6, 0.3],
           }}
           transition={{
-            duration: frame.duration,
-            delay: frame.delay,
+            duration: cloud.duration,
+            delay: cloud.delay,
             repeat: Infinity,
             ease: "easeInOut",
           }}
-        >
-          {/* Inner glow */}
-          <div className="absolute inset-0 border border-cyan-500/10 rounded-sm m-2" />
-        </motion.div>
+        />
       ))}
 
-      {/* Spotlight beams */}
-      <motion.div
-        className="absolute top-0 left-1/4 w-px h-full bg-gradient-to-b from-purple-500/20 via-purple-500/5 to-transparent"
-        animate={{
-          opacity: [0.3, 0.6, 0.3],
-          scaleY: [0.8, 1, 0.8],
-        }}
-        transition={{
-          duration: 4,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-      <motion.div
-        className="absolute top-0 right-1/3 w-px h-full bg-gradient-to-b from-cyan-500/20 via-cyan-500/5 to-transparent"
-        animate={{
-          opacity: [0.6, 0.3, 0.6],
-          scaleY: [1, 0.8, 1],
-        }}
-        transition={{
-          duration: 5,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 1,
-        }}
-      />
-
-      {/* Floating particles */}
-      {Array.from({ length: 20 }).map((_, i) => (
+      {/* Subtle cosmic dust particles */}
+      {Array.from({ length: 15 }).map((_, i) => (
         <motion.div
-          key={`particle-${i}`}
-          className="absolute w-1 h-1 bg-purple-400/40 rounded-full"
+          key={`dust-${i}`}
+          className="absolute w-px h-px bg-purple-300/30 rounded-full"
           style={{
             left: `${Math.random() * 100}%`,
             top: `${Math.random() * 100}%`,
+            boxShadow: '0 0 2px rgba(216, 180, 254, 0.3)',
           }}
           animate={{
-            y: [-20, -60],
-            opacity: [0, 1, 0],
+            y: [0, -40, -80],
+            opacity: [0, 0.6, 0],
           }}
           transition={{
-            duration: 3 + Math.random() * 2,
-            delay: Math.random() * 3,
+            duration: 4 + Math.random() * 3,
+            delay: Math.random() * 4,
             repeat: Infinity,
             ease: "easeOut",
           }}
         />
       ))}
 
-      {/* Scanning line effect */}
+      {/* Organic light rays */}
       <motion.div
-        className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent"
+        className="absolute top-0 left-1/4 w-px h-full opacity-20"
+        style={{
+          background: 'linear-gradient(to bottom, rgba(88, 28, 135, 0.3) 0%, transparent 60%)',
+        }}
         animate={{
-          top: ["0%", "100%"],
+          opacity: [0.1, 0.3, 0.1],
         }}
         transition={{
-          duration: 8,
+          duration: 6,
           repeat: Infinity,
-          ease: "linear",
+          ease: "easeInOut",
+        }}
+      />
+      <motion.div
+        className="absolute top-0 right-1/3 w-px h-full opacity-20"
+        style={{
+          background: 'linear-gradient(to bottom, rgba(120, 113, 108, 0.2) 0%, transparent 50%)',
+        }}
+        animate={{
+          opacity: [0.2, 0.1, 0.2],
+        }}
+        transition={{
+          duration: 7,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: 2,
+        }}
+      />
+
+      {/* Vignette effect */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.4) 100%)',
+        }}
+      />
+
+      {/* Subtle texture overlay using SVG filter simulation */}
+      <div 
+        className="absolute inset-0 opacity-20 mix-blend-overlay"
+        style={{
+          backgroundImage: `
+            radial-gradient(circle at 20% 30%, rgba(88, 28, 135, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 70%, rgba(68, 64, 60, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 40% 80%, rgba(88, 28, 135, 0.08) 0%, transparent 50%)
+          `,
         }}
       />
     </div>

@@ -69,11 +69,13 @@ export const Hero = () => {
           className="glitch-text text-gradient"
           data-text={personalInfo.name}
           style={{
-            fontSize: 'clamp(2.5rem, 8vw, 4rem)',
+            fontSize: 'clamp(2.5rem, 8vw, 4.5rem)',
             fontFamily: 'var(--font-glitch)',
-            fontWeight: 700,
+            fontWeight: 900,
+            letterSpacing: '0.05em',
             marginBottom: '1rem',
             lineHeight: '1.2',
+            textTransform: 'uppercase',
           }}
         >
           {personalInfo.name}

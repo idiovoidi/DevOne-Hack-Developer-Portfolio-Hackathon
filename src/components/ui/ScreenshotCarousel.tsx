@@ -88,8 +88,8 @@ const ScreenshotCarousel: React.FC<ScreenshotCarouselProps> = ({
 
             {/* Image Container */}
             <div
-              className="relative bg-background"
-              style={{ minHeight: "400px" }}
+              className="relative bg-background flex items-center justify-center"
+              style={{ height: "60vh", minHeight: "400px" }}
             >
               {!imageLoaded && (
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -101,7 +101,7 @@ const ScreenshotCarousel: React.FC<ScreenshotCarouselProps> = ({
                 src={currentScreenshot.image}
                 alt={currentScreenshot.caption}
                 onLoad={() => setImageLoaded(true)}
-                className={`w-full h-auto max-h-[60vh] object-contain transition-opacity duration-300 ${
+                className={`max-w-full max-h-full object-contain transition-opacity duration-300 ${
                   imageLoaded ? "opacity-100" : "opacity-0"
                 }`}
               />

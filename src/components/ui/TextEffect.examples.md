@@ -13,22 +13,28 @@ The `TextEffect` component provides reusable text effects for the portfolio.
 ## Usage Examples
 
 ### Glitch Effect (for headings)
+
 ```tsx
-import { TextEffect } from '../ui';
+import { TextEffect } from "../ui";
 
 <TextEffect effect="glitch" as="h1" className="text-5xl font-bold">
   GLITCH TEXT
-</TextEffect>
+</TextEffect>;
 ```
 
 ### Flicker Effect (for emphasis)
+
 ```tsx
 <p>
-  This word will <TextEffect effect="flicker" className="font-bold text-purple-400">flicker</TextEffect>
+  This word will{" "}
+  <TextEffect effect="flicker" className="font-bold text-purple-400">
+    flicker
+  </TextEffect>
 </p>
 ```
 
 ### Glow Effect (for highlights)
+
 ```tsx
 <TextEffect effect="glow" className="text-cyan-400">
   Glowing text
@@ -36,6 +42,7 @@ import { TextEffect } from '../ui';
 ```
 
 ### Pulse Effect (for attention)
+
 ```tsx
 <TextEffect effect="pulse" as="span" className="text-pink-400">
   Pulsing text
@@ -43,11 +50,12 @@ import { TextEffect } from '../ui';
 ```
 
 ### Custom Styling
+
 ```tsx
-<TextEffect 
-  effect="flicker" 
+<TextEffect
+  effect="flicker"
   className="font-bold text-2xl"
-  style={{ color: 'var(--color-accent)' }}
+  style={{ color: "var(--color-accent)" }}
 >
   Custom styled text
 </TextEffect>

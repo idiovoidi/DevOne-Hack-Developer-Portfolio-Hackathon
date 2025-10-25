@@ -1,5 +1,5 @@
 import { Header, Footer } from './components/layout';
-import { Hero, Projects, ArtGallery, Music, Skills, Contact } from './components/sections';
+import { Hero, Projects, ArtGallery, Music, Videos, Skills, Contact } from './components/sections';
 import { ScrollProgress, CosmicBackground } from './components/ui';
 
 function App() {
@@ -32,6 +32,9 @@ function App() {
 
         {/* Music Section */}
         <Music />
+
+        {/* Videos Section */}
+        <Videos />
 
         {/* Skills Section */}
         <Skills />

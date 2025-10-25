@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { NFT } from '../../data/nfts';
 import { FaEthereum } from 'react-icons/fa';
 import { RiNftLine } from 'react-icons/ri';
+import { useTilt } from '../../hooks/useTilt';
 
 interface NFTCardProps {
   nft: NFT;
@@ -22,17 +23,41 @@ const NFTCard: React.FC<NFTCardProps> = ({ nft, index, onClick }) => {
     }
   };
 
+  // 3D Tilt effect
+  const {
+    ref: tiltRef,
+    tiltStyle,
+    glareStyle,
+  } = useTilt({
+    maxTilt: 10,
+    perspective: 1000,
+    scale: 1.05,
+    speed: 400,
+    glare: true,
+    maxGlare: 0.3,
+  });
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: index * 0.1 }}
-      className="group relative bg-black/40 backdrop-blur-sm border border-purple-500/20 rounded-lg overflow-hidden hover:border-purple-500/50 transition-all duration-300 cursor-pointer"
-      onClick={onClick}
+    <div
+      ref={tiltRef}
       style={{
-        boxShadow: '0 0 20px rgba(168, 85, 247, 0.15)',
+        ...tiltStyle,
+        transformStyle: 'preserve-3d',
       }}
     >
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: index * 0.1 }}
+        className="group relative bg-black/40 backdrop-blur-sm border border-purple-500/20 rounded-lg overflow-hidden hover:border-purple-500/50 transition-all duration-300 cursor-pointer"
+        onClick={onClick}
+        style={{
+          boxShadow: '0 0 20px rgba(168, 85, 247, 0.15)',
+          transformStyle: 'preserve-3d',
+        }}
+      >
+        {/* Glare Effect Overlay */}
+        {glareStyle && <div style={glareStyle} />}
       {/* NFT Image */}
       <div className="relative aspect-square overflow-hidden bg-background">
         <img
@@ -71,11 +96,12 @@ const NFTCard: React.FC<NFTCardProps> = ({ nft, index, onClick }) => {
         )}
       </div>
 
-      {/* Glow Effect on Hover */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-pink-500/10" />
-      </div>
-    </motion.div>
+        {/* Glow Effect on Hover */}
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-pink-500/10" />
+        </div>
+      </motion.div>
+    </div>
   );
 };
 

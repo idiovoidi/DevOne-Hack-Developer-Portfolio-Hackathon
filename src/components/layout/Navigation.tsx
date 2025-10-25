@@ -283,21 +283,23 @@ const Navigation: React.FC = () => {
             );
           })}
 
-          {/* Light Mode Toggle Button (Desktop) */}
+          {/* Light Mode Toggle Button (Desktop) - Easter Egg */}
           <button
             onClick={handleDarkModeClick}
-            className="relative px-3 py-1.5 text-sm font-medium text-yellow-400 hover:text-yellow-300 transition-all duration-300 focus-visible-ring rounded-lg border border-yellow-500/30 hover:border-yellow-400 hover:shadow-lg hover:shadow-yellow-500/20"
+            className="relative px-2 py-1 text-xs opacity-40 hover:opacity-70 transition-opacity duration-300 focus-visible-ring rounded flex items-center gap-1"
             aria-label="Toggle light mode"
           >
-            ☀️ Light Mode
+            <span>☀️</span>
+            <span className="text-text-secondary text-[10px]">Light Mode</span>
           </button>
         </div>
 
-        {/* Light Mode Toggle Button (Mobile) */}
+        {/* Light Mode Toggle Button (Mobile) - Easter Egg */}
         <button
           onClick={handleDarkModeClick}
-          className="md:hidden relative px-3 py-1.5 text-sm font-medium text-yellow-400 hover:text-yellow-300 transition-all duration-300 focus-visible-ring rounded-lg border border-yellow-500/30 hover:border-yellow-400 mr-2"
+          className="md:hidden relative p-2 text-xs opacity-40 hover:opacity-70 transition-opacity duration-300 focus-visible-ring rounded mr-1"
           aria-label="Toggle light mode"
+          title="Light Mode"
         >
           ☀️
         </button>
@@ -569,7 +571,8 @@ const Navigation: React.FC = () => {
             <motion.div
               className="relative bg-black border-2 border-red-500 rounded-lg p-8 shadow-2xl pointer-events-auto"
               style={{
-                boxShadow: "0 0 40px rgba(239, 68, 68, 0.5), inset 0 0 20px rgba(239, 68, 68, 0.2)",
+                boxShadow:
+                  "0 0 40px rgba(239, 68, 68, 0.5), inset 0 0 20px rgba(239, 68, 68, 0.2)",
               }}
               animate={{
                 x: [0, -2, 2, -2, 2, 0],
@@ -598,7 +601,8 @@ const Navigation: React.FC = () => {
                 className="text-2xl font-bold text-red-500 text-center relative z-10"
                 style={{
                   fontFamily: "monospace",
-                  textShadow: "2px 2px 0 rgba(0, 255, 255, 0.3), -2px -2px 0 rgba(255, 0, 255, 0.3)",
+                  textShadow:
+                    "2px 2px 0 rgba(0, 255, 255, 0.3), -2px -2px 0 rgba(255, 0, 255, 0.3)",
                   letterSpacing: "0.1em",
                 }}
                 animate={{
@@ -617,7 +621,8 @@ const Navigation: React.FC = () => {
               <motion.div
                 className="absolute inset-0 pointer-events-none"
                 style={{
-                  background: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 0, 0, 0.1) 2px, rgba(255, 0, 0, 0.1) 4px)",
+                  background:
+                    "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 0, 0, 0.1) 2px, rgba(255, 0, 0, 0.1) 4px)",
                 }}
                 animate={{
                   y: [0, 8],

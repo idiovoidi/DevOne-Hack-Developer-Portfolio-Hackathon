@@ -38,10 +38,69 @@ export const Music = () => {
   return (
     <section
       id="music"
-      className="relative pt-12 pb-20 px-4 sm:px-6 lg:px-8"
+      className="relative pt-12 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden"
       style={{ backgroundColor: "var(--color-background-secondary)" }}
     >
-      <div className="max-w-7xl mx-auto">
+      {/* Pulsing Beats Background Effect */}
+      <div className="absolute inset-0 pointer-events-none">
+        {/* Beat circles - different sizes and speeds */}
+        <div 
+          className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full opacity-20"
+          style={{
+            background: 'radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, transparent 70%)',
+            animation: 'musicPulse 2s ease-in-out infinite',
+          }}
+        />
+        <div 
+          className="absolute top-1/3 right-1/4 w-96 h-96 rounded-full opacity-15"
+          style={{
+            background: 'radial-gradient(circle, rgba(236, 72, 153, 0.3) 0%, transparent 70%)',
+            animation: 'musicPulse 2.5s ease-in-out infinite 0.3s',
+          }}
+        />
+        <div 
+          className="absolute bottom-1/4 left-1/3 w-80 h-80 rounded-full opacity-10"
+          style={{
+            background: 'radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%)',
+            animation: 'musicPulse 3s ease-in-out infinite 0.6s',
+          }}
+        />
+        <div 
+          className="absolute top-1/2 right-1/3 w-72 h-72 rounded-full opacity-15"
+          style={{
+            background: 'radial-gradient(circle, rgba(168, 85, 247, 0.35) 0%, transparent 70%)',
+            animation: 'musicPulse 2.2s ease-in-out infinite 0.9s',
+          }}
+        />
+        
+        {/* Soundwave lines */}
+        <div className="absolute left-0 top-1/2 w-full h-1 opacity-10">
+          <div 
+            className="h-full bg-gradient-to-r from-transparent via-purple-500 to-transparent"
+            style={{
+              animation: 'soundwave 4s ease-in-out infinite',
+            }}
+          />
+        </div>
+        <div className="absolute left-0 top-1/3 w-full h-1 opacity-10">
+          <div 
+            className="h-full bg-gradient-to-r from-transparent via-pink-500 to-transparent"
+            style={{
+              animation: 'soundwave 3.5s ease-in-out infinite 0.5s',
+            }}
+          />
+        </div>
+        <div className="absolute left-0 top-2/3 w-full h-1 opacity-10">
+          <div 
+            className="h-full bg-gradient-to-r from-transparent via-cyan-500 to-transparent"
+            style={{
+              animation: 'soundwave 4.5s ease-in-out infinite 1s',
+            }}
+          />
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Header */}
         <motion.div
           ref={ref}

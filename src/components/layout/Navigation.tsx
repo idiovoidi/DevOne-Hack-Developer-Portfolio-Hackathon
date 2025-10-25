@@ -60,7 +60,12 @@ const Navigation: React.FC = () => {
           href="#home"
           onClick={(e) => handleNavClick(e, '#home')}
           className="text-2xl font-bold text-gradient focus-visible-ring"
-          style={{ fontFamily: 'var(--font-heading)' }}
+          style={{ 
+            fontFamily: 'var(--font-glitch)',
+            fontWeight: 900,
+            letterSpacing: '0.05em',
+            textTransform: 'uppercase'
+          }}
         >
           idiovoidi
         </a>

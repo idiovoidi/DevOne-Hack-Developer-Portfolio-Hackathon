@@ -516,6 +516,35 @@
     animation: rotateSlow 20s linear infinite;
   }
   
+  /* Flicker effect for void text */
+  @keyframes flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+      opacity: 1;
+      text-shadow: 0 0 10px rgba(139, 92, 246, 0.8), 0 0 20px rgba(139, 92, 246, 0.5), 0 0 30px rgba(139, 92, 246, 0.3);
+    }
+    20%, 24%, 55% {
+      opacity: 0.4;
+      text-shadow: 0 0 5px rgba(139, 92, 246, 0.3);
+    }
+    22% {
+      opacity: 0.7;
+      text-shadow: 0 0 8px rgba(139, 92, 246, 0.6);
+    }
+  }
+  
+  /* Text Effect Classes */
+  .flicker-text {
+    display: inline-block;
+  }
+  
+  .glow-text {
+    display: inline-block;
+  }
+  
+  .pulse-text {
+    display: inline-block;
+  }
+  
   /* Glitch Effect Animations */
   @keyframes glitch {
     0% {

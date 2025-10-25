@@ -1,9 +1,10 @@
-import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import { TextEffect } from "../ui";
 
 /**
  * Music Section Component
- * 
+ *
  * Displays Spotify embeds of featured tracks
  */
 
@@ -15,16 +16,16 @@ interface SpotifyTrack {
 
 const spotifyTracks: SpotifyTrack[] = [
   {
-    id: '1G1lhf2zGBSr6EPjEur2Zc',
-    url: 'https://open.spotify.com/track/1G1lhf2zGBSr6EPjEur2Zc',
+    id: "1G1lhf2zGBSr6EPjEur2Zc",
+    url: "https://open.spotify.com/track/1G1lhf2zGBSr6EPjEur2Zc",
   },
   {
-    id: '5rpU8Ytpkb3r3lshsElyZX',
-    url: 'https://open.spotify.com/track/5rpU8Ytpkb3r3lshsElyZX',
+    id: "5rpU8Ytpkb3r3lshsElyZX",
+    url: "https://open.spotify.com/track/5rpU8Ytpkb3r3lshsElyZX",
   },
   {
-    id: '6c3VWJKzKt0oQ3ORm2dem6',
-    url: 'https://open.spotify.com/track/6c3VWJKzKt0oQ3ORm2dem6',
+    id: "6c3VWJKzKt0oQ3ORm2dem6",
+    url: "https://open.spotify.com/track/6c3VWJKzKt0oQ3ORm2dem6",
   },
 ];
 
@@ -38,7 +39,7 @@ export const Music = () => {
     <section
       id="music"
       className="relative pt-12 pb-20 px-4 sm:px-6 lg:px-8"
-      style={{ backgroundColor: 'var(--color-background-secondary)' }}
+      style={{ backgroundColor: "var(--color-background-secondary)" }}
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
@@ -49,14 +50,18 @@ export const Music = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 
-            className="glitch-text text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent"
-            data-text="MUSIC"
+          <TextEffect
+            effect="glitch"
+            as="h2"
+            className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent"
           >
             MUSIC
-          </h2>
+          </TextEffect>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-            Sounds from the void
+            Sounds from the{" "}
+            <TextEffect effect="flicker" className="font-bold text-purple-400">
+              void
+            </TextEffect>
           </p>
         </motion.div>
 

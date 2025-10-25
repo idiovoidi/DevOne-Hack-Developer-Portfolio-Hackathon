@@ -25,3 +25,6 @@ export type { ContactFormProps, ContactFormData } from './ContactForm';
 export { default as ScrollProgress } from './ScrollProgress';
 
 export { CosmicBackground } from './CosmicBackground';
+
+export { TextEffect } from './TextEffect';
+export type { TextEffectType } from './TextEffect';

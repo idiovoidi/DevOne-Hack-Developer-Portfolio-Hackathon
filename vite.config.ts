@@ -3,7 +3,16 @@ import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  // Base path: '/' for Vercel, '/repo-name/' for GitHub Pages
+  base: '/',
+  plugins: [
+    react({
+      // Disable fast refresh in production to avoid eval
+      babel: {
+        compact: true,
+      },
+    }),
+  ],
   build: {
     rollupOptions: {
       output: {

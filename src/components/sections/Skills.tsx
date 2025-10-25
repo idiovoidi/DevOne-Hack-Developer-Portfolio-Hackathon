@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { skillsData } from '../../data/skills';
 import SkillBadge from '../ui/SkillBadge';
+import NeuralBackground from '../ui/NeuralBackground';
 import { useInView } from '../../hooks';
 
 const Skills: React.FC = () => {
@@ -33,8 +34,11 @@ const Skills: React.FC = () => {
   };
 
   return (
-    <section id="skills" className="section" style={{ backgroundColor: 'var(--color-background)' }}>
-      <div className="container-custom">
+    <section id="skills" className="section relative" style={{ backgroundColor: 'var(--color-background)' }}>
+      {/* Neural Brain Background */}
+      <NeuralBackground />
+      
+      <div className="container-custom relative z-10">
         {/* Section Header */}
         <motion.div
           ref={headerRef}
@@ -43,9 +47,42 @@ const Skills: React.FC = () => {
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className="text-center mb-16"
         >
-          <h2 className="section-heading">Skills & Technologies</h2>
+          <div className="flex items-center justify-center gap-4 mb-4">
+            <motion.div
+              animate={{
+                scale: [1, 1.1, 1],
+                rotate: [0, 5, -5, 0],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="text-5xl"
+            >
+              🧠
+            </motion.div>
+            <h2 className="section-heading bg-gradient-to-r from-purple-400 via-purple-300 to-purple-400 bg-clip-text text-transparent">
+              Skills & Technologies
+            </h2>
+            <motion.div
+              animate={{
+                scale: [1, 1.1, 1],
+                rotate: [0, -5, 5, 0],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 1.5,
+              }}
+              className="text-5xl"
+            >
+              🧠
+            </motion.div>
+          </div>
           <p className="section-subheading max-w-2xl mx-auto">
-            A comprehensive overview of my technical expertise and the tools I use to bring ideas to life
+            Neural pathways of technical expertise - where knowledge connects and evolves
           </p>
         </motion.div>
 

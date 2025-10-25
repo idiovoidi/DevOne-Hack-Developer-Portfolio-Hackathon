@@ -94,3 +94,41 @@ export const getCollections = (): string[] => {
 export const getNFTsByBlockchain = (blockchain: string): NFT[] => {
   return nfts.filter((nft) => nft.blockchain === blockchain);
 };
+
+// NFT Collections
+export interface NFTCollection {
+  id: string;
+  name: string;
+  description: string;
+  contractAddress: string;
+  collectionUrl: string;
+  itemCount?: number;
+  coverImage: string; // Use one of the NFT images as cover
+}
+
+export const nftCollections: NFTCollection[] = [
+  {
+    id: "collection-1",
+    name: "𖣐ƿ℮ɲ ΣĐ!էὶꝋn",
+    description: "Explore the full collection on objkt.com",
+    contractAddress: "KT1SJawrAnz4qnt3XLGa924WQR5Jkp95UL9K",
+    collectionUrl: "https://objkt.com/collections/KT1SJawrAnz4qnt3XLGa924WQR5Jkp95UL9K",
+    coverImage: "https://assets.objkt.media/file/assets-003/Qmc4ESmrXwj8VyToKubMgNbXAsQu8h78LAfbt4bTDaxrbU/thumb400",
+  },
+  {
+    id: "collection-2",
+    name: "Collection 2",
+    description: "Explore the full collection on objkt.com",
+    contractAddress: "KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew",
+    collectionUrl: "https://objkt.com/collections/KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew",
+    coverImage: "https://assets.objkt.media/file/assets-003/QmW66bkjRdN65RtuwFmVNQtJX57zwhbCjVmqRSC5jxuYk3/artifact",
+  },
+  {
+    id: "collection-3",
+    name: "Collection 3",
+    description: "Explore the full collection on objkt.com",
+    contractAddress: "KT1EQFjF1qDm99nkZvqNtw14kNb6YJAnDM5M",
+    collectionUrl: "https://objkt.com/collections/KT1EQFjF1qDm99nkZvqNtw14kNb6YJAnDM5M",
+    coverImage: "https://assets.objkt.media/file/assets-003/QmXRLk4VACrzL6z1u3eAy8ffwdiXH7mjPtxkDc48xUh3fp/artifact",
+  },
+];

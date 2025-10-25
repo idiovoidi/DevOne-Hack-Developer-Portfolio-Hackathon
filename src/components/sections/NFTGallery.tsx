@@ -1,28 +1,23 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { nfts, getCollections } from '../../data/nfts';
-import NFTCard from '../ui/NFTCard';
-import Lightbox from '../ui/Lightbox';
-import { useInView } from '../../hooks';
-import { RiNftLine } from 'react-icons/ri';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { nfts, nftCollections } from "../../data/nfts";
+import NFTCard from "../ui/NFTCard";
+import Lightbox from "../ui/Lightbox";
+import { useInView } from "../../hooks";
+import { RiNftLine } from "react-icons/ri";
+import { FiExternalLink } from "react-icons/fi";
 
 const NFTGallery: React.FC = () => {
   const [selectedNFT, setSelectedNFT] = useState<number | null>(null);
-  const [selectedCollection, setSelectedCollection] = useState<string>('all');
   const { ref: headerRef, inView: headerInView } = useInView({
     threshold: 0.2,
   });
-
-  const collections = ['all', ...getCollections()];
-  
-  const filteredNFTs = selectedCollection === 'all'
-    ? nfts
-    : nfts.filter(nft => nft.collection === selectedCollection);
+  const { ref: collectionsRef, inView: collectionsInView } = useInView({
+    threshold: 0.2,
+  });
 
   const handleNFTClick = (index: number) => {
-    // Find the actual index in the full nfts array
-    const actualIndex = nfts.findIndex(nft => nft.id === filteredNFTs[index].id);
-    setSelectedNFT(actualIndex);
+    setSelectedNFT(index);
   };
 
   const handleCloseLightbox = () => {
@@ -35,7 +30,7 @@ const NFTGallery: React.FC = () => {
     <section
       id="nft-gallery"
       className="section"
-      style={{ backgroundColor: 'var(--color-background)' }}
+      style={{ backgroundColor: "var(--color-background)" }}
     >
       <div className="container-custom">
         {/* Section Header */}
@@ -43,7 +38,7 @@ const NFTGallery: React.FC = () => {
           ref={headerRef}
           initial={{ opacity: 0, y: 30 }}
           animate={headerInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           className="text-center mb-12"
         >
           <div className="flex items-center justify-center gap-3 mb-4">
@@ -51,62 +46,94 @@ const NFTGallery: React.FC = () => {
             <h2 className="section-heading">NFT Collection</h2>
           </div>
           <p className="section-subheading max-w-2xl mx-auto">
-            Explore my digital art minted on the blockchain
+            Featured pieces from my blockchain art collections
           </p>
         </motion.div>
 
-        {/* Collection Filter */}
-        {collections.length > 2 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={headerInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex flex-wrap justify-center gap-3 mb-12"
-          >
-            {collections.map((collection) => (
-              <button
-                key={collection}
-                onClick={() => setSelectedCollection(collection)}
-                className={`px-6 py-2 rounded-full border transition-all duration-300 ${
-                  selectedCollection === collection
-                    ? 'bg-accent-primary/20 border-accent-primary text-accent-primary'
-                    : 'bg-surface border-accent-primary/20 text-text-secondary hover:border-accent-primary/50 hover:text-text-primary'
-                }`}
-              >
-                {collection === 'all' ? 'All NFTs' : collection}
-              </button>
-            ))}
-          </motion.div>
-        )}
-
-        {/* NFT Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredNFTs.length > 0 ? (
-            filteredNFTs.map((nft, index) => (
-              <NFTCard
-                key={nft.id}
-                nft={nft}
-                index={index}
-                onClick={() => handleNFTClick(index)}
-              />
-            ))
-          ) : (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="col-span-full text-center py-12"
-            >
-              <p className="text-text-secondary text-lg">
-                No NFTs available in this collection.
-              </p>
-            </motion.div>
-          )}
+        {/* Featured NFTs Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+          {nfts.map((nft, index) => (
+            <NFTCard
+              key={nft.id}
+              nft={nft}
+              index={index}
+              onClick={() => handleNFTClick(index)}
+            />
+          ))}
         </div>
+
+        {/* Collections Section */}
+        <motion.div
+          ref={collectionsRef}
+          initial={{ opacity: 0, y: 30 }}
+          animate={
+            collectionsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }
+          }
+          transition={{ duration: 0.6 }}
+          className="mt-16"
+        >
+          <h3 className="text-2xl font-bold text-text-primary text-center mb-8">
+            Explore Full Collections
+          </h3>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {nftCollections.map((collection, index) => (
+              <motion.a
+                key={collection.id}
+                href={collection.collectionUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 20 }}
+                animate={
+                  collectionsInView
+                    ? { opacity: 1, y: 0 }
+                    : { opacity: 0, y: 20 }
+                }
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+                className="group relative bg-surface border border-accent-primary/20 rounded-lg overflow-hidden hover:border-accent-primary/50 transition-all duration-300"
+                style={{
+                  boxShadow: "0 0 20px rgba(139, 92, 246, 0.1)",
+                }}
+              >
+                {/* Collection Cover */}
+                <div className="relative aspect-square overflow-hidden bg-background">
+                  <img
+                    src={collection.coverImage}
+                    alt={collection.name}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
+
+                {/* Collection Info */}
+                <div className="p-6">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-lg font-semibold text-text-primary group-hover:text-accent-primary transition-colors duration-300">
+                      {collection.name}
+                    </h4>
+                    <FiExternalLink
+                      className="text-accent-primary shrink-0 ml-2"
+                      size={20}
+                    />
+                  </div>
+                </div>
+
+                {/* Hover Glow */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                  <div className="absolute inset-0 bg-gradient-to-br from-accent-primary/10 via-transparent to-accent-secondary/10" />
+                </div>
+              </motion.a>
+            ))}
+          </div>
+        </motion.div>
 
         {/* Stats Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={headerInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          animate={
+            collectionsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
+          }
           transition={{ duration: 0.6, delay: 0.4 }}
           className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6"
         >
@@ -114,16 +141,16 @@ const NFTGallery: React.FC = () => {
             <div className="text-3xl font-bold text-accent-primary mb-2">
               {nfts.length}
             </div>
-            <div className="text-text-secondary">Total NFTs</div>
+            <div className="text-text-secondary">Featured NFTs</div>
           </div>
-          
+
           <div className="bg-surface border border-accent-primary/20 rounded-lg p-6 text-center">
             <div className="text-3xl font-bold text-accent-primary mb-2">
-              {getCollections().length}
+              {nftCollections.length}
             </div>
             <div className="text-text-secondary">Collections</div>
           </div>
-          
+
           <div className="bg-surface border border-accent-primary/20 rounded-lg p-6 text-center">
             <div className="text-3xl font-bold text-accent-primary mb-2">
               Tezos

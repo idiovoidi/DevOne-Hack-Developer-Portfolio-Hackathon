@@ -9,7 +9,7 @@ param(
     [string]$OutputFolder = "public/art",
     
     [Parameter(Mandatory=$false)]
-    [int]$ThumbSize = 800,
+    [int]$ThumbSize = 384,
     
     [Parameter(Mandatory=$false)]
     [int]$FullSize = 1920,
@@ -108,30 +108,35 @@ foreach ($image in $images) {
     
     try {
         # Create thumbnail (square crop from center)
-        & $magickCmd convert "$($image.FullName)" `
-            -resize "${ThumbSize}x${ThumbSize}^" `
+        $resizeParam = "${ThumbSize}x${ThumbSize}^"
+        $extentParam = "${ThumbSize}x${ThumbSize}"
+        
+        Write-Host "  DEBUG: Resize=$resizeParam Extent=$extentParam" -ForegroundColor DarkGray
+        
+        & $magickCmd "$($image.FullName)" `
+            -resize $resizeParam `
             -gravity center `
-            -extent "${ThumbSize}x${ThumbSize}" `
+            -extent $extentParam `
             -quality $ThumbQuality `
             -define webp:method=6 `
             "$thumbOutput"
         
         # Create full-size (maintain aspect ratio, max dimension)
-        & $magickCmd convert "$($image.FullName)" `
+        & $magickCmd "$($image.FullName)" `
             -resize "${FullSize}x${FullSize}>" `
             -quality $FullQuality `
             -define webp:method=6 `
             "$fullOutput"
         
         # Get file sizes
-        $thumbSize = [math]::Round((Get-Item $thumbOutput).Length / 1KB, 2)
+        $thumbSizeKB = [math]::Round((Get-Item $thumbOutput).Length / 1KB, 2)
         $fullSizeKB = [math]::Round((Get-Item $fullOutput).Length / 1KB, 2)
         
-        Write-Host "  ✓ Thumbnail: ${thumbSize}KB" -ForegroundColor Green
+        Write-Host "  ✓ Thumbnail: ${thumbSizeKB}KB" -ForegroundColor Green
         Write-Host "  ✓ Full-size: ${fullSizeKB}KB" -ForegroundColor Green
         
         # Warn if files are too large
-        if ($thumbSize -gt 200) {
+        if ($thumbSizeKB -gt 200) {
             Write-Host "  ⚠ Warning: Thumbnail exceeds 200KB" -ForegroundColor Yellow
         }
         if ($fullSizeKB -gt 500) {

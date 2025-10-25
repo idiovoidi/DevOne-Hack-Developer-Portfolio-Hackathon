@@ -18,6 +18,17 @@ A modern, dark-themed developer portfolio showcasing projects, skills, and digit
 - **Performance Optimized**: Lazy loading, code splitting, and optimized assets
 - **SEO Ready**: Comprehensive meta tags for search engines and social sharing
 
+### 🎨 Custom Features
+
+- **Cosmic Particle Background**: Canvas-based animated starfield with floating particles that create a dynamic void aesthetic
+- **3D Card Tilt Effect**: Interactive parallax tilt effect on project cards that responds to mouse movement with realistic 3D perspective and glare overlay
+- **Performance Controls**: Floating settings panel allowing users to toggle effects based on their device capabilities:
+  - Enable/disable 3D tilt effects
+  - Enable/disable particle background
+  - Enable/disable scroll animations
+  - Settings persist across sessions via localStorage
+  - Auto-detection of low-end devices to optimize performance
+
 ## 🛠️ Tech Stack
 
 ### Core

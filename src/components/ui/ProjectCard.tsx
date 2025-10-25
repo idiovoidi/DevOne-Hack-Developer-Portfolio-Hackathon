@@ -5,15 +5,28 @@ import { Project } from '../../data/projects';
 import SkillBadge from './SkillBadge';
 import EmbeddedDemo from './EmbeddedDemo';
 import Button from './Button';
+import { useTilt } from '../../hooks/useTilt';
 
 export interface ProjectCardProps {
   project: Project;
   index: number;
+  disableTilt?: boolean;
 }
 
-const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
+const ProjectCard: React.FC<ProjectCardProps> = ({ project, index, disableTilt = false }) => {
   const [isEmbedOpen, setIsEmbedOpen] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
+  
+  // 3D Tilt effect
+  const { ref: tiltRef, tiltStyle, glareStyle } = useTilt({
+    maxTilt: 10,
+    perspective: 1000,
+    scale: 1.02,
+    speed: 400,
+    glare: true,
+    maxGlare: 0.2,
+    disabled: disableTilt,
+  });
 
   const handlePlayDemo = () => {
     if (project.embedUrl) {
@@ -24,12 +37,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
   return (
     <>
       <motion.div
+        ref={tiltRef}
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-50px' }}
         transition={{ duration: 0.5, delay: index * 0.1 }}
-        className="group relative bg-surface rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300"
+        className="group relative bg-surface rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300"
+        style={tiltStyle}
       >
+        {/* Glare Effect Overlay */}
+        {glareStyle && <div style={glareStyle} />}
         {/* Image Container */}
         <div className="relative w-full aspect-video overflow-hidden bg-background">
           {!imageLoaded && (

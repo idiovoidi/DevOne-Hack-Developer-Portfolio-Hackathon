@@ -164,7 +164,6 @@
 
 - [x] 10. Create Footer component
 
-
   - Add social media links with hover animations
   - Include copyright information with current year
   - Add quick navigation links to main sections
@@ -174,10 +173,6 @@
 
 - [x] 11. Implement scroll animations and interactions
 
-
-
-
-
   - Install react-intersection-observer package
   - Create useInView custom hook for viewport detection
   - Add fade-in animations to all major sections
@@ -186,7 +181,8 @@
   - Verify all animations complete within 1 second
   - _Requirements: 6.1, 6.2, 6.3, 6.4_
 
-- [ ] 13. Add custom feature: Particle background or 3D card tilt
+- [x] 13. Add custom feature: Particle background or 3D card tilt
+
 
   - Choose one: Canvas-based particle animation in Hero OR 3D tilt effect on ProjectCards
   - Implement chosen feature with performance optimization
@@ -195,11 +191,6 @@
   - _Requirements: 10.1, 10.4_
 
 - [x] 14. Optimize images and performance
-
-
-
-
-
 
   - Create public/projects and public/art folders for organizing assets
   - Compress all project images to WebP format (< 200KB for thumbnails)

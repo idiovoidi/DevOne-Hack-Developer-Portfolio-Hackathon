@@ -28,3 +28,5 @@ export { CosmicBackground } from './CosmicBackground';
 
 export { TextEffect } from './TextEffect';
 export type { TextEffectType } from './TextEffect';
+
+export { PerformanceToggle } from './PerformanceToggle';

@@ -1,8 +1,11 @@
 import { Header, Footer } from './components/layout';
 import { Hero, Projects, ArtGallery, Music, Videos, Skills, Contact } from './components/sections';
-import { ScrollProgress, CosmicBackground } from './components/ui';
+import { ScrollProgress, CosmicBackground, PerformanceToggle } from './components/ui';
+import { PerformanceProvider, usePerformance } from './contexts/PerformanceContext';
 
-function App() {
+function AppContent() {
+  const { settings } = usePerformance();
+
   return (
     <div 
       className="relative min-h-screen"
@@ -12,10 +15,13 @@ function App() {
       }}
     >
       {/* Cosmic Background Effect */}
-      <CosmicBackground />
+      {settings.enableParticles && <CosmicBackground />}
       
       {/* Scroll Progress Indicator */}
       <ScrollProgress />
+      
+      {/* Performance Settings Toggle */}
+      <PerformanceToggle />
       
       {/* Main Content */}
       <div className="relative z-10">
@@ -46,7 +52,15 @@ function App() {
         <Footer />
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+function App() {
+  return (
+    <PerformanceProvider>
+      <AppContent />
+    </PerformanceProvider>
+  );
+}
+
+export default App;

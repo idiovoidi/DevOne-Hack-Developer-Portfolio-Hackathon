@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { projects } from '../../data/projects';
 import { ProjectCard } from '../ui';
 import { useInView } from '../../hooks';
+import { usePerformance } from '../../contexts/PerformanceContext';
 
 type CategoryFilter = 'all' | 'development' | 'game' | 'art' | 'design';
 
@@ -18,6 +19,7 @@ const Projects: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>('all');
   const { ref: headerRef, inView: headerInView } = useInView({ threshold: 0.2 });
   const { ref: filtersRef, inView: filtersInView } = useInView({ threshold: 0.2 });
+  const { settings } = usePerformance();
 
   // Filter projects based on active category
   const filteredProjects = useMemo(() => {
@@ -74,7 +76,12 @@ const Projects: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProjects.length > 0 ? (
             filteredProjects.map((project, index) => (
-              <ProjectCard key={project.id} project={project} index={index} />
+              <ProjectCard 
+                key={project.id} 
+                project={project} 
+                index={index}
+                disableTilt={!settings.enableTiltEffect}
+              />
             ))
           ) : (
             <motion.div

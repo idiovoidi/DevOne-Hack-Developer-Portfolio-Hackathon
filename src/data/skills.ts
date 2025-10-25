@@ -62,42 +62,17 @@ export const skillsData: SkillGroup[] = [
         proficiency: 95,
       },
       { name: "HTML5", category: "frontend", icon: "SiHtml5", proficiency: 95 },
-      { name: "CSS3", category: "frontend", icon: "SiCss3", proficiency: 90 },
       {
         name: "Tailwind CSS",
         category: "frontend",
         icon: "SiTailwindcss",
         proficiency: 85,
       },
-      {
-        name: "Next.js",
-        category: "frontend",
-        icon: "SiNextdotjs",
-        proficiency: 80,
-      },
-      {
-        name: "Vue.js",
-        category: "frontend",
-        icon: "SiVuedotjs",
-        proficiency: 70,
-      },
     ],
   },
   {
     name: "Backend Development",
     skills: [
-      {
-        name: "Node.js",
-        category: "backend",
-        icon: "SiNodedotjs",
-        proficiency: 85,
-      },
-      {
-        name: "Express",
-        category: "backend",
-        icon: "SiExpress",
-        proficiency: 80,
-      },
       {
         name: "Python",
         category: "backend",
@@ -116,7 +91,6 @@ export const skillsData: SkillGroup[] = [
         icon: "SiMariadb",
         proficiency: 80,
       },
-      { name: "REST API", category: "backend", proficiency: 90 },
     ],
   },
   {

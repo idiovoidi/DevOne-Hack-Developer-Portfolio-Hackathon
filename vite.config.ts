@@ -9,8 +9,17 @@ export default defineConfig({
       output: {
         manualChunks: {
           "react-vendor": ["react", "react-dom"],
+          "animation-vendor": ["framer-motion"],
+          "form-vendor": ["react-hook-form"],
+          "icons-vendor": ["react-icons"],
         },
       },
     },
+    // Optimize chunk size
+    chunkSizeWarningLimit: 1000,
+  },
+  // Optimize dependencies
+  optimizeDeps: {
+    include: ["react", "react-dom", "framer-motion", "react-hook-form", "react-icons"],
   },
 });

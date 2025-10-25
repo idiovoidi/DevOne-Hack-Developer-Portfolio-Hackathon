@@ -1,0 +1,18 @@
+# Project Images
+
+Place your project screenshots and thumbnails here.
+
+## Naming Convention:
+- Use descriptive kebab-case names
+- Thumbnails: `project-name-thumb.webp`
+- Full size: `project-name-full.webp`
+
+## Image Optimization:
+- Thumbnails should be < 200KB
+- Use WebP format for better compression
+- Recommended dimensions: 800x600px for thumbnails
+
+## Example:
+- tower-defense-thumb.webp
+- ecommerce-platform-thumb.webp
+- task-manager-thumb.webp

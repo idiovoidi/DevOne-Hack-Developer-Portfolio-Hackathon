@@ -41,8 +41,8 @@ export const artworks: ArtPiece[] = [
     id: 'cyberpunk-character',
     title: 'Cyberpunk Character Concept',
     description: 'A futuristic character design for a sci-fi game project, featuring neon accents and cybernetic enhancements.',
-    image: '/art/cyberpunk-char-thumb.webp',
-    fullImage: '/art/cyberpunk-char-full.webp',
+    image: '/art/placeholder.svg', // Replace with: /art/cyberpunk-char-thumb.webp
+    fullImage: '/art/placeholder.svg', // Replace with: /art/cyberpunk-char-full.webp
     medium: 'Digital Art',
     tools: ['Photoshop', 'Procreate'],
     date: '2025-01',
@@ -52,8 +52,8 @@ export const artworks: ArtPiece[] = [
     id: 'fantasy-environment',
     title: 'Mystical Forest Environment',
     description: 'An atmospheric environment piece showcasing lighting and mood for a fantasy game setting.',
-    image: '/art/forest-env-thumb.webp',
-    fullImage: '/art/forest-env-full.webp',
+    image: '/art/placeholder.svg', // Replace with: /art/forest-env-thumb.webp
+    fullImage: '/art/placeholder.svg', // Replace with: /art/forest-env-full.webp
     medium: 'Digital Painting',
     tools: ['Photoshop', 'Blender'],
     date: '2024-12',
@@ -63,8 +63,8 @@ export const artworks: ArtPiece[] = [
     id: 'ui-design-mockup',
     title: 'Mobile App UI Design',
     description: 'Clean and modern UI design for a fitness tracking mobile application.',
-    image: '/art/ui-mockup-thumb.webp',
-    fullImage: '/art/ui-mockup-full.webp',
+    image: '/art/placeholder.svg', // Replace with: /art/ui-mockup-thumb.webp
+    fullImage: '/art/placeholder.svg', // Replace with: /art/ui-mockup-full.webp
     medium: 'UI/UX Design',
     tools: ['Figma', 'Adobe XD'],
     date: '2024-11',
@@ -74,8 +74,8 @@ export const artworks: ArtPiece[] = [
     id: '3d-robot-model',
     title: '3D Robot Character',
     description: 'A low-poly robot character model with PBR textures, ready for game integration.',
-    image: '/art/robot-3d-thumb.webp',
-    fullImage: '/art/robot-3d-full.webp',
+    image: '/art/placeholder.svg', // Replace with: /art/robot-3d-thumb.webp
+    fullImage: '/art/placeholder.svg', // Replace with: /art/robot-3d-full.webp
     medium: '3D Modeling',
     tools: ['Blender', 'Substance Painter'],
     date: '2024-10',

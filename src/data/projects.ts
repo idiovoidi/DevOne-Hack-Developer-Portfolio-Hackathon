@@ -42,7 +42,7 @@ export const projects: Project[] = [
     id: 'tower-defense-game',
     title: 'Tower Defense Game',
     description: 'An interactive browser-based tower defense game built with TypeScript and Pixi.js. Features multiple tower types, enemy waves, and strategic gameplay.',
-    image: '/projects/tower-defense-thumb.webp',
+    image: '/projects/placeholder.svg', // Replace with: /projects/tower-defense-thumb.webp
     technologies: ['TypeScript', 'Pixi.js', 'HTML5 Canvas', 'Vite'],
     liveUrl: 'https://yourusername.github.io/tower-defense',
     githubUrl: 'https://github.com/yourusername/tower-defense',
@@ -54,7 +54,7 @@ export const projects: Project[] = [
     id: 'ecommerce-platform',
     title: 'E-Commerce Platform',
     description: 'A full-stack online store with product catalog, shopping cart, and secure payment integration using Stripe API.',
-    image: '/projects/ecommerce-thumb.webp',
+    image: '/projects/placeholder.svg', // Replace with: /projects/ecommerce-thumb.webp
     technologies: ['React', 'Node.js', 'Express', 'MongoDB', 'Stripe', 'Tailwind CSS'],
     liveUrl: 'https://ecommerce-demo.vercel.app',
     githubUrl: 'https://github.com/yourusername/ecommerce-platform',
@@ -65,7 +65,7 @@ export const projects: Project[] = [
     id: 'task-management-app',
     title: 'Task Management App',
     description: 'A collaborative task management application with real-time updates, drag-and-drop functionality, and team collaboration features.',
-    image: '/projects/task-app-thumb.webp',
+    image: '/projects/placeholder.svg', // Replace with: /projects/task-app-thumb.webp
     technologies: ['React', 'TypeScript', 'Firebase', 'React DnD', 'Material-UI'],
     liveUrl: 'https://task-manager-demo.netlify.app',
     githubUrl: 'https://github.com/yourusername/task-manager',
@@ -76,7 +76,7 @@ export const projects: Project[] = [
     id: 'weather-dashboard',
     title: 'Weather Dashboard',
     description: 'A responsive weather application that displays current conditions and forecasts using the OpenWeather API with beautiful data visualizations.',
-    image: '/projects/weather-thumb.webp',
+    image: '/projects/placeholder.svg', // Replace with: /projects/weather-thumb.webp
     technologies: ['React', 'TypeScript', 'Chart.js', 'OpenWeather API', 'CSS Modules'],
     liveUrl: 'https://weather-dashboard-demo.vercel.app',
     githubUrl: 'https://github.com/yourusername/weather-dashboard',

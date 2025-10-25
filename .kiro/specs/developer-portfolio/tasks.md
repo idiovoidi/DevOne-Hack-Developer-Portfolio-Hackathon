@@ -186,15 +186,6 @@
   - Verify all animations complete within 1 second
   - _Requirements: 6.1, 6.2, 6.3, 6.4_
 
-- [ ] 12. Add custom feature: Theme switcher
-
-  - Create theme context with light/dark mode state
-  - Build theme toggle button component
-  - Implement CSS custom properties for theme colors
-  - Add smooth transition between themes
-  - Persist theme preference in localStorage
-  - _Requirements: 10.1, 10.2, 10.4, 10.5_
-
 - [ ] 13. Add custom feature: Particle background or 3D card tilt
 
   - Choose one: Canvas-based particle animation in Hero OR 3D tilt effect on ProjectCards
@@ -203,7 +194,10 @@
   - Add toggle to disable if performance issues detected
   - _Requirements: 10.1, 10.4_
 
-- [ ] 14. Optimize images and performance
+- [-] 14. Optimize images and performance
+
+
+
 
   - Create public/projects and public/art folders for organizing assets
   - Compress all project images to WebP format (< 200KB for thumbnails)

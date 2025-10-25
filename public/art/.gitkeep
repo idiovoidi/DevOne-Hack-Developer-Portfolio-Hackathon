@@ -1,0 +1,21 @@
+# Art Portfolio Images
+
+Place your artwork images here.
+
+## Naming Convention:
+- Use descriptive kebab-case names
+- Thumbnails: `artwork-name-thumb.webp`
+- Full size: `artwork-name-full.webp`
+
+## Image Optimization:
+- Thumbnails should be < 200KB
+- Full-size images should be < 500KB
+- Use WebP format for better compression
+- Recommended dimensions: 
+  - Thumbnails: 600x600px
+  - Full-size: 1920x1920px (max)
+
+## Example:
+- cyberpunk-character-thumb.webp
+- cyberpunk-character-full.webp
+- environment-concept-thumb.webp

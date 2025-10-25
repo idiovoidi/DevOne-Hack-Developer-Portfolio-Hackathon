@@ -9,7 +9,7 @@ param(
     [string]$OutputFolder = "public/art",
     
     [Parameter(Mandatory=$false)]
-    [int]$ThumbSize = 600,
+    [int]$ThumbSize = 800,
     
     [Parameter(Mandatory=$false)]
     [int]$FullSize = 1920,

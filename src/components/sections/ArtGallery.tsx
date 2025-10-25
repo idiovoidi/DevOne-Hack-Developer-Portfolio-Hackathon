@@ -7,6 +7,7 @@ import { useInView } from "../../hooks";
 
 const ArtGallery: React.FC = () => {
   const [selectedArtwork, setSelectedArtwork] = useState<number | null>(null);
+  const [visibleCount, setVisibleCount] = useState(6);
   const { ref: headerRef, inView: headerInView } = useInView({
     threshold: 0.2,
   });
@@ -19,8 +20,15 @@ const ArtGallery: React.FC = () => {
     setSelectedArtwork(null);
   };
 
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => prev + 6);
+  };
+
   const currentArtwork =
     selectedArtwork !== null ? artworks[selectedArtwork] : null;
+  
+  const visibleArtworks = artworks.slice(0, visibleCount);
+  const hasMore = visibleCount < artworks.length;
 
   return (
     <section
@@ -46,7 +54,7 @@ const ArtGallery: React.FC = () => {
         {/* Art Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {artworks.length > 0 ? (
-            artworks.map((artwork, index) => (
+            visibleArtworks.map((artwork, index) => (
               <ArtPieceCard
                 key={artwork.id}
                 artwork={artwork}
@@ -66,6 +74,28 @@ const ArtGallery: React.FC = () => {
             </motion.div>
           )}
         </div>
+
+        {/* Load More Button */}
+        {hasMore && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="text-center mt-8"
+          >
+            <button
+              onClick={handleLoadMore}
+              className="group flex items-center justify-center gap-4 mx-auto px-8 py-4 bg-accent-primary/10 hover:bg-accent-primary/20 border border-accent-primary/30 hover:border-accent-primary rounded-lg hover:scale-105 transition-all duration-300 cursor-pointer"
+              aria-label="Load more artworks"
+            >
+              <div className="h-px w-12 bg-gradient-to-r from-transparent to-accent-primary group-hover:to-accent-secondary transition-colors duration-300"></div>
+              <div className="text-3xl group-hover:scale-110 transition-transform duration-300">
+                👁️
+              </div>
+              <div className="h-px w-12 bg-gradient-to-l from-transparent to-accent-primary group-hover:to-accent-secondary transition-colors duration-300"></div>
+            </button>
+          </motion.div>
+        )}
       </div>
 
       {/* Lightbox for full-size viewing */}

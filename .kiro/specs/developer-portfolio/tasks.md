@@ -11,7 +11,6 @@
 
 - [x] 2. Configure Tailwind CSS and styling foundation
 
-
   - Install and configure Tailwind CSS with PostCSS
   - Create tailwind.config.js with custom theme (colors, fonts, breakpoints)
   - Set up global styles in src/styles/globals.css with CSS custom properties
@@ -19,11 +18,7 @@
   - Add Google Fonts (Inter, Poppins) to index.html
   - _Requirements: 1.5, 5.1, 10.3_
 
-
 - [x] 3. Create data files for portfolio content
-
-
-
 
   - Create src/data/personal.ts with PersonalInfo interface and placeholder data
   - Create src/data/projects.ts with Project interface (including embedUrl and category fields) and at least 3 sample projects
@@ -35,13 +30,7 @@
 
 - [x] 4. Build core UI components
 
-
-
-
-
   - [x] 4.1 Create Button component with variants (primary, secondary, outline)
-
-
 
     - Implement size variants (small, medium, large)
     - Add loading state with spinner
@@ -49,16 +38,11 @@
     - Add proper ARIA labels for accessibility
     - _Requirements: 1.5, 6.5, 10.1_
 
-
-
-  - [-] 4.2 Create SocialLinks component
-
-
+  - [x] 4.2 Create SocialLinks component
 
     - Install react-icons package
     - Implement icon buttons for GitHub, LinkedIn, Twitter, Email
     - Add hover animations (scale, color change)
-
 
     - Ensure links open in new tab with rel="noopener noreferrer"
     - _Requirements: 4.2, 4.5, 6.5_

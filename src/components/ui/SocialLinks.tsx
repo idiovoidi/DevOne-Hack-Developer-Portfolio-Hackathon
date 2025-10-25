@@ -45,7 +45,7 @@ const SocialLinks: React.FC<SocialLinksProps> = ({
             href={href}
             target={isEmail ? undefined : '_blank'}
             rel={isEmail ? undefined : 'noopener noreferrer'}
-            className="text-text-secondary hover:text-primary transition-all duration-200 hover:scale-110 active:scale-95"
+            className="text-text-secondary hover:text-primary transition-all duration-300 hover:scale-110 active:scale-95 transform"
             aria-label={link.label || `Visit ${link.platform}`}
           >
             <Icon size={iconSize} />

@@ -37,7 +37,7 @@ export const Music = () => {
   return (
     <section
       id="music"
-      className="relative py-20 px-4 sm:px-6 lg:px-8"
+      className="relative pt-12 pb-20 px-4 sm:px-6 lg:px-8"
       style={{ backgroundColor: 'var(--color-background-secondary)' }}
     >
       <div className="max-w-7xl mx-auto">
@@ -49,8 +49,11 @@ export const Music = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
-            Music
+          <h2 
+            className="glitch-text text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent"
+            data-text="MUSIC"
+          >
+            MUSIC
           </h2>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto">
             Sounds from the void
@@ -58,7 +61,7 @@ export const Music = () => {
         </motion.div>
 
         {/* Spotify Embeds Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 max-w-4xl mx-auto">
           {spotifyTracks.map((track, index) => (
             <motion.div
               key={track.id}
@@ -71,7 +74,7 @@ export const Music = () => {
                 <iframe
                   src={`https://open.spotify.com/embed/track/${track.id}?utm_source=generator&theme=0`}
                   width="100%"
-                  height="352"
+                  height="152"
                   frameBorder="0"
                   allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                   loading="lazy"

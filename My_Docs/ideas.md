@@ -11,4 +11,9 @@ Add an option to disable Dark Mode but when clicked it comes up with a joke sayi
 
 Tezos symbol next to "Explore Full Collections" We can later implement it as a way to filter NFTs on different blockchains
 
+Add a giant eyeball in the middle of the landing page
+
+---
+
+Implemented
 Add pulsing beats effect for the music section

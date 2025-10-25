@@ -7,33 +7,48 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: {
-          DEFAULT: '#3b82f6',
-          dark: '#2563eb',
-          light: '#60a5fa',
+        // Dark void backgrounds
+        void: {
+          DEFAULT: '#000000',
+          secondary: '#0a0a0a',
+          tertiary: '#111111',
         },
-        accent: {
+        // Primary purple accent
+        primary: {
           DEFAULT: '#8b5cf6',
           dark: '#7c3aed',
+          light: '#a78bfa',
         },
-        background: {
-          DEFAULT: '#ffffff',
-          dark: '#0f172a',
+        // Cyan accent
+        accent: {
+          DEFAULT: '#06b6d4',
+          dark: '#0891b2',
+          purple: '#d946ef',
+          magenta: '#ec4899',
         },
+        // Surface colors with transparency
         surface: {
-          DEFAULT: '#f9fafb',
-          dark: '#1e293b',
+          DEFAULT: 'rgba(20, 20, 30, 0.6)',
+          elevated: 'rgba(30, 30, 45, 0.8)',
         },
+        // High contrast text
         text: {
-          primary: '#111827',
-          secondary: '#6b7280',
-          'primary-dark': '#f1f5f9',
-          'secondary-dark': '#94a3b8',
+          primary: '#f8fafc',
+          secondary: '#cbd5e1',
+          tertiary: '#94a3b8',
         },
+        // Borders with glow
         border: {
-          DEFAULT: '#e5e7eb',
-          dark: '#334155',
+          DEFAULT: 'rgba(139, 92, 246, 0.2)',
+          hover: 'rgba(139, 92, 246, 0.5)',
         },
+        // Glow colors
+        glow: {
+          purple: 'rgba(139, 92, 246, 0.4)',
+          cyan: 'rgba(6, 182, 212, 0.4)',
+          magenta: 'rgba(236, 72, 153, 0.4)',
+        },
+        // Semantic colors
         success: '#10b981',
         error: '#ef4444',
         warning: '#f59e0b',

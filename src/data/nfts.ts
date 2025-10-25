@@ -27,55 +27,67 @@ export interface NFT {
 export const nfts: NFT[] = [
   {
     id: "nft-1",
-    title: "NFT #15 - Collection 1",
-    description: "Minted NFT artwork on Tezos blockchain",
-    image: "https://assets.objkt.media/file/assets-003/QmbtUvGdxFuaauaYYSBnySzEYqruaMdJ6p74kAhr5A7TN5/artifact",
-    collection: "Collection 1",
+    title: "NFT #15", // TODO: Add actual NFT title from objkt.com
+    description: "", // TODO: Add description if available
+    image:
+      "https://assets.objkt.media/file/assets-003/QmbtUvGdxFuaauaYYSBnySzEYqruaMdJ6p74kAhr5A7TN5/artifact",
+    collection: "𖣐ƿ℮ɲ ΣĐ!էὶꝋn",
     blockchain: "Tezos",
     contractAddress: "KT1SJawrAnz4qnt3XLGa924WQR5Jkp95UL9K",
     tokenId: "15",
-    mintDate: "2024-01-01",
-    marketplaceUrl: "https://objkt.com/tokens/KT1SJawrAnz4qnt3XLGa924WQR5Jkp95UL9K/15",
-    embedUrl: "https://objkt.com/tokens/KT1SJawrAnz4qnt3XLGa924WQR5Jkp95UL9K/15",
+    mintDate: "2024-01-01", // TODO: Add actual mint date
+    marketplaceUrl:
+      "https://objkt.com/tokens/KT1SJawrAnz4qnt3XLGa924WQR5Jkp95UL9K/15",
+    embedUrl:
+      "https://objkt.com/tokens/KT1SJawrAnz4qnt3XLGa924WQR5Jkp95UL9K/15",
   },
   {
     id: "nft-2",
-    title: "NFT #15 - Collection 2",
-    description: "Minted NFT artwork on Tezos blockchain",
-    image: "https://assets.objkt.media/file/assets-003/QmW66bkjRdN65RtuwFmVNQtJX57zwhbCjVmqRSC5jxuYk3/artifact",
-    collection: "Collection 2",
+    title: "NFT #15", // TODO: Add actual NFT title from objkt.com
+    description: "", // TODO: Add description if available
+    image:
+      "https://assets.objkt.media/file/assets-003/QmW66bkjRdN65RtuwFmVNQtJX57zwhbCjVmqRSC5jxuYk3/artifact",
+    collection: "M¡ɲƋ_Ƌ∆T∆_",
     blockchain: "Tezos",
     contractAddress: "KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew",
     tokenId: "15",
-    mintDate: "2024-01-01",
-    marketplaceUrl: "https://objkt.com/tokens/KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew/15",
-    embedUrl: "https://objkt.com/tokens/KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew/15",
+    mintDate: "2024-01-01", // TODO: Add actual mint date
+    marketplaceUrl:
+      "https://objkt.com/tokens/KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew/15",
+    embedUrl:
+      "https://objkt.com/tokens/KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew/15",
   },
   {
     id: "nft-3",
-    title: "NFT #11",
-    description: "Minted NFT artwork on Tezos blockchain",
-    image: "https://assets.objkt.media/file/assets-003/QmXRLk4VACrzL6z1u3eAy8ffwdiXH7mjPtxkDc48xUh3fp/artifact",
-    collection: "Collection 3",
+    title: "NFT #11", // TODO: Add actual NFT title from objkt.com
+    description: "", // TODO: Add description if available
+    image:
+      "https://assets.objkt.media/file/assets-003/QmXRLk4VACrzL6z1u3eAy8ffwdiXH7mjPtxkDc48xUh3fp/artifact",
+    collection: "𐌼!ɳɖ~ʍɛꝆ₸Ɀ",
     blockchain: "Tezos",
     contractAddress: "KT1EQFjF1qDm99nkZvqNtw14kNb6YJAnDM5M",
     tokenId: "11",
-    mintDate: "2024-01-01",
-    marketplaceUrl: "https://objkt.com/tokens/KT1EQFjF1qDm99nkZvqNtw14kNb6YJAnDM5M/11",
-    embedUrl: "https://objkt.com/tokens/KT1EQFjF1qDm99nkZvqNtw14kNb6YJAnDM5M/11",
+    mintDate: "2024-01-01", // TODO: Add actual mint date
+    marketplaceUrl:
+      "https://objkt.com/tokens/KT1EQFjF1qDm99nkZvqNtw14kNb6YJAnDM5M/11",
+    embedUrl:
+      "https://objkt.com/tokens/KT1EQFjF1qDm99nkZvqNtw14kNb6YJAnDM5M/11",
   },
   {
     id: "nft-4",
-    title: "NFT #12",
-    description: "Minted NFT artwork on Tezos blockchain",
-    image: "https://assets.objkt.media/file/assets-003/bafybeihh6ms2oqiwjav4l5vqy7edomdt5wz36hpzbhkjxpu23tznlqgf6a/artifact",
-    collection: "Collection 2",
+    title: "NFT #12", // TODO: Add actual NFT title from objkt.com
+    description: "", // TODO: Add description if available
+    image:
+      "https://assets.objkt.media/file/assets-003/bafybeihh6ms2oqiwjav4l5vqy7edomdt5wz36hpzbhkjxpu23tznlqgf6a/artifact",
+    collection: "M¡ɲƋ_Ƌ∆T∆_",
     blockchain: "Tezos",
     contractAddress: "KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew",
     tokenId: "12",
-    mintDate: "2024-01-01",
-    marketplaceUrl: "https://objkt.com/tokens/KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew/12",
-    embedUrl: "https://objkt.com/tokens/KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew/12",
+    mintDate: "2024-01-01", // TODO: Add actual mint date
+    marketplaceUrl:
+      "https://objkt.com/tokens/KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew/12",
+    embedUrl:
+      "https://objkt.com/tokens/KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew/12",
   },
 ];
 
@@ -112,23 +124,29 @@ export const nftCollections: NFTCollection[] = [
     name: "𖣐ƿ℮ɲ ΣĐ!էὶꝋn",
     description: "Explore the full collection on objkt.com",
     contractAddress: "KT1SJawrAnz4qnt3XLGa924WQR5Jkp95UL9K",
-    collectionUrl: "https://objkt.com/collections/KT1SJawrAnz4qnt3XLGa924WQR5Jkp95UL9K",
-    coverImage: "https://assets.objkt.media/file/assets-003/Qmc4ESmrXwj8VyToKubMgNbXAsQu8h78LAfbt4bTDaxrbU/thumb400",
+    collectionUrl:
+      "https://objkt.com/collections/KT1SJawrAnz4qnt3XLGa924WQR5Jkp95UL9K",
+    coverImage:
+      "https://assets.objkt.media/file/assets-003/Qmc4ESmrXwj8VyToKubMgNbXAsQu8h78LAfbt4bTDaxrbU/thumb400",
   },
   {
     id: "collection-2",
     name: "M¡ɲƋ_Ƌ∆T∆_",
     description: "Explore the full collection on objkt.com",
     contractAddress: "KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew",
-    collectionUrl: "https://objkt.com/collections/KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew",
-    coverImage: "https://assets.objkt.media/file/assets-003/QmfBFcs5TXhQiATstLJumVMdeLFkgsmzYHduS5ALoARziZ/thumb400",
+    collectionUrl:
+      "https://objkt.com/collections/KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew",
+    coverImage:
+      "https://assets.objkt.media/file/assets-003/QmfBFcs5TXhQiATstLJumVMdeLFkgsmzYHduS5ALoARziZ/thumb400",
   },
   {
     id: "collection-3",
     name: "𐌼!ɳɖ~ʍɛꝆ₸Ɀ",
     description: "Explore the full collection on objkt.com",
     contractAddress: "KT1EQFjF1qDm99nkZvqNtw14kNb6YJAnDM5M",
-    collectionUrl: "https://objkt.com/collections/KT1EQFjF1qDm99nkZvqNtw14kNb6YJAnDM5M",
-    coverImage: "https://assets.objkt.media/file/assets-003/QmSEXA6iNGgFzas1aZ1UvHtHVrrbbA1Ep8UvfaQT8fZigM/thumb400",
+    collectionUrl:
+      "https://objkt.com/collections/KT1EQFjF1qDm99nkZvqNtw14kNb6YJAnDM5M",
+    coverImage:
+      "https://assets.objkt.media/file/assets-003/QmSEXA6iNGgFzas1aZ1UvHtHVrrbbA1Ep8UvfaQT8fZigM/thumb400",
   },
 ];

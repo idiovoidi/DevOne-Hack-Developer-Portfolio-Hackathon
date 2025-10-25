@@ -13,6 +13,8 @@ Tezos symbol next to "Explore Full Collections" We can later implement it as a w
 
 Add a giant eyeball in the middle of the landing page
 
+Neural brain section theme for the Skills and tech section
+
 ---
 
 Implemented

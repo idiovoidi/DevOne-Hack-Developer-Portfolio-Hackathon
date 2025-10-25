@@ -4,6 +4,7 @@ import { artworks } from "../../data/artworks";
 import ArtPieceCard from "../ui/ArtPieceCard";
 import Lightbox from "../ui/Lightbox";
 import GlitchText from "../ui/GlitchText";
+import GalleryBackground from "../ui/GalleryBackground";
 import { useInView } from "../../hooks";
 
 const ArtGallery: React.FC = () => {
@@ -34,10 +35,13 @@ const ArtGallery: React.FC = () => {
   return (
     <section
       id="art-gallery"
-      className="section"
+      className="section relative"
       style={{ backgroundColor: "var(--color-background)" }}
     >
-      <div className="container-custom">
+      {/* Animated Background */}
+      <GalleryBackground />
+      
+      <div className="container-custom relative z-10">
         {/* Section Header */}
         <motion.div
           ref={headerRef}

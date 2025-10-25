@@ -6,9 +6,10 @@
  */
 
 export interface SocialLink {
-  platform: "github" | "linkedin" | "twitter" | "instagram" | "email" | "other";
+  platform: "github" | "linkedin" | "twitter" | "instagram" | "email" | "spotify" | "youtube" | "tumblr" | "other";
   url: string;
   username: string;
+  icon?: string; // Optional: Custom icon name from react-icons
 }
 
 export interface PersonalInfo {
@@ -33,24 +34,29 @@ export const personalInfo: PersonalInfo = {
   resumeUrl: "/resume.pdf", // Optional: Add your resume PDF to the public folder
   social: [
     {
-      platform: "github",
-      url: "https://github.com/yourusername",
-      username: "yourusername",
-    },
-    {
-      platform: "linkedin",
-      url: "https://linkedin.com/in/yourusername",
-      username: "yourusername",
+      platform: "instagram",
+      url: "https://www.instagram.com/idiovoidi/",
+      username: "@idiovoidi",
     },
     {
       platform: "twitter",
-      url: "https://twitter.com/yourusername",
-      username: "@yourusername",
+      url: "https://twitter.com/idiovoidi",
+      username: "@idiovoidi",
     },
     {
-      platform: "email",
-      url: "mailto:your.email@example.com",
-      username: "your.email@example.com",
+      platform: "spotify",
+      url: "https://open.spotify.com/artist/1haA9Lfr8e35mJlalAbPFz?si=u3oEZ3j0ShGYHdGA9wuR4A",
+      username: "idiovoidi",
+    },
+    {
+      platform: "tumblr",
+      url: "https://vaelzz.tumblr.com/",
+      username: "vaelzz",
+    },
+    {
+      platform: "youtube",
+      url: "https://www.youtube.com/@idiovoidi/videos",
+      username: "@idiovoidi",
     },
   ],
 };

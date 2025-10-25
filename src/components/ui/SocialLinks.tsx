@@ -1,9 +1,9 @@
 import React from 'react';
-import { FaGithub, FaLinkedin, FaTwitter, FaEnvelope, FaInstagram, FaSpotify } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaTwitter, FaEnvelope, FaInstagram, FaSpotify, FaYoutube } from 'react-icons/fa';
 import { SiTumblr } from 'react-icons/si';
 
 export interface SocialLink {
-  platform: 'github' | 'linkedin' | 'twitter' | 'email' | 'instagram' | 'spotify' | 'tumblr' | 'other';
+  platform: 'github' | 'linkedin' | 'twitter' | 'email' | 'instagram' | 'spotify' | 'tumblr' | 'youtube' | 'other';
   url: string;
   label?: string;
 }
@@ -22,6 +22,7 @@ const iconMap = {
   instagram: FaInstagram,
   spotify: FaSpotify,
   tumblr: SiTumblr,
+  youtube: FaYoutube,
   other: FaEnvelope,
 };
 

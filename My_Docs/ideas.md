@@ -7,14 +7,10 @@ A commercial section For my normal photography it can be a bright area with a go
 
 Add an option to disable Dark Mode but when clicked it comes up with a joke saying "What kind of messed up individual doesn't use dark mode in 2025?"
 
-Tezos symbol next to "Explore Full Collections" We can later implement it as a way to filter NFTs on different blockchains
-
-Add a giant eyeball in the middle of the landing page
-
-When you hover the button in Art Gallery the button should come up with a preview saying "Oh yes, please click me 👁️👅👁️"
-
-## Some sort of visual link between the navigation menus for music - videos to show they are all art
-
 Implemented
 Add pulsing beats effect for the music section
 Neural brain section theme for the Skills and tech section
+
+Tezos symbol next to "Explore Full Collections" We can later implement it as a way to filter NFTs on different blockchains
+
+When you hover the button to see more in Art Gallery the button should come up with a preview saying "Oh yes, please click me 👁️👅👁️"

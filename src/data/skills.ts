@@ -50,13 +50,7 @@ export const skillsData: SkillGroup[] = [
     skills: [
       { name: "React", category: "frontend", icon: "SiReact", proficiency: 90 },
       {
-        name: "TypeScript",
-        category: "frontend",
-        icon: "SiTypescript",
-        proficiency: 85,
-      },
-      {
-        name: "JavaScript",
+        name: "JavaScript / TypeScript",
         category: "frontend",
         icon: "SiJavascript",
         proficiency: 95,
@@ -67,6 +61,12 @@ export const skillsData: SkillGroup[] = [
         category: "frontend",
         icon: "SiTailwindcss",
         proficiency: 85,
+      },
+      {
+        name: "PyQt6",
+        category: "frontend",
+        icon: "SiQt",
+        proficiency: 90,
       },
     ],
   },

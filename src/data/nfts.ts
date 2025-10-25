@@ -42,7 +42,7 @@ export const nfts: NFT[] = [
     id: "nft-2",
     title: "NFT #15 - Collection 2",
     description: "Minted NFT artwork on Tezos blockchain",
-    image: "/nft/placeholder-2.svg", // TODO: Add actual asset URL
+    image: "https://assets.objkt.media/file/assets-003/QmW66bkjRdN65RtuwFmVNQtJX57zwhbCjVmqRSC5jxuYk3/artifact",
     collection: "Collection 2",
     blockchain: "Tezos",
     contractAddress: "KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew",
@@ -55,7 +55,7 @@ export const nfts: NFT[] = [
     id: "nft-3",
     title: "NFT #11",
     description: "Minted NFT artwork on Tezos blockchain",
-    image: "/nft/placeholder-3.svg", // TODO: Add actual asset URL
+    image: "https://assets.objkt.media/file/assets-003/QmXRLk4VACrzL6z1u3eAy8ffwdiXH7mjPtxkDc48xUh3fp/artifact",
     collection: "Collection 3",
     blockchain: "Tezos",
     contractAddress: "KT1EQFjF1qDm99nkZvqNtw14kNb6YJAnDM5M",
@@ -68,7 +68,7 @@ export const nfts: NFT[] = [
     id: "nft-4",
     title: "NFT #12",
     description: "Minted NFT artwork on Tezos blockchain",
-    image: "/nft/placeholder-4.svg", // TODO: Add actual asset URL
+    image: "https://assets.objkt.media/file/assets-003/bafybeihh6ms2oqiwjav4l5vqy7edomdt5wz36hpzbhkjxpu23tznlqgf6a/artifact",
     collection: "Collection 2",
     blockchain: "Tezos",
     contractAddress: "KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew",

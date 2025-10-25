@@ -72,9 +72,14 @@ const NFTGallery: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="mt-16"
         >
-          <h3 className="text-2xl font-bold text-text-primary text-center mb-8">
-            Explore Full Collections
-          </h3>
+          <div className="flex items-center justify-center gap-3 mb-8">
+            <span className="text-3xl font-bold" style={{ color: "#0d61ff" }}>
+              ꜩ
+            </span>
+            <h3 className="text-2xl font-bold text-text-primary text-center">
+              Explore Full Collections
+            </h3>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {nftCollections.map((collection, index) => (
@@ -125,37 +130,6 @@ const NFTGallery: React.FC = () => {
                 </div>
               </motion.a>
             ))}
-          </div>
-        </motion.div>
-
-        {/* Stats Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={
-            collectionsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
-          }
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6"
-        >
-          <div className="bg-surface border border-accent-primary/20 rounded-lg p-6 text-center">
-            <div className="text-3xl font-bold text-accent-primary mb-2">
-              {nfts.length}
-            </div>
-            <div className="text-text-secondary">Featured NFTs</div>
-          </div>
-
-          <div className="bg-surface border border-accent-primary/20 rounded-lg p-6 text-center">
-            <div className="text-3xl font-bold text-accent-primary mb-2">
-              {nftCollections.length}
-            </div>
-            <div className="text-text-secondary">Collections</div>
-          </div>
-
-          <div className="bg-surface border border-accent-primary/20 rounded-lg p-6 text-center">
-            <div className="text-3xl font-bold text-accent-primary mb-2">
-              Tezos
-            </div>
-            <div className="text-text-secondary">Blockchain</div>
           </div>
         </motion.div>
       </div>

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { artworks } from "../../data/artworks";
 import ArtPieceCard from "../ui/ArtPieceCard";
 import Lightbox from "../ui/Lightbox";
+import GlitchText from "../ui/GlitchText";
 import { useInView } from "../../hooks";
 
 const ArtGallery: React.FC = () => {
@@ -45,7 +46,7 @@ const ArtGallery: React.FC = () => {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="text-center mb-12"
         >
-          <h2 className="section-heading">Art Gallery</h2>
+          <GlitchText text="Art Gallery" />
           <p className="section-subheading max-w-2xl mx-auto">
             A showcase of digital art, 3D models, and design work
           </p>

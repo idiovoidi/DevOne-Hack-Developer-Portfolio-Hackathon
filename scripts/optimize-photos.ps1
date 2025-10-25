@@ -68,8 +68,9 @@ if (-not (Test-Path $outputPath)) {
 }
 
 # Get all image files
-$imageExtensions = @("*.jpg", "*.jpeg", "*.png", "*.JPG", "*.JPEG", "*.PNG")
-$images = Get-ChildItem -Path $SourceFolder -Include $imageExtensions -File
+$images = Get-ChildItem -Path $SourceFolder -File | Where-Object { 
+    $_.Extension -match '\.(jpg|jpeg|png)$' 
+}
 
 if ($images.Count -eq 0) {
     Write-Host "No images found in $SourceFolder" -ForegroundColor Red

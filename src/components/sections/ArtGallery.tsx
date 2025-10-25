@@ -50,8 +50,25 @@ const ArtGallery: React.FC = () => {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="text-center mb-12"
         >
-          <GlitchText text="Art Gallery" />
-          <p className="section-subheading max-w-2xl mx-auto">
+          <div className="relative inline-block">
+            {/* Void connection indicator */}
+            <div 
+              className="absolute -top-3 left-0 right-0 h-[2px] rounded-full mx-auto"
+              style={{
+                width: '60%',
+                background: 'linear-gradient(90deg, transparent, var(--color-primary) 30%, var(--color-accent) 70%, transparent)',
+                boxShadow: '0 0 6px var(--color-primary)',
+                opacity: 0.4,
+              }}
+            />
+            <GlitchText text="Art Gallery" />
+          </div>
+          <p 
+            className="section-subheading max-w-2xl mx-auto"
+            style={{
+              color: 'var(--color-text-secondary)',
+            }}
+          >
             A showcase of digital art, 3D models, and design work
           </p>
         </motion.div>

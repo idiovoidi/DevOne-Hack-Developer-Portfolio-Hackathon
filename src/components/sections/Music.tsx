@@ -109,16 +109,41 @@ export const Music = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <TextEffect
-            effect="glitch"
-            as="h2"
-            className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent"
-          >
-            MUSIC
-          </TextEffect>
+          <div className="relative inline-block">
+            {/* Void connection indicator */}
+            <div 
+              className="absolute -top-3 left-0 right-0 h-[2px] rounded-full mx-auto"
+              style={{
+                width: '60%',
+                background: 'linear-gradient(90deg, transparent, var(--color-primary) 30%, var(--color-accent) 70%, transparent)',
+                boxShadow: '0 0 6px var(--color-primary)',
+                opacity: 0.4,
+              }}
+            />
+            <TextEffect
+              effect="glitch"
+              as="h2"
+              className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent"
+              style={{
+                backgroundImage: 'linear-gradient(90deg, var(--color-primary), var(--color-accent), var(--color-primary))',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                textShadow: '0 0 15px rgba(168, 85, 247, 0.4), 0 0 30px rgba(236, 72, 153, 0.3)',
+              }}
+            >
+              MUSIC
+            </TextEffect>
+          </div>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto">
             Sounds from the{" "}
-            <TextEffect effect="flicker" className="font-bold text-purple-400">
+            <TextEffect 
+              effect="flicker" 
+              className="font-bold"
+              style={{
+                color: 'var(--color-primary)',
+                textShadow: '0 0 8px var(--color-primary)',
+              }}
+            >
               void
             </TextEffect>
           </p>

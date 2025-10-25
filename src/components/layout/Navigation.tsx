@@ -80,66 +80,149 @@ const Navigation: React.FC = () => {
         </a>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-8">
+        <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link, index) => {
             const prevLink = navLinks[index - 1];
             const isFirstArtItem = link.isArtGroup && !prevLink?.isArtGroup;
-            const isLastArtItem = link.isArtGroup && !navLinks[index + 1]?.isArtGroup;
-            
-            return (
-              <div
-                key={link.id}
-                className={`relative flex items-center ${
-                  link.isArtGroup ? (index > 0 && prevLink?.isArtGroup ? '-ml-4' : '') : ''
-                }`}
-              >
-                {/* Art group visual bracket - left side */}
-                {isFirstArtItem && (
-                  <div 
-                    className="absolute -left-3 top-1/2 -translate-y-1/2 w-1 h-8 rounded-l-full opacity-40"
-                    style={{
-                      background: 'linear-gradient(to bottom, var(--color-primary), var(--color-accent))',
-                    }}
-                  />
-                )}
-                
-                <a
-                  href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
-                  className={`relative text-base font-medium transition-colors duration-200 focus-visible-ring ${
-                    activeSection === link.id
-                      ? "text-primary"
-                      : "text-text-secondary hover:text-primary"
-                  } ${link.isArtGroup ? 'px-3' : ''}`}
-                  style={{
-                    color:
-                      activeSection === link.id
-                        ? "var(--color-primary)"
-                        : "var(--color-text-secondary)",
-                  }}
-                >
-                  {link.label}
-                  {activeSection === link.id && (
-                    <motion.div
-                      layoutId="activeSection"
-                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary"
-                      style={{ backgroundColor: "var(--color-primary)" }}
-                      initial={false}
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                </a>
+            const isArtGroupItem = link.isArtGroup;
 
-                {/* Art group visual bracket - right side */}
-                {isLastArtItem && (
+            // Render art group as a single block
+            if (isFirstArtItem) {
+              const artLinks = navLinks.filter(l => l.isArtGroup);
+              return (
+                <div key="art-group" className="relative">
+                  {/* Void-themed container block */}
                   <div 
-                    className="absolute -right-3 top-1/2 -translate-y-1/2 w-1 h-8 rounded-r-full opacity-40"
+                    className="relative px-4 py-2 rounded-lg"
                     style={{
-                      background: 'linear-gradient(to bottom, var(--color-primary), var(--color-accent))',
+                      background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(236, 72, 153, 0.08))',
+                      border: '1px solid rgba(168, 85, 247, 0.2)',
+                      boxShadow: '0 0 20px rgba(168, 85, 247, 0.15), inset 0 0 20px rgba(168, 85, 247, 0.05)',
+                    }}
+                  >
+                    {/* Cosmic particles */}
+                    <motion.div
+                      className="absolute top-1 left-2 w-1 h-1 rounded-full pointer-events-none"
+                      style={{
+                        background: "var(--color-primary)",
+                        boxShadow: "0 0 4px var(--color-primary)",
+                      }}
+                      animate={{
+                        opacity: [0.3, 0.8, 0.3],
+                        scale: [0.8, 1.2, 0.8],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                    />
+                    <motion.div
+                      className="absolute bottom-1 right-3 w-0.5 h-0.5 rounded-full pointer-events-none"
+                      style={{
+                        background: "var(--color-accent)",
+                        boxShadow: "0 0 3px var(--color-accent)",
+                      }}
+                      animate={{
+                        opacity: [0.4, 0.9, 0.4],
+                        scale: [0.7, 1.3, 0.7],
+                      }}
+                      transition={{
+                        duration: 2.5,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: 0.5,
+                      }}
+                    />
+
+                    {/* Art group items with minimal spacing */}
+                    <div className="flex items-center gap-2">
+                      {artLinks.map((artLink) => (
+                        <a
+                          key={artLink.id}
+                          href={artLink.href}
+                          onClick={(e) => handleNavClick(e, artLink.href)}
+                          className={`relative text-sm font-medium transition-all duration-300 focus-visible-ring px-2 py-1 rounded hover:scale-105 ${
+                            activeSection === artLink.id
+                              ? "text-primary"
+                              : "text-text-secondary hover:text-primary"
+                          }`}
+                          style={{
+                            color:
+                              activeSection === artLink.id
+                                ? "var(--color-primary)"
+                                : "var(--color-text-secondary)",
+                            textShadow:
+                              activeSection === artLink.id
+                                ? "0 0 10px var(--color-primary)"
+                                : "none",
+                          }}
+                        >
+                          {artLink.label}
+                          {activeSection === artLink.id && (
+                            <motion.div
+                              layoutId="activeSection"
+                              className="absolute -bottom-0.5 left-0 right-0 h-0.5 bg-primary rounded-full"
+                              style={{
+                                backgroundColor: "var(--color-primary)",
+                                boxShadow: "0 0 8px var(--color-primary)",
+                              }}
+                              initial={false}
+                              transition={{
+                                type: "spring",
+                                stiffness: 380,
+                                damping: 30,
+                              }}
+                            />
+                          )}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+
+            // Skip other art items as they're rendered in the block above
+            if (isArtGroupItem) {
+              return null;
+            }
+
+            // Render non-art items normally
+            return (
+              <a
+                key={link.id}
+                href={link.href}
+                onClick={(e) => handleNavClick(e, link.href)}
+                className={`relative text-base font-medium transition-all duration-300 focus-visible-ring ${
+                  activeSection === link.id
+                    ? "text-primary"
+                    : "text-text-secondary hover:text-primary"
+                }`}
+                style={{
+                  color:
+                    activeSection === link.id
+                      ? "var(--color-primary)"
+                      : "var(--color-text-secondary)",
+                }}
+              >
+                {link.label}
+                {activeSection === link.id && (
+                  <motion.div
+                    layoutId="activeSection"
+                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary"
+                    style={{
+                      backgroundColor: "var(--color-primary)",
+                    }}
+                    initial={false}
+                    transition={{
+                      type: "spring",
+                      stiffness: 380,
+                      damping: 30,
                     }}
                   />
                 )}
-              </div>
+              </a>
             );
           })}
         </div>
@@ -213,51 +296,126 @@ const Navigation: React.FC = () => {
               <div className="flex flex-col p-6 space-y-6">
                 {navLinks.map((link, index) => {
                   const prevLink = navLinks[index - 1];
-                  const isFirstArtItem = link.isArtGroup && !prevLink?.isArtGroup;
-                  const isLastArtItem = link.isArtGroup && !navLinks[index + 1]?.isArtGroup;
-                  
+                  const nextLink = navLinks[index + 1];
+                  const isFirstArtItem =
+                    link.isArtGroup && !prevLink?.isArtGroup;
+                  const isLastArtItem =
+                    link.isArtGroup && !nextLink?.isArtGroup;
+
                   return (
                     <div key={link.id} className="relative">
-                      {/* Art group label for mobile */}
+                      {/* Void-themed art group container for mobile */}
                       {isFirstArtItem && (
-                        <div 
-                          className="text-xs uppercase tracking-wider mb-2 opacity-50"
-                          style={{ color: 'var(--color-primary)' }}
-                        >
-                          Creative Works
+                        <div className="mb-3 pb-2 relative">
+                          <div
+                            className="text-xs uppercase tracking-wider mb-2 flex items-center gap-2"
+                            style={{ color: "var(--color-primary)" }}
+                          >
+                            <motion.span
+                              className="w-1.5 h-1.5 rounded-full"
+                              style={{
+                                background: "var(--color-primary)",
+                                boxShadow: "0 0 6px var(--color-primary)",
+                              }}
+                              animate={{
+                                opacity: [0.4, 1, 0.4],
+                                scale: [0.8, 1.2, 0.8],
+                              }}
+                              transition={{
+                                duration: 2,
+                                repeat: Infinity,
+                                ease: "easeInOut",
+                              }}
+                            />
+                            Creative Works
+                            <motion.span
+                              className="w-1 h-1 rounded-full"
+                              style={{
+                                background: "var(--color-accent)",
+                                boxShadow: "0 0 4px var(--color-accent)",
+                              }}
+                              animate={{
+                                opacity: [0.3, 0.9, 0.3],
+                                scale: [0.7, 1.3, 0.7],
+                              }}
+                              transition={{
+                                duration: 2.5,
+                                repeat: Infinity,
+                                ease: "easeInOut",
+                                delay: 0.5,
+                              }}
+                            />
+                          </div>
+                          {/* Glowing underline */}
+                          <div
+                            className="absolute bottom-0 left-0 right-0 h-[2px] rounded-full"
+                            style={{
+                              background:
+                                "linear-gradient(90deg, var(--color-primary), var(--color-accent), var(--color-primary))",
+                              boxShadow: "0 0 6px var(--color-primary)",
+                              opacity: 0.5,
+                            }}
+                          />
                         </div>
                       )}
-                      
+
                       <motion.a
                         href={link.href}
                         onClick={(e) => handleNavClick(e, link.href)}
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.1 }}
-                        className={`block text-lg font-medium transition-colors duration-200 focus-visible-ring ${
+                        className={`block text-lg font-medium transition-all duration-200 focus-visible-ring ${
                           activeSection === link.id
                             ? "text-primary"
                             : "text-text-secondary hover:text-primary"
-                        } ${link.isArtGroup ? 'pl-4' : ''}`}
+                        } ${link.isArtGroup ? "pl-6 relative" : ""}`}
                         style={{
                           color:
                             activeSection === link.id
                               ? "var(--color-primary)"
                               : "var(--color-text-secondary)",
+                          textShadow:
+                            link.isArtGroup && activeSection === link.id
+                              ? "0 0 8px var(--color-primary)"
+                              : "none",
                         }}
                       >
+                        {/* Void dot indicator for art items */}
+                        {link.isArtGroup && (
+                          <span
+                            className="absolute left-2 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full"
+                            style={{
+                              background:
+                                activeSection === link.id
+                                  ? "var(--color-primary)"
+                                  : "var(--color-text-secondary)",
+                              boxShadow:
+                                activeSection === link.id
+                                  ? "0 0 6px var(--color-primary)"
+                                  : "none",
+                              opacity: 0.7,
+                            }}
+                          />
+                        )}
+
                         {link.label}
                         {activeSection === link.id && (
                           <motion.div
                             layoutId="activeSectionMobile"
                             className="h-0.5 bg-primary mt-1"
-                            style={{ backgroundColor: "var(--color-primary)" }}
+                            style={{
+                              backgroundColor: "var(--color-primary)",
+                              boxShadow: link.isArtGroup
+                                ? "0 0 6px var(--color-primary)"
+                                : "none",
+                            }}
                           />
                         )}
                       </motion.a>
-                      
+
                       {/* Spacing after art group */}
-                      {isLastArtItem && <div className="h-2" />}
+                      {isLastArtItem && <div className="h-4" />}
                     </div>
                   );
                 })}

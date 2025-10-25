@@ -40,21 +40,42 @@ const NFTGallery: React.FC = () => {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="text-center mb-12"
         >
-          <h2 
-            className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent"
-            style={{
-              backgroundImage: 'linear-gradient(90deg, #a855f7, #3b82f6, #ec4899, #ef4444, #a855f7, #3b82f6)',
-              backgroundSize: '200% 100%',
-              animation: 'voidFloat 6s ease-in-out infinite, voidGradientShift 8s ease-in-out infinite',
-              textShadow: '0 0 20px rgba(168, 85, 247, 0.6), 0 0 40px rgba(236, 72, 153, 0.4), 0 0 60px rgba(59, 130, 246, 0.3)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}
-          >
-            NFT COLLECTION
-          </h2>
+          <div className="relative inline-block">
+            {/* Void connection indicator */}
+            <div 
+              className="absolute -top-3 left-0 right-0 h-[2px] rounded-full mx-auto"
+              style={{
+                width: '60%',
+                background: 'linear-gradient(90deg, transparent, var(--color-primary) 30%, var(--color-accent) 70%, transparent)',
+                boxShadow: '0 0 6px var(--color-primary)',
+                opacity: 0.4,
+              }}
+            />
+            <h2 
+              className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent"
+              style={{
+                backgroundImage: 'linear-gradient(90deg, var(--color-primary), var(--color-accent), var(--color-primary))',
+                backgroundSize: '200% 100%',
+                animation: 'voidFloat 6s ease-in-out infinite, voidGradientShift 8s ease-in-out infinite',
+                textShadow: '0 0 15px rgba(168, 85, 247, 0.4), 0 0 30px rgba(236, 72, 153, 0.3)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              NFT COLLECTION
+            </h2>
+          </div>
           <p className="text-lg max-w-2xl mx-auto">
-            <span className="font-bold text-xl bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Featured:</span>
+            <span 
+              className="font-bold text-xl bg-clip-text text-transparent"
+              style={{
+                backgroundImage: 'linear-gradient(90deg, var(--color-primary), var(--color-accent))',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              Featured:
+            </span>
           </p>
         </motion.div>
 

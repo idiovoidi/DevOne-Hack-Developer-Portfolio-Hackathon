@@ -10,10 +10,5 @@ Integrate form submission service
 
 
     ----
-    Optional:
-    - [ ] 13. Add custom feature: Particle background or 3D card tilt
 
-  - Choose one: Canvas-based particle animation in Hero OR 3D tilt effect on ProjectCards
-  - Implement chosen feature with performance optimization
-  - Ensure feature works across different devices
-  - Add toggle to disable if performance issues 
+Add see more for the full Spotify and Youtube link

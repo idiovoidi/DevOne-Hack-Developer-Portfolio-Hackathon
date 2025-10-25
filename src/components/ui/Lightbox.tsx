@@ -77,20 +77,21 @@ const Lightbox: React.FC<LightboxProps> = ({
         
         {/* NFT Embed or Regular Image */}
         {embedUrl ? (
-          <div className="w-full max-w-2xl" onClick={(e) => e.stopPropagation()}>
+          <div className="w-full max-w-4xl flex flex-col items-center" onClick={(e) => e.stopPropagation()}>
             <iframe
               src={embedUrl}
-              className="w-full h-[600px] rounded-lg shadow-2xl border-2 border-primary/30"
+              className="w-full aspect-square max-h-[70vh] rounded-lg shadow-2xl border-2 border-accent-primary/30"
               title={title || 'NFT Artwork'}
               loading="lazy"
-              sandbox="allow-scripts allow-same-origin allow-popups"
+              sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
             />
             {nftUrl && (
               <a
                 href={nftUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-4 inline-block text-primary hover:text-primary/80 transition-colors duration-200 underline"
+                className="mt-6 px-6 py-3 bg-accent-primary/20 hover:bg-accent-primary/30 border border-accent-primary rounded-lg text-accent-primary hover:text-white transition-all duration-300 font-medium"
               >
                 View on objkt.com →
               </a>

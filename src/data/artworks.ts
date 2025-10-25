@@ -279,55 +279,6 @@ export const artworks: ArtPiece[] = [
     date: "2015",
     category: "Nature",
   },
-  // NFT Artworks
-  {
-    id: "nft-1",
-    title: "NFT #15 - Collection 1",
-    description: "Minted NFT artwork on Tezos blockchain",
-    image: "/art/placeholder.svg", // Add a screenshot/thumbnail if you have one
-    medium: "Digital Art / NFT",
-    tools: ["Tezos", "objkt.com"],
-    date: "2024", // Update with actual mint date
-    category: "NFT",
-    nftUrl: "https://objkt.com/tokens/KT1SJawrAnz4qnt3XLGa924WQR5Jkp95UL9K/15",
-    embedUrl: "https://objkt.com/tokens/KT1SJawrAnz4qnt3XLGa924WQR5Jkp95UL9K/15",
-  },
-  {
-    id: "nft-2",
-    title: "NFT #15 - Collection 2",
-    description: "Minted NFT artwork on Tezos blockchain",
-    image: "/art/placeholder.svg",
-    medium: "Digital Art / NFT",
-    tools: ["Tezos", "objkt.com"],
-    date: "2024",
-    category: "NFT",
-    nftUrl: "https://objkt.com/tokens/KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew/15",
-    embedUrl: "https://objkt.com/tokens/KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew/15",
-  },
-  {
-    id: "nft-3",
-    title: "NFT #11",
-    description: "Minted NFT artwork on Tezos blockchain",
-    image: "/art/placeholder.svg",
-    medium: "Digital Art / NFT",
-    tools: ["Tezos", "objkt.com"],
-    date: "2024",
-    category: "NFT",
-    nftUrl: "https://objkt.com/tokens/KT1EQFjF1qDm99nkZvqNtw14kNb6YJAnDM5M/11",
-    embedUrl: "https://objkt.com/tokens/KT1EQFjF1qDm99nkZvqNtw14kNb6YJAnDM5M/11",
-  },
-  {
-    id: "nft-4",
-    title: "NFT #12",
-    description: "Minted NFT artwork on Tezos blockchain",
-    image: "/art/placeholder.svg",
-    medium: "Digital Art / NFT",
-    tools: ["Tezos", "objkt.com"],
-    date: "2024",
-    category: "NFT",
-    nftUrl: "https://objkt.com/tokens/KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew/12",
-    embedUrl: "https://objkt.com/tokens/KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew/12",
-  },
 ];
 
 // Helper function to get artworks by category

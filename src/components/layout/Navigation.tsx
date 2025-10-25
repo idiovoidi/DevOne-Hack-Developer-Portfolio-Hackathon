@@ -11,6 +11,8 @@ interface NavLink {
 const navLinks: NavLink[] = [
   { id: "home", label: "Home", href: "#home" },
   { id: "projects", label: "Projects", href: "#projects" },
+  { id: "art-gallery", label: "Art", href: "#art-gallery" },
+  { id: "nft-gallery", label: "NFTs", href: "#nft-gallery" },
   { id: "music", label: "Music", href: "#music" },
   { id: "videos", label: "Videos", href: "#videos" },
   { id: "skills", label: "Skills", href: "#skills" },

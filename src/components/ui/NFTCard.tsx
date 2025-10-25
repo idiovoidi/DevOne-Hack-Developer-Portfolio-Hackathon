@@ -14,7 +14,7 @@ const NFTCard: React.FC<NFTCardProps> = ({ nft, index, onClick }) => {
   const getBlockchainIcon = () => {
     switch (nft.blockchain.toLowerCase()) {
       case 'tezos':
-        return <RiNftLine className="text-accent-primary" size={20} />;
+        return <span className="text-lg font-bold" style={{ color: '#0d61ff' }}>ꜩ</span>;
       case 'ethereum':
         return <FaEthereum className="text-accent-primary" size={20} />;
       default:

@@ -46,7 +46,7 @@ const NFTGallery: React.FC = () => {
             <h2 className="section-heading">NFT Collection</h2>
           </div>
           <p className="section-subheading max-w-2xl mx-auto">
-            Featured pieces from my blockchain art collections
+            <span className="text-gradient font-bold text-xl">Featured:</span>
           </p>
         </motion.div>
 

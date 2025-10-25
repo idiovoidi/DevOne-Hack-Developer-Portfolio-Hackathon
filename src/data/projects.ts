@@ -99,7 +99,7 @@ export const projects: Project[] = [
     id: "idioview",
     title: "ID:I/O VIEW",
     description:
-      "A comprehensive image metadata viewer and editor for artists and photographers. Features advanced metadata parsing, batch processing, and detailed EXIF/IPTC data management.",
+      "Organizational media library & Viewer for curation and sorting of media assets, features advanced metadata and JSON parsing for working with large libraries of both traditional and generative AI based metadata",
     image: "/projects/idioview-2-main.webp",
     screenshots: [
       {
@@ -129,6 +129,7 @@ export const projects: Project[] = [
       },
     ],
     technologies: ["Python", "PyQt6", "Pillow", "ExifTool"],
+    githubUrl: "https://github.com/idiovoidi/IDIOVIEW",
     category: "development",
     featured: true,
   },

@@ -22,7 +22,13 @@ const navLinks: NavLink[] = [
 
 const Navigation: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showDarkModeError, setShowDarkModeError] = useState(false);
   const activeSection = useScrollSpy(navLinks.map((link) => link.id));
+
+  const handleDarkModeClick = () => {
+    setShowDarkModeError(true);
+    setTimeout(() => setShowDarkModeError(false), 3000);
+  };
 
   // Handle smooth scroll
   const handleNavClick = (
@@ -80,7 +86,7 @@ const Navigation: React.FC = () => {
         </a>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-6">
           {navLinks.map((link, index) => {
             const prevLink = navLinks[index - 1];
             const isFirstArtItem = link.isArtGroup && !prevLink?.isArtGroup;
@@ -276,7 +282,25 @@ const Navigation: React.FC = () => {
               </div>
             );
           })}
+
+          {/* Light Mode Toggle Button (Desktop) */}
+          <button
+            onClick={handleDarkModeClick}
+            className="relative px-3 py-1.5 text-sm font-medium text-yellow-400 hover:text-yellow-300 transition-all duration-300 focus-visible-ring rounded-lg border border-yellow-500/30 hover:border-yellow-400 hover:shadow-lg hover:shadow-yellow-500/20"
+            aria-label="Toggle light mode"
+          >
+            ☀️ Light Mode
+          </button>
         </div>
+
+        {/* Light Mode Toggle Button (Mobile) */}
+        <button
+          onClick={handleDarkModeClick}
+          className="md:hidden relative px-3 py-1.5 text-sm font-medium text-yellow-400 hover:text-yellow-300 transition-all duration-300 focus-visible-ring rounded-lg border border-yellow-500/30 hover:border-yellow-400 mr-2"
+          aria-label="Toggle light mode"
+        >
+          ☀️
+        </button>
 
         {/* Mobile Menu Button */}
         <button
@@ -529,6 +553,83 @@ const Navigation: React.FC = () => {
               </div>
             </motion.div>
           </>
+        )}
+      </AnimatePresence>
+
+      {/* Glitchy Error Message Modal */}
+      <AnimatePresence>
+        {showDarkModeError && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            className="fixed inset-0 flex items-center justify-center pointer-events-none"
+            style={{ zIndex: 100 }}
+          >
+            <motion.div
+              className="relative bg-black border-2 border-red-500 rounded-lg p-8 shadow-2xl pointer-events-auto"
+              style={{
+                boxShadow: "0 0 40px rgba(239, 68, 68, 0.5), inset 0 0 20px rgba(239, 68, 68, 0.2)",
+              }}
+              animate={{
+                x: [0, -2, 2, -2, 2, 0],
+                y: [0, 2, -2, 2, -2, 0],
+              }}
+              transition={{
+                duration: 0.3,
+                repeat: Infinity,
+                repeatDelay: 0.5,
+              }}
+            >
+              {/* Glitch overlay effect */}
+              <motion.div
+                className="absolute inset-0 bg-red-500 opacity-10 rounded-lg"
+                animate={{
+                  opacity: [0.1, 0.3, 0.1],
+                }}
+                transition={{
+                  duration: 0.2,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                }}
+              />
+
+              <motion.p
+                className="text-2xl font-bold text-red-500 text-center relative z-10"
+                style={{
+                  fontFamily: "monospace",
+                  textShadow: "2px 2px 0 rgba(0, 255, 255, 0.3), -2px -2px 0 rgba(255, 0, 255, 0.3)",
+                  letterSpacing: "0.1em",
+                }}
+                animate={{
+                  opacity: [1, 0.7, 1],
+                }}
+                transition={{
+                  duration: 0.15,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                }}
+              >
+                E̷R̴R̵O̴R̸:̸ ̶T̶H̴E̷R̴E̸ ̵I̶S̶ ̶O̷N̷L̶Y̴ ̶D̵A̴R̵K̷N̶E̸S̶S̴ ̸H̷E̷R̸E̶!
+              </motion.p>
+
+              {/* Scanline effect */}
+              <motion.div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 0, 0, 0.1) 2px, rgba(255, 0, 0, 0.1) 4px)",
+                }}
+                animate={{
+                  y: [0, 8],
+                }}
+                transition={{
+                  duration: 0.5,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+              />
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
     </nav>

@@ -46,7 +46,7 @@ export const projects: Project[] = [
     technologies: ['TypeScript', 'Pixi.js', 'HTML5 Canvas', 'Vite'],
     liveUrl: 'https://idiovoidi.github.io/Zombie_Tower_Defence-OS2',
     githubUrl: 'https://github.com/idiovoidi/Zombie_Tower_Defence-OS2',
-    embedUrl: 'https://idiovoidi.github.io/Zombie_Tower_Defence-OS2', // Allows playing directly in portfolio
+    // embedUrl removed - users will click "View Demo" to play on GitHub Pages
     category: 'game',
     featured: true
   },

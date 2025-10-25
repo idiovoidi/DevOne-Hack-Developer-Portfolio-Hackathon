@@ -9,7 +9,7 @@ import { useInView } from "../../hooks";
 
 const ArtGallery: React.FC = () => {
   const [selectedArtwork, setSelectedArtwork] = useState<number | null>(null);
-  const [visibleCount, setVisibleCount] = useState(6);
+  const [visibleCount, setVisibleCount] = useState(8);
   const { ref: headerRef, inView: headerInView } = useInView({
     threshold: 0.2,
   });
@@ -23,12 +23,12 @@ const ArtGallery: React.FC = () => {
   };
 
   const handleLoadMore = () => {
-    setVisibleCount((prev) => prev + 6);
+    setVisibleCount((prev) => prev + 8);
   };
 
   const currentArtwork =
     selectedArtwork !== null ? artworks[selectedArtwork] : null;
-  
+
   const visibleArtworks = artworks.slice(0, visibleCount);
   const hasMore = visibleCount < artworks.length;
 
@@ -40,7 +40,7 @@ const ArtGallery: React.FC = () => {
     >
       {/* Animated Background */}
       <GalleryBackground />
-      
+
       <div className="container-custom relative z-10">
         {/* Section Header */}
         <motion.div
@@ -86,19 +86,90 @@ const ArtGallery: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="text-center mt-8"
+            className="text-center mt-12"
           >
-            <button
+            <motion.button
               onClick={handleLoadMore}
-              className="group flex items-center justify-center gap-4 mx-auto px-8 py-4 bg-accent-primary/10 hover:bg-accent-primary/20 border border-accent-primary/30 hover:border-accent-primary rounded-lg hover:scale-105 transition-all duration-300 cursor-pointer"
+              className="group relative mx-auto px-10 py-5 bg-gradient-to-r from-purple-900/30 via-stone-900/40 to-purple-900/30 border-2 border-purple-500/30 rounded-lg overflow-hidden cursor-pointer"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               aria-label="Load more artworks"
             >
-              <div className="h-px w-12 bg-gradient-to-r from-transparent to-accent-primary group-hover:to-accent-secondary transition-colors duration-300"></div>
-              <div className="text-3xl group-hover:scale-110 transition-transform duration-300">
-                👁️
+              {/* Animated background glow */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-purple-600/20 via-pink-600/20 to-purple-600/20"
+                animate={{
+                  x: ["-100%", "100%"],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+              />
+
+              {/* Button content */}
+              <div className="relative flex flex-col items-center justify-center gap-1">
+                {/* Eyes row */}
+                <div className="flex items-center gap-3">
+                  {/* Left eye */}
+                  <motion.div
+                    className="text-3xl"
+                    animate={{
+                      rotateY: [0, 180, 360],
+                    }}
+                    transition={{
+                      duration: 4,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                  >
+                    👁️
+                  </motion.div>
+
+                  {/* Text */}
+                  <span className="text-lg font-semibold text-purple-200 group-hover:text-purple-100 transition-colors">
+                    Reveal More
+                  </span>
+
+                  {/* Right eye */}
+                  <motion.div
+                    className="text-3xl"
+                    animate={{
+                      rotateY: [360, 180, 0],
+                    }}
+                    transition={{
+                      duration: 4,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                  >
+                    👁️
+                  </motion.div>
+                </div>
+
+                {/* Mouth */}
+                <motion.div
+                  className="text-2xl"
+                  animate={{
+                    scale: [1, 1.1, 1],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
+                  👄
+                </motion.div>
               </div>
-              <div className="h-px w-12 bg-gradient-to-l from-transparent to-accent-primary group-hover:to-accent-secondary transition-colors duration-300"></div>
-            </button>
+
+              {/* Corner accents */}
+              <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-purple-400/50 group-hover:border-pink-400/70 transition-colors" />
+              <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-purple-400/50 group-hover:border-pink-400/70 transition-colors" />
+              <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-purple-400/50 group-hover:border-pink-400/70 transition-colors" />
+              <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-purple-400/50 group-hover:border-pink-400/70 transition-colors" />
+            </motion.button>
           </motion.div>
         )}
       </div>

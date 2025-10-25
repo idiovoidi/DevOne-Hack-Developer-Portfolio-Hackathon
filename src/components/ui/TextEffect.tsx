@@ -6,7 +6,7 @@ import React from 'react';
  * Reusable component for applying various text effects like glitch, flicker, glow, etc.
  */
 
-export type TextEffectType = 'glitch' | 'flicker' | 'glow' | 'pulse' | 'none';
+export type TextEffectType = 'glitch' | 'flicker' | 'glow' | 'pulse' | 'void' | 'none';
 
 interface TextEffectProps {
   children: React.ReactNode;
@@ -33,6 +33,8 @@ export const TextEffect: React.FC<TextEffectProps> = ({
         return 'glow-text';
       case 'pulse':
         return 'pulse-text';
+      case 'void':
+        return 'void-text';
       default:
         return '';
     }
@@ -55,6 +57,12 @@ export const TextEffect: React.FC<TextEffectProps> = ({
         return {
           textShadow: '0 0 10px rgba(139, 92, 246, 0.8)',
           animation: 'pulseGlow 3s ease-in-out infinite',
+          ...style,
+        };
+      case 'void':
+        return {
+          textShadow: '0 0 20px rgba(168, 85, 247, 0.6), 0 0 40px rgba(236, 72, 153, 0.4), 0 0 60px rgba(168, 85, 247, 0.3)',
+          animation: 'voidFloat 6s ease-in-out infinite',
           ...style,
         };
       default:

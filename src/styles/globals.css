@@ -532,6 +532,26 @@
     }
   }
   
+  /* Void float effect - slow floating with color shift */
+  @keyframes voidFloat {
+    0%, 100% {
+      transform: translateY(0px) scale(1);
+      text-shadow: 0 0 20px rgba(168, 85, 247, 0.6), 0 0 40px rgba(236, 72, 153, 0.4), 0 0 60px rgba(168, 85, 247, 0.3);
+    }
+    25% {
+      transform: translateY(-8px) scale(1.02);
+      text-shadow: 0 0 25px rgba(236, 72, 153, 0.7), 0 0 50px rgba(168, 85, 247, 0.5), 0 0 70px rgba(236, 72, 153, 0.4);
+    }
+    50% {
+      transform: translateY(-15px) scale(1.03);
+      text-shadow: 0 0 30px rgba(168, 85, 247, 0.8), 0 0 60px rgba(236, 72, 153, 0.6), 0 0 80px rgba(168, 85, 247, 0.4);
+    }
+    75% {
+      transform: translateY(-8px) scale(1.02);
+      text-shadow: 0 0 25px rgba(236, 72, 153, 0.7), 0 0 50px rgba(168, 85, 247, 0.5), 0 0 70px rgba(236, 72, 153, 0.4);
+    }
+  }
+  
   /* Text Effect Classes */
   .flicker-text {
     display: inline-block;
@@ -542,6 +562,10 @@
   }
   
   .pulse-text {
+    display: inline-block;
+  }
+  
+  .void-text {
     display: inline-block;
   }
   

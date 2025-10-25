@@ -62,32 +62,31 @@ export const projects: Project[] = [
     title: "Social Content Manager",
     description:
       "A desktop application for organizing and scheduling artwork posts across social media platforms with ethical posting practices and automated workflows.",
-    image: "/projects/social-content-manager-1.webp",
+    image: "/projects/idioview-2-main.webp",
     screenshots: [
       {
-        image: "/projects/social-content-manager-1.webp",
+        image: "/projects/idioview-1-metadata.png",
+        caption: "Metadata parsing and extraction from image files",
+      },
+      {
+        image: "/projects/idioview-2-main.webp",
         caption: "Main dashboard showing content queue and scheduling overview",
       },
       {
-        image: "/projects/social-content-manager-2.webp",
+        image: "/projects/idioview-3-gallery.webp",
         caption: "Content library with artwork organization and tagging system",
       },
       {
-        image: "/projects/social-content-manager-3.webp",
-        caption: "Post composer with platform-specific formatting and preview",
+        image: "/projects/idioview-4-details.webp",
+        caption: "Detailed view with platform-specific formatting options",
       },
       {
-        image: "/projects/social-content-manager-4.webp",
-        caption: "Analytics dashboard tracking engagement and posting metrics",
+        image: "/projects/idioview-5-settings.webp",
+        caption: "Settings panel for platform integrations and automation rules",
       },
       {
-        image: "/projects/social-content-manager-5.webp",
-        caption: "Schedule calendar view with drag-and-drop functionality",
-      },
-      {
-        image: "/projects/social-content-manager-6.webp",
-        caption:
-          "Settings panel for platform integrations and automation rules",
+        image: "/projects/idioview-6-preview.webp",
+        caption: "Post preview with multi-platform compatibility check",
       },
     ],
     technologies: ["Python", "PyQt6", "MongoDB", "REST APIs"],

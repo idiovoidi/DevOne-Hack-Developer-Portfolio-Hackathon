@@ -135,7 +135,7 @@ export const Music = () => {
             </TextEffect>
           </div>
           <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-            Sounds from the{" "}
+            Ｓｏｕｎｄｓ　ｆｒｏｍ　ｔｈｅ　   {" "}
             <TextEffect 
               effect="flicker" 
               className="font-bold"
@@ -144,7 +144,7 @@ export const Music = () => {
                 textShadow: '0 0 8px var(--color-primary)',
               }}
             >
-              void
+              ＶＯＩＤ
             </TextEffect>
           </p>
         </motion.div>

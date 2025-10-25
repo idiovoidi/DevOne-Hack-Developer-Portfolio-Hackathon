@@ -1,11 +1,14 @@
-Add a light/dark section of the website
+
 
 custom domain (optional but professional)
 3-minute demo video walking through features (would prob significantly boost win probability)
 
 A commercial section For my normal photography it can be a bright area with a godray amongst the dark corners of the primary style
 
+Add a light/dark section of the website
 Add an option to disable Dark Mode but when clicked it comes up with a joke saying "What kind of messed up individual doesn't use dark mode in 2025?"
+"THERE IS ONLY DARKNESS HERE!"
+
 
 Implemented
 Add pulsing beats effect for the music section

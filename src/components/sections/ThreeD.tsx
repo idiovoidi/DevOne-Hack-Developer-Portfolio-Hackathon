@@ -30,9 +30,16 @@ const threeDWorks: ThreeDWork[] = [
   {
     id: "corrupted-healthpack",
     title: "Corrupted Healthpack",
-    description: "Corrupted health restoration item",
-    modelPath: "/3D/corrupted-healthpack.glb",
+    description: "Corrupted health restoration item with PBR textures",
+    modelPath: "/3D/corrupted-healthpack-textured.glb",
     category: "Model",
+  },
+  {
+    id: "enemy",
+    title: "Enemy Character",
+    description: "3D enemy character model",
+    modelPath: "/3D/enemy.glb",
+    category: "Character",
   },
   // Add more models here as you convert them
 ];

@@ -35,3 +35,5 @@ export { default as ScreenshotCarousel } from './ScreenshotCarousel';
 export type { ScreenshotCarouselProps } from './ScreenshotCarousel';
 
 export { CRTEffect } from './CRTEffect';
+
+export { ModelViewer } from './ModelViewer';

@@ -29,3 +29,11 @@ dist-ssr
 .env.production.local
 .env.development.local
 .vercel
+
+# 3D Models (source files - keep converted GLB files)
+public/3D/**/*.fbx
+public/3D/**/*.obj
+public/3D/**/*.blend
+public/3D/**/*.max
+public/3D/**/*.ma
+public/3D/**/*.mb

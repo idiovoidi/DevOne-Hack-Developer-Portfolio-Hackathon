@@ -127,8 +127,9 @@ const SkillBadge: React.FC<SkillBadgeProps> = ({
             justifyContent: 'center',
             filter: 'drop-shadow(0 0 8px rgba(139, 92, 246, 0.5))',
           }}
+          aria-hidden="true"
         >
-          <IconComponent />
+          <IconComponent aria-hidden="true" />
         </motion.div>
       )}
 

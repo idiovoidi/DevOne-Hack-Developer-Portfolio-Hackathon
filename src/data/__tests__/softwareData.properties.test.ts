@@ -182,71 +182,41 @@ describe('Software Experience - Property Tests', () => {
   });
 
   /**
-   * Property 9: WebP icon format
+   * Property 9: Simple Icons format
    * **Validates: Requirements 8.1**
    * 
-   * Tests that all software entry icon paths reference .webp file format.
-   * This ensures optimized image performance across the portfolio.
+   * Tests that all software entry icon names follow the Simple Icons format (SiIconName).
+   * This ensures consistent icon usage from react-icons/si library.
    */
-  it('Property 9: All software entry icons use WebP format', () => {
+  it('Property 9: All software entry icons use Simple Icons format', () => {
     softwareData.forEach((entry: SoftwareEntry) => {
       expect(entry.icon).toBeDefined();
       expect(typeof entry.icon).toBe('string');
-      expect(entry.icon.endsWith('.webp')).toBe(true);
+      // Icon should start with 'Si' (Simple Icons prefix)
+      expect(entry.icon.startsWith('Si')).toBe(true);
+      // Icon should be in PascalCase format (e.g., SiBlender, SiReact)
+      expect(entry.icon).toMatch(/^Si[A-Z][a-zA-Z0-9]*$/);
     });
   });
 
   /**
-   * Property-based test: Generated icon paths should end with .webp
+   * Property-based test: Generated icon names should follow Simple Icons format
    * 
-   * This test generates random icon paths and validates they would be
-   * accepted by the WebP format requirement.
+   * This test generates random icon names and validates they would be
+   * accepted by the Simple Icons format requirement.
    */
-  it('Property 9: Generated icon paths with .webp extension are valid', () => {
+  it('Property 9: Generated icon names with Si prefix are valid', () => {
     fc.assert(
       fc.property(
-        // Generate arbitrary icon paths that end with .webp
-        fc.string({ minLength: 1 }).map(path => `${path}.webp`),
-        (iconPath) => {
-          expect(iconPath.endsWith('.webp')).toBe(true);
+        // Generate arbitrary icon names that start with 'Si' and follow PascalCase
+        fc.string({ minLength: 1 }).filter(s => /^[A-Z][a-zA-Z0-9]*$/.test(s)).map(name => `Si${name}`),
+        (iconName) => {
+          expect(iconName.startsWith('Si')).toBe(true);
+          expect(iconName).toMatch(/^Si[A-Z][a-zA-Z0-9]*$/);
         }
       ),
       { numRuns: 100 }
     );
   });
-});
-
-/**
- * Property 9: WebP icon format
- * **Validates: Requirements 8.1**
- *
- * Tests that all software entry icon paths reference .webp file format.
- * This ensures optimized image performance across the portfolio.
- */
-it('Property 9: All software entry icons use WebP format', () => {
-  softwareData.forEach((entry: SoftwareEntry) => {
-    expect(entry.icon).toBeDefined();
-    expect(typeof entry.icon).toBe('string');
-    expect(entry.icon.endsWith('.webp')).toBe(true);
-  });
-});
-
-/**
- * Property-based test: Generated icon paths should end with .webp
- *
- * This test generates random icon paths and validates they would be
- * accepted by the WebP format requirement.
- */
-it('Property 9: Generated icon paths with .webp extension are valid', () => {
-  fc.assert(
-    fc.property(
-      // Generate arbitrary icon paths that end with .webp
-      fc.string({ minLength: 1 }).map(path => `${path}.webp`),
-      (iconPath) => {
-        expect(iconPath.endsWith('.webp')).toBe(true);
-      }
-    ),
-    { numRuns: 100 }
-  );
 });
 

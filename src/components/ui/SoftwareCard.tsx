@@ -35,8 +35,41 @@ const SoftwareCard: React.FC<SoftwareCardProps> = ({
     }
   };
 
+  // Build ARIA label for accessibility
+  const buildAriaLabel = (): string => {
+    let label = software.name;
+    
+    if (software.version) {
+      label += `, version ${software.version}`;
+    }
+    
+    if (software.category === 'main') {
+      label += ', currently in use';
+    } else if (software.category === 'past') {
+      if (software.yearLastUsed) {
+        label += `, last used in ${software.yearLastUsed}`;
+      }
+      label += ', retired software';
+    }
+    
+    return label;
+  };
+
   return (
-    <div
+    <>
+      {/* Focus-visible styles for keyboard navigation */}
+      <style>{`
+        .software-card {
+          outline: none;
+        }
+        .software-card:focus-visible {
+          outline: 3px solid rgba(167, 139, 250, 0.8);
+          outline-offset: 4px;
+          box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.3), 0 0 20px rgba(139, 92, 246, 0.5);
+        }
+      `}</style>
+      
+      <div
       onClick={handleClick}
       onKeyDown={(e) => {
         if ((e.key === 'Enter' || e.key === ' ') && onClick) {
@@ -46,6 +79,7 @@ const SoftwareCard: React.FC<SoftwareCardProps> = ({
       }}
       role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}
+      aria-label={buildAriaLabel()}
       data-software-id={software.id}
       className="software-card"
       style={{
@@ -112,6 +146,7 @@ const SoftwareCard: React.FC<SoftwareCardProps> = ({
         )}
       </div>
     </div>
+    </>
   );
 };
 

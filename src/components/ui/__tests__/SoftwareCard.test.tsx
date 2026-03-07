@@ -10,7 +10,7 @@ import type { SoftwareEntry } from '../../../data/softwareData';
  * Task: 2.4 - Write unit tests for SoftwareCard component
  * 
  * These tests validate specific examples and edge cases for the SoftwareCard component.
- * Tests cover: logo/name rendering, version display, year display, hover effects,
+ * Tests cover: icon/name rendering via SkillBadge, version display, year display, hover effects,
  * onClick handler, error handling, and keyboard navigation.
  * 
  * Requirements tested: 3.1, 3.2, 3.3, 3.4, 8.3, 8.4
@@ -22,7 +22,7 @@ describe('SoftwareCard - Unit Tests', () => {
     id: 'blender',
     name: 'Blender',
     category: 'main',
-    icon: '/software/blender.webp',
+    icon: 'SiBlender',
     version: '4.2',
     tags: ['3d', 'modeling'],
     portfolioIds: [],
@@ -32,7 +32,7 @@ describe('SoftwareCard - Unit Tests', () => {
     id: 'unity',
     name: 'Unity',
     category: 'past',
-    icon: '/software/unity.webp',
+    icon: 'SiUnity',
     yearLastUsed: 2022,
     tags: ['game-dev'],
     portfolioIds: [],
@@ -42,54 +42,39 @@ describe('SoftwareCard - Unit Tests', () => {
     id: 'photoshop',
     name: 'Adobe Photoshop',
     category: 'main',
-    icon: '/software/photoshop.webp',
+    icon: 'SiAdobephotoshop',
     tags: ['design'],
     portfolioIds: [],
   };
 
-  describe('Logo and Name Rendering (Requirements 3.1, 3.2)', () => {
-    it('should render software logo with correct alt text', () => {
+  describe('Icon and Name Rendering via SkillBadge (Requirements 3.1, 3.2)', () => {
+    it('should render SkillBadge component with correct props', () => {
       const { container } = render(<SoftwareCard software={blenderSoftware} index={0} />);
       
-      // Check for img element with correct alt text (may not be visible initially due to lazy loading)
-      // The component uses IntersectionObserver, so initially shows fallback
-      const logoImg = container.querySelector('img[alt="Blender logo"]');
+      // Check for SkillBadge by looking for its characteristic structure
+      const skillBadge = container.querySelector('.skill-badge');
+      expect(skillBadge).toBeTruthy();
       
-      // Either img or fallback should be present
-      const fallbackDiv = Array.from(container.querySelectorAll('div')).find(div => 
-        div.textContent === 'B' && div.style.fontSize === '1.5rem'
-      );
-      
-      expect(logoImg || fallbackDiv).toBeTruthy();
-      
-      if (logoImg) {
-        expect(logoImg.getAttribute('src')).toBe('/software/blender.webp');
-        expect(logoImg.getAttribute('loading')).toBe('lazy');
-      }
+      // Verify the name is rendered
+      expect(container.textContent).toContain('Blender');
     });
 
-    it('should render software name in h3 element', () => {
-      render(<SoftwareCard software={blenderSoftware} index={0} />);
+    it('should render software name in SkillBadge', () => {
+      const { container } = render(<SoftwareCard software={blenderSoftware} index={0} />);
       
-      const nameElement = screen.getByRole('heading', { level: 3 });
-      expect(nameElement).toHaveTextContent('Blender');
+      // The name should be visible in the component
+      expect(container.textContent).toContain('Blender');
     });
 
-    it('should render both logo and name for any software entry', () => {
+    it('should render both icon and name for any software entry', () => {
       const { container } = render(<SoftwareCard software={photoshopSoftware} index={0} />);
       
-      // Check for logo (either img or fallback)
-      // Due to lazy loading with IntersectionObserver, fallback shows initially
-      const logoImg = container.querySelector('img[alt*="logo"]');
-      const fallbackDiv = Array.from(container.querySelectorAll('div')).find(div => 
-        div.textContent === 'A' && div.style.fontSize === '1.5rem'
-      );
-      
-      expect(logoImg || fallbackDiv).toBeTruthy();
+      // Check for SkillBadge
+      const skillBadge = container.querySelector('.skill-badge');
+      expect(skillBadge).toBeTruthy();
       
       // Check for name
-      const nameElement = screen.getByRole('heading', { level: 3 });
-      expect(nameElement).toHaveTextContent('Adobe Photoshop');
+      expect(container.textContent).toContain('Adobe Photoshop');
     });
   });
 
@@ -99,28 +84,13 @@ describe('SoftwareCard - Unit Tests', () => {
       
       // Look for version text
       expect(container.textContent).toContain('v4.2');
-      
-      // Verify it's in a paragraph element
-      const paragraphs = container.querySelectorAll('p');
-      const versionParagraph = Array.from(paragraphs).find(p => 
-        p.textContent?.includes('v4.2')
-      );
-      expect(versionParagraph).toBeTruthy();
     });
 
     it('should not display version when not provided', () => {
       const { container } = render(<SoftwareCard software={photoshopSoftware} index={0} />);
       
-      // Verify no version paragraph exists (check paragraphs only, not CSS)
-      const paragraphs = container.querySelectorAll('p');
-      const versionParagraph = Array.from(paragraphs).find(p => 
-        p.textContent?.startsWith('v')
-      );
-      expect(versionParagraph).toBeFalsy();
-      
-      // Verify the h3 doesn't contain version info
-      const nameElement = screen.getByRole('heading', { level: 3 });
-      expect(nameElement.textContent).not.toMatch(/v\d/);
+      // Verify no version text exists
+      expect(container.textContent).not.toMatch(/v\d/);
     });
   });
 
@@ -130,14 +100,6 @@ describe('SoftwareCard - Unit Tests', () => {
       
       // Check for "Last used:" text and year
       expect(container.textContent).toContain('Last used: 2022');
-      
-      // Verify it's in a paragraph element
-      const paragraphs = container.querySelectorAll('p');
-      const yearParagraph = Array.from(paragraphs).find(p => 
-        p.textContent?.includes('Last used:')
-      );
-      expect(yearParagraph).toBeTruthy();
-      expect(yearParagraph?.textContent).toBe('Last used: 2022');
     });
 
     it('should not display year last used for current software (main category)', () => {
@@ -182,14 +144,6 @@ describe('SoftwareCard - Unit Tests', () => {
       const card = container.querySelector('.software-card');
       expect(card).toHaveStyle({ cursor: 'default' });
     });
-
-    it('should have glow effect element for hover animation', () => {
-      const { container } = render(<SoftwareCard software={blenderSoftware} index={0} />);
-      
-      // Check for glow effect div
-      const glowEffect = container.querySelector('.software-card-glow');
-      expect(glowEffect).toBeTruthy();
-    });
   });
 
   describe('onClick Handler (Requirement 5.1)', () => {
@@ -233,69 +187,20 @@ describe('SoftwareCard - Unit Tests', () => {
     });
   });
 
-  describe('Error Handling - Missing Icon (Requirement 8.1)', () => {
-    it('should display fallback when image fails to load', () => {
-      const { container } = render(<SoftwareCard software={blenderSoftware} index={0} />);
-      
-      // Simulate image error
-      const img = container.querySelector('img');
-      if (img) {
-        img.dispatchEvent(new Event('error'));
-      }
-      
-      // Check for fallback div with first letter
-      const fallbackDiv = Array.from(container.querySelectorAll('div')).find(div => 
-        div.textContent === 'B' && div.style.fontSize === '1.5rem'
-      );
-      
-      expect(fallbackDiv).toBeTruthy();
-      expect(fallbackDiv?.textContent).toBe('B');
-    });
-
-    it('should display first letter of software name in fallback', () => {
-      const { container } = render(<SoftwareCard software={photoshopSoftware} index={0} />);
-      
-      // Simulate image error
-      const img = container.querySelector('img');
-      if (img) {
-        img.dispatchEvent(new Event('error'));
-      }
-      
-      // Check for fallback with 'A' (Adobe Photoshop)
-      const fallbackDiv = Array.from(container.querySelectorAll('div')).find(div => 
-        div.textContent === 'A' && div.style.fontSize === '1.5rem'
-      );
-      
-      expect(fallbackDiv).toBeTruthy();
-    });
-
-    it('should show loading spinner before image loads', () => {
-      const { container } = render(<SoftwareCard software={blenderSoftware} index={0} />);
-      
-      // Initially, before image loads, there should be a loading spinner
-      // The spinner is a div with rotating animation
-      const allDivs = container.querySelectorAll('div');
-      const spinnerDiv = Array.from(allDivs).find(div => 
-        div.style.position === 'absolute' && 
-        div.style.borderRadius === '50%'
-      );
-      
-      // Spinner may or may not be present depending on timing
-      // This test just verifies the component handles loading state
-      expect(container).toBeTruthy();
-    });
-  });
-
   describe('Keyboard Navigation (Requirements 8.3, 8.4)', () => {
-    it('should be keyboard focusable with tabIndex=0', () => {
-      const { container } = render(<SoftwareCard software={blenderSoftware} index={0} />);
+    it('should be keyboard focusable with tabIndex=0 when onClick provided', () => {
+      const { container } = render(
+        <SoftwareCard software={blenderSoftware} index={0} onClick={() => {}} />
+      );
       
       const card = container.querySelector('.software-card');
       expect(card?.getAttribute('tabIndex')).toBe('0');
     });
 
-    it('should have role="button" for accessibility', () => {
-      const { container } = render(<SoftwareCard software={blenderSoftware} index={0} />);
+    it('should have role="button" for accessibility when onClick provided', () => {
+      const { container } = render(
+        <SoftwareCard software={blenderSoftware} index={0} onClick={() => {}} />
+      );
       
       const card = container.querySelector('.software-card');
       expect(card?.getAttribute('role')).toBe('button');
@@ -382,66 +287,33 @@ describe('SoftwareCard - Unit Tests', () => {
       expect(container2.querySelector('.software-card')).toBeTruthy();
     });
 
-    it('should have lazy loading attribute on image', () => {
-      const { container } = render(<SoftwareCard software={blenderSoftware} index={0} />);
+    it('should render SkillBadge with index for animation', () => {
+      const { container } = render(<SoftwareCard software={blenderSoftware} index={3} />);
       
-      const img = container.querySelector('img');
-      if (img) {
-        expect(img.getAttribute('loading')).toBe('lazy');
-      }
-    });
-
-    it('should render neural pulse effect element', () => {
-      const { container } = render(<SoftwareCard software={blenderSoftware} index={0} />);
-      
-      // Check for pulse effect div
-      const pulseEffect = container.querySelector('.software-card-pulse');
-      // Pulse effect may or may not be present depending on reduced motion preference
-      // Just verify component renders without error
-      expect(container).toBeTruthy();
+      // SkillBadge should be present
+      const skillBadge = container.querySelector('.skill-badge');
+      expect(skillBadge).toBeTruthy();
     });
   });
 
   describe('Visual Consistency (Requirement 6.1, 6.2)', () => {
-    it('should have dark void aesthetic styling', () => {
-      const { container } = render(<SoftwareCard software={blenderSoftware} index={0} />);
-      
-      const card = container.querySelector('.software-card');
-      
-      // Check for dark background
-      expect(card).toHaveStyle({
-        backgroundColor: 'rgba(15, 15, 25, 0.8)',
-      });
-      
-      // Check for purple border
-      expect(card).toHaveStyle({
-        border: '1px solid rgba(139, 92, 246, 0.3)',
-      });
-    });
-
-    it('should have glowing border and shadow effects', () => {
-      const { container } = render(<SoftwareCard software={blenderSoftware} index={0} />);
-      
-      const card = container.querySelector('.software-card');
-      
-      // Check for box shadow with purple glow
-      const boxShadow = card?.getAttribute('style');
-      expect(boxShadow).toContain('box-shadow');
-      expect(boxShadow).toContain('rgba(139, 92, 246');
-    });
-
     it('should maintain consistent layout structure', () => {
       const { container } = render(<SoftwareCard software={blenderSoftware} index={0} />);
       
       const card = container.querySelector('.software-card');
       
-      // Check for flexbox layout
+      // Check for relative positioning (for overlay)
       expect(card).toHaveStyle({
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
+        position: 'relative',
       });
+    });
+
+    it('should render SkillBadge for consistent styling', () => {
+      const { container } = render(<SoftwareCard software={blenderSoftware} index={0} />);
+      
+      // SkillBadge should be present for consistent styling
+      const skillBadge = container.querySelector('.skill-badge');
+      expect(skillBadge).toBeTruthy();
     });
   });
 });

@@ -1,19 +1,19 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { getSoftwareByCategory } from '../../data/softwareData';
+import { getActiveCategories, getSoftwareByCategory } from '../../data/softwareData';
 import SoftwareCard from '../ui/SoftwareCard';
 import { useInView } from '../../hooks';
 
 /**
  * SoftwareExperience Section Component
  * 
- * Displays software tools and technologies organized by current and past usage.
+ * Displays software tools and technologies organized by category.
  * Implements scroll-triggered animations with staggered category groups.
  * 
  * Layout:
  * - Responsive grid: 1 column (mobile <768px), 2 columns (tablet 768-1024px), 3 columns (desktop ≥1024px)
  * - Maximum content width: 1280px
- * - Categories rendered in order: "Main (Current)" before "Past (Retired)"
+ * - Categories rendered in order defined in categoryConfig
  * 
  * Styling:
  * - Dark void aesthetic with glowing purple accents
@@ -25,12 +25,9 @@ import { useInView } from '../../hooks';
  */
 const SoftwareExperience: React.FC = () => {
   const { ref: headerRef, inView: headerInView } = useInView({ threshold: 0.2 });
-  const { ref: mainCategoryRef, inView: mainCategoryInView } = useInView({ threshold: 0.1 });
-  const { ref: pastCategoryRef, inView: pastCategoryInView } = useInView({ threshold: 0.1 });
 
-  // Get software by category
-  const mainSoftware = getSoftwareByCategory('main');
-  const pastSoftware = getSoftwareByCategory('past');
+  // Get all active categories sorted by display order
+  const categories = getActiveCategories();
 
   // Animation variants for category containers
   const categoryVariants = {
@@ -95,82 +92,79 @@ const SoftwareExperience: React.FC = () => {
             </motion.div>
           </div>
           <p className="section-subheading max-w-2xl mx-auto">
-            Tools and technologies that power my creative journey - from current workflows to past experiences
+            Tools and technologies that power my creative journey across music, design, development, and more
           </p>
         </motion.div>
 
-        {/* Main (Current) Category */}
-        {mainSoftware.length > 0 && (
-          <motion.div
-            ref={mainCategoryRef}
-            variants={categoryVariants}
-            initial="hidden"
-            animate={mainCategoryInView ? "visible" : "hidden"}
-            className="mb-16"
-            data-category="main"
-          >
-            {/* Category Title */}
-            <h3
-              className="text-2xl font-semibold mb-6"
-              style={{
-                color: 'var(--color-text-primary)',
-                fontFamily: 'var(--font-heading)',
-              }}
-            >
-              Main (Current)
-            </h3>
+        {/* Render each category */}
+        {categories.map(({ category, title }, categoryIndex) => {
+          const software = getSoftwareByCategory(category);
+          
+          if (software.length === 0) return null;
 
-            {/* Software Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {mainSoftware.map((software, index) => (
-                <SoftwareCard
-                  key={software.id}
-                  software={software}
-                  index={index}
-                  // Future: Add onClick handler for filtering
-                  // onClick={(softwareId) => handleSoftwareClick(softwareId)}
-                />
-              ))}
-            </div>
-          </motion.div>
-        )}
-
-        {/* Past (Retired) Category */}
-        {pastSoftware.length > 0 && (
-          <motion.div
-            ref={pastCategoryRef}
-            variants={categoryVariants}
-            initial="hidden"
-            animate={pastCategoryInView ? "visible" : "hidden"}
-            data-category="past"
-          >
-            {/* Category Title */}
-            <h3
-              className="text-2xl font-semibold mb-6"
-              style={{
-                color: 'var(--color-text-primary)',
-                fontFamily: 'var(--font-heading)',
-              }}
-            >
-              Past (Retired)
-            </h3>
-
-            {/* Software Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {pastSoftware.map((software, index) => (
-                <SoftwareCard
-                  key={software.id}
-                  software={software}
-                  index={index}
-                  // Future: Add onClick handler for filtering
-                  // onClick={(softwareId) => handleSoftwareClick(softwareId)}
-                />
-              ))}
-            </div>
-          </motion.div>
-        )}
+          return (
+            <CategorySection
+              key={category}
+              title={title}
+              software={software}
+              categoryIndex={categoryIndex}
+              categoryVariants={categoryVariants}
+            />
+          );
+        })}
       </div>
     </section>
+  );
+};
+
+// Separate component for each category section to manage individual inView state
+interface CategorySectionProps {
+  title: string;
+  software: any[];
+  categoryIndex: number;
+  categoryVariants: any;
+}
+
+const CategorySection: React.FC<CategorySectionProps> = ({ 
+  title, 
+  software, 
+  categoryIndex,
+  categoryVariants 
+}) => {
+  const { ref, inView } = useInView({ threshold: 0.1 });
+
+  return (
+    <motion.div
+      ref={ref}
+      variants={categoryVariants}
+      initial="hidden"
+      animate={inView ? "visible" : "hidden"}
+      className={categoryIndex < getActiveCategories().length - 1 ? "mb-16" : ""}
+    >
+      {/* Category Title */}
+      <h3
+        className="text-2xl font-semibold mb-6"
+        style={{
+          color: 'var(--color-text-primary)',
+          fontFamily: 'var(--font-heading)',
+        }}
+      >
+        {title}
+      </h3>
+
+      {/* Software Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {software.map((item, index) => (
+          <SoftwareCard
+            key={item.id}
+            software={item}
+            index={index}
+            // Future: Add onClick handler for filtering
+            // onClick={(softwareId) => handleSoftwareClick(softwareId)}
+          />
+        ))}
+      </div>
+    </motion.div>
   );
 };
 

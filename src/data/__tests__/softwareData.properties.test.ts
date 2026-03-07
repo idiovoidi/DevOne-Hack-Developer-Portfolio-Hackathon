@@ -16,10 +16,21 @@ describe('Software Experience - Property Tests', () => {
    * **Validates: Requirements 4.1, 4.2, 4.3, 4.4**
    * 
    * Tests that all software entries have required fields (id, name, category, icon)
-   * and that category values are only 'main' or 'past'.
+   * and that category values are valid.
    * Optional fields (tags, portfolioIds) must be arrays when present.
    */
   it('Property 5: All software entries have valid data structure', () => {
+    const validCategories: SoftwareCategory[] = [
+      'music',
+      'digital-media',
+      '3d-game',
+      'coding-languages',
+      'libraries-python',
+      'libraries-js-ts',
+      'libraries-dbs',
+      'other'
+    ];
+
     // Test each entry in the actual software data
     softwareData.forEach((entry: SoftwareEntry) => {
       // Required field: id (must be a non-empty string)
@@ -32,9 +43,9 @@ describe('Software Experience - Property Tests', () => {
       expect(typeof entry.name).toBe('string');
       expect(entry.name.length).toBeGreaterThan(0);
 
-      // Required field: category (must be 'main' or 'past')
+      // Required field: category (must be a valid category)
       expect(entry.category).toBeDefined();
-      expect(['main', 'past']).toContain(entry.category);
+      expect(validCategories).toContain(entry.category);
 
       // Required field: icon (must be a non-empty string)
       expect(entry.icon).toBeDefined();
@@ -44,11 +55,6 @@ describe('Software Experience - Property Tests', () => {
       // Optional field: version (if present, must be a string)
       if (entry.version !== undefined) {
         expect(typeof entry.version).toBe('string');
-      }
-
-      // Optional field: yearLastUsed (if present, must be a number)
-      if (entry.yearLastUsed !== undefined) {
-        expect(typeof entry.yearLastUsed).toBe('number');
       }
 
       // Optional field: tags (if present, must be an array)
@@ -78,16 +84,35 @@ describe('Software Experience - Property Tests', () => {
    * accepted by the data structure requirements.
    */
   it('Property 5: Generated software entries with required fields are valid', () => {
+    const validCategories: SoftwareCategory[] = [
+      'music',
+      'digital-media',
+      '3d-game',
+      'coding-languages',
+      'libraries-python',
+      'libraries-js-ts',
+      'libraries-dbs',
+      'other'
+    ];
+
     fc.assert(
       fc.property(
         // Generate arbitrary software entries
         fc.record({
           id: fc.string({ minLength: 1 }),
           name: fc.string({ minLength: 1 }),
-          category: fc.constantFrom<SoftwareCategory>('main', 'past'),
+          category: fc.constantFrom<SoftwareCategory>(
+            'music',
+            'digital-media',
+            '3d-game',
+            'coding-languages',
+            'libraries-python',
+            'libraries-js-ts',
+            'libraries-dbs',
+            'other'
+          ),
           icon: fc.string({ minLength: 1 }),
           version: fc.option(fc.string(), { nil: undefined }),
-          yearLastUsed: fc.option(fc.integer({ min: 1990, max: 2030 }), { nil: undefined }),
           tags: fc.option(fc.array(fc.string()), { nil: undefined }),
           portfolioIds: fc.option(fc.array(fc.string()), { nil: undefined }),
         }),
@@ -102,7 +127,7 @@ describe('Software Experience - Property Tests', () => {
           expect(generatedEntry.name.length).toBeGreaterThan(0);
 
           expect(generatedEntry.category).toBeDefined();
-          expect(['main', 'past']).toContain(generatedEntry.category);
+          expect(validCategories).toContain(generatedEntry.category);
 
           expect(generatedEntry.icon).toBeDefined();
           expect(typeof generatedEntry.icon).toBe('string');
@@ -111,10 +136,6 @@ describe('Software Experience - Property Tests', () => {
           // Validate optional fields when present
           if (generatedEntry.version !== undefined) {
             expect(typeof generatedEntry.version).toBe('string');
-          }
-
-          if (generatedEntry.yearLastUsed !== undefined) {
-            expect(typeof generatedEntry.yearLastUsed).toBe('number');
           }
 
           if (generatedEntry.tags !== undefined) {
@@ -131,12 +152,21 @@ describe('Software Experience - Property Tests', () => {
   });
 
   /**
-   * Property 5: Category values are strictly 'main' or 'past'
+   * Property 5: Category values are valid
    * 
    * This test ensures no invalid category values exist in the data.
    */
-  it('Property 5: All category values are either "main" or "past"', () => {
-    const validCategories: SoftwareCategory[] = ['main', 'past'];
+  it('Property 5: All category values are valid', () => {
+    const validCategories: SoftwareCategory[] = [
+      'music',
+      'digital-media',
+      '3d-game',
+      'coding-languages',
+      'libraries-python',
+      'libraries-js-ts',
+      'libraries-dbs',
+      'other'
+    ];
     
     softwareData.forEach((entry: SoftwareEntry) => {
       expect(validCategories).toContain(entry.category);

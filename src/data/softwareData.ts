@@ -1,19 +1,18 @@
 /**
  * Software Experience Data
  *
- * This file contains software tools and technologies organized by current and past usage.
+ * This file contains software tools and technologies organized by category.
  * The data structure is designed to support future filtering of portfolio pieces by software tags.
  *
  * HOW TO ADD NEW SOFTWARE:
- * 1. Add a new SoftwareEntry object to the softwareData array:
+ * 1. Add a new SoftwareEntry object to the softwareData array under the appropriate category:
  *    {
  *      id: 'software-name',           // Unique identifier (kebab-case)
  *      name: 'Software Name',         // Display name
- *      category: 'main',              // 'main' for current, 'past' for retired
+ *      category: 'music',             // Category (see SoftwareCategory type)
  *      icon: 'SiSoftwarename',        // Icon name from react-icons/si (Simple Icons)
  *      version: '4.2',                // Optional: version number
- *      yearLastUsed: 2022,            // Optional: for 'past' category only
- *      tags: ['3d', 'modeling'],      // Optional: for future filtering
+ *      tags: ['audio', 'production'], // Optional: for future filtering
  *      portfolioIds: [],              // Optional: for future filtering
  *    }
  *
@@ -56,84 +55,289 @@
  *    You may also want to create a reverse lookup function in portfolio data files.
  */
 
-export type SoftwareCategory = 'main' | 'past';
+export type SoftwareCategory = 
+  | 'music'
+  | 'digital-media'
+  | '3d-game'
+  | 'coding-languages'
+  | 'libraries-python'
+  | 'libraries-js-ts'
+  | 'libraries-dbs'
+  | 'other';
 
 export interface SoftwareEntry {
   id: string;                    // Unique identifier (kebab-case)
   name: string;                  // Display name
-  category: SoftwareCategory;    // 'main' for current, 'past' for retired
+  category: SoftwareCategory;    // Category (music, digital-media, 3d-game, etc.)
   icon: string;                  // Icon name from react-icons/si (e.g., 'SiBlender', 'SiReact')
   version?: string;              // Optional: version number (e.g., "4.2")
-  yearLastUsed?: number;         // Optional: year last used (for 'past' category)
   tags?: string[];               // Optional: tags for filtering (e.g., ['3d', 'modeling'])
   portfolioIds?: string[];       // Optional: IDs of portfolio pieces using this software
 }
 
-// Software entries organized by current and past usage
+// Category display configuration
+export const categoryConfig: Record<SoftwareCategory, { title: string; order: number }> = {
+  'music': { title: 'Music', order: 1 },
+  'digital-media': { title: 'Digital Media', order: 2 },
+  '3d-game': { title: '3D + Game', order: 3 },
+  'coding-languages': { title: 'Coding Languages', order: 4 },
+  'libraries-python': { title: 'Libraries - Python', order: 5 },
+  'libraries-js-ts': { title: 'Libraries - JavaScript/TypeScript', order: 6 },
+  'libraries-dbs': { title: 'Libraries & DBS', order: 7 },
+  'other': { title: 'Other', order: 8 },
+};
+
+// Software entries organized by category
 export const softwareData: SoftwareEntry[] = [
-  // Main (Current) Software
+  // Music
   {
-    id: 'blender',
-    name: 'Blender',
-    category: 'main',
-    icon: 'SiBlender',
-    version: '4.2',
-    tags: ['3d', 'modeling', 'animation', 'rendering'],
-    portfolioIds: [], // Future: Add IDs of 3D projects and artworks
+    id: 'cubase',
+    name: 'Cubase',
+    category: 'music',
+    icon: 'SiSteinberg',
+    tags: ['audio', 'production', 'daw'],
+    portfolioIds: [],
   },
+  {
+    id: 'ableton',
+    name: 'Ableton Live',
+    category: 'music',
+    icon: 'SiAbleton',
+    tags: ['audio', 'production', 'daw'],
+    portfolioIds: [],
+  },
+
+  // Digital Media
   {
     id: 'photoshop',
     name: 'Adobe Photoshop',
-    category: 'main',
+    category: 'digital-media',
     icon: 'SiAdobephotoshop',
     tags: ['design', 'image-editing', 'digital-art'],
-    portfolioIds: [], // Future: Add IDs of art pieces and design projects
+    portfolioIds: [],
   },
   {
-    id: 'react',
-    name: 'React',
-    category: 'main',
-    icon: 'SiReact',
-    tags: ['frontend', 'web-development', 'javascript'],
-    portfolioIds: [], // Future: Add IDs of web projects
+    id: 'davinci-resolve',
+    name: 'DaVinci Resolve',
+    category: 'digital-media',
+    icon: 'SiDavinciresolve',
+    tags: ['video', 'editing', 'color-grading'],
+    portfolioIds: [],
+  },
+  {
+    id: 'lightroom',
+    name: 'Adobe Lightroom',
+    category: 'digital-media',
+    icon: 'SiAdobelightroom',
+    tags: ['photography', 'editing'],
+    portfolioIds: [],
+  },
+  {
+    id: 'canva',
+    name: 'Canva',
+    category: 'digital-media',
+    icon: 'SiCanva',
+    tags: ['design', 'graphics'],
+    portfolioIds: [],
+  },
+
+  // 3D + Game
+  {
+    id: 'maya',
+    name: 'Autodesk Maya',
+    category: '3d-game',
+    icon: 'SiAutodesk',
+    tags: ['3d', 'modeling', 'animation'],
+    portfolioIds: [],
+  },
+  {
+    id: 'substance-painter',
+    name: 'Substance Painter',
+    category: '3d-game',
+    icon: 'SiAdobe',
+    tags: ['3d', 'texturing', 'materials'],
+    portfolioIds: [],
+  },
+  {
+    id: 'unity',
+    name: 'Unity',
+    category: '3d-game',
+    icon: 'SiUnity',
+    version: '5.0',
+    tags: ['game-dev', '3d', 'c-sharp'],
+    portfolioIds: [],
+  },
+  {
+    id: 'unreal-engine',
+    name: 'Unreal Engine',
+    category: '3d-game',
+    icon: 'SiUnrealengine',
+    version: '5.7',
+    tags: ['game-dev', '3d', 'rendering'],
+    portfolioIds: [],
+  },
+
+  // Coding Languages
+  {
+    id: 'javascript',
+    name: 'JavaScript',
+    category: 'coding-languages',
+    icon: 'SiJavascript',
+    tags: ['frontend', 'backend', 'web-development'],
+    portfolioIds: [],
   },
   {
     id: 'typescript',
     name: 'TypeScript',
-    category: 'main',
+    category: 'coding-languages',
     icon: 'SiTypescript',
     tags: ['frontend', 'backend', 'web-development'],
-    portfolioIds: [], // Future: Add IDs of TypeScript projects
-  },
-  
-  // Past (Retired) Software
-  {
-    id: 'unity',
-    name: 'Unity',
-    category: 'past',
-    icon: 'SiUnity',
-    yearLastUsed: 2022,
-    tags: ['game-dev', '3d', 'c-sharp'],
-    portfolioIds: [], // Future: Add IDs of Unity game projects
+    portfolioIds: [],
   },
   {
-    id: 'maya',
-    name: 'Autodesk Maya',
-    category: 'past',
-    icon: 'SiAutodesk',
-    yearLastUsed: 2020,
-    tags: ['3d', 'modeling', 'animation'],
-    portfolioIds: [], // Future: Add IDs of Maya projects
+    id: 'python',
+    name: 'Python',
+    category: 'coding-languages',
+    icon: 'SiPython',
+    tags: ['backend', 'scripting', 'data'],
+    portfolioIds: [],
+  },
+  {
+    id: 'cpp',
+    name: 'C++',
+    category: 'coding-languages',
+    icon: 'SiCplusplus',
+    tags: ['systems', 'game-dev', 'fundamentals'],
+    portfolioIds: [],
+  },
+  {
+    id: 'csharp',
+    name: 'C#',
+    category: 'coding-languages',
+    icon: 'SiCsharp',
+    tags: ['unity', 'game-dev', 'backend'],
+    portfolioIds: [],
+  },
+  {
+    id: 'git',
+    name: 'Git',
+    category: 'coding-languages',
+    icon: 'SiGit',
+    tags: ['version-control', 'collaboration'],
+    portfolioIds: [],
+  },
+
+  // Libraries - Python
+  {
+    id: 'pyqt6',
+    name: 'PyQt6',
+    category: 'libraries-python',
+    icon: 'SiQt',
+    tags: ['python', 'gui', 'desktop'],
+    portfolioIds: [],
+  },
+
+  // Libraries - JavaScript/TypeScript
+  {
+    id: 'babylonjs',
+    name: 'Babylon.js',
+    category: 'libraries-js-ts',
+    icon: 'SiBabylondotjs',
+    tags: ['3d', 'webgl', 'rendering'],
+    portfolioIds: [],
+  },
+  {
+    id: 'pixijs',
+    name: 'Pixi.js',
+    category: 'libraries-js-ts',
+    icon: 'SiPixi',
+    tags: ['2d', 'webgl', 'rendering'],
+    portfolioIds: [],
+  },
+  {
+    id: 'matterjs',
+    name: 'Matter.js',
+    category: 'libraries-js-ts',
+    icon: 'SiJavascript',
+    tags: ['physics', '2d', 'game-dev'],
+    portfolioIds: [],
+  },
+  {
+    id: 'react',
+    name: 'React',
+    category: 'libraries-js-ts',
+    icon: 'SiReact',
+    tags: ['frontend', 'web-development', 'ui'],
+    portfolioIds: [],
+  },
+
+  // Libraries & DBS
+  {
+    id: 'sql',
+    name: 'SQL',
+    category: 'libraries-dbs',
+    icon: 'SiMysql',
+    tags: ['database', 'query'],
+    portfolioIds: [],
+  },
+  {
+    id: 'sqlite',
+    name: 'SQLite',
+    category: 'libraries-dbs',
+    icon: 'SiSqlite',
+    tags: ['database', 'embedded'],
+    portfolioIds: [],
+  },
+  {
+    id: 'mariadb',
+    name: 'MariaDB',
+    category: 'libraries-dbs',
+    icon: 'SiMariadb',
+    tags: ['database', 'sql'],
+    portfolioIds: [],
+  },
+  {
+    id: 'mongodb',
+    name: 'MongoDB',
+    category: 'libraries-dbs',
+    icon: 'SiMongodb',
+    tags: ['database', 'nosql'],
+    portfolioIds: [],
+  },
+
+  // Other
+  {
+    id: 'obsidian',
+    name: 'Obsidian',
+    category: 'other',
+    icon: 'SiObsidian',
+    tags: ['notes', 'knowledge-management'],
+    portfolioIds: [],
   },
 ];
 
 /**
  * Get software entries by category
- * @param category - 'main' for current software, 'past' for retired software
+ * @param category - Category to filter by (e.g., 'music', 'digital-media', '3d-game')
  * @returns Array of software entries in the specified category
  */
 export const getSoftwareByCategory = (category: SoftwareCategory): SoftwareEntry[] => {
   return softwareData.filter(software => software.category === category);
+};
+
+/**
+ * Get all categories that have software entries, sorted by display order
+ * @returns Array of categories with their display configuration
+ */
+export const getActiveCategories = (): Array<{ category: SoftwareCategory; title: string; order: number }> => {
+  const activeCategories = new Set(softwareData.map(s => s.category));
+  return Object.entries(categoryConfig)
+    .filter(([category]) => activeCategories.has(category as SoftwareCategory))
+    .map(([category, config]) => ({
+      category: category as SoftwareCategory,
+      ...config,
+    }))
+    .sort((a, b) => a.order - b.order);
 };
 
 /**

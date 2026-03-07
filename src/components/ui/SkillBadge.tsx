@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import * as SimpleIcons from 'react-icons/si';
 
 export interface SkillBadgeProps {
@@ -7,22 +7,56 @@ export interface SkillBadgeProps {
   icon?: string;
   proficiency?: number;
   className?: string;
+  index?: number;
 }
 
 const SkillBadge: React.FC<SkillBadgeProps> = ({ 
   name, 
   icon, 
   proficiency, 
-  className = '' 
+  className = '',
+  index = 0
 }) => {
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const [isInView, setIsInView] = useState(false);
+  const badgeRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
+  
   // Dynamically get the icon component from react-icons/si
   const IconComponent = icon ? (SimpleIcons as any)[icon] : null;
 
+  // Use Intersection Observer for better performance
+  useEffect(() => {
+    if (!badgeRef.current || hasAnimated) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasAnimated) {
+            setIsInView(true);
+            setHasAnimated(true);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '50px' }
+    );
+
+    observer.observe(badgeRef.current);
+
+    return () => observer.disconnect();
+  }, [hasAnimated]);
+
+  // Stagger animation delay based on index
+  const animationDelay = prefersReducedMotion ? 0 : Math.min(index * 0.03, 0.5);
+
   return (
     <motion.div
-      whileHover={{ scale: 1.08, y: -4 }}
-      whileTap={{ scale: 0.98 }}
-      transition={{ duration: 0.2 }}
+      ref={badgeRef}
+      initial={{ opacity: 0, y: 20 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={{ duration: 0.4, delay: animationDelay }}
+      whileHover={!prefersReducedMotion ? { scale: 1.08, y: -4 } : {}}
+      whileTap={!prefersReducedMotion ? { scale: 0.98 } : {}}
       className={`skill-badge ${className}`}
       style={{
         display: 'flex',
@@ -41,25 +75,28 @@ const SkillBadge: React.FC<SkillBadgeProps> = ({
         boxShadow: '0 4px 15px rgba(139, 92, 246, 0.1)',
       }}
     >
-      {/* Neural pulse effect */}
-      <motion.div
-        className="skill-badge-pulse"
-        animate={{
-          scale: [1, 1.5, 1],
-          opacity: [0.3, 0, 0.3],
-        }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        style={{
-          position: 'absolute',
-          inset: '-20%',
-          background: 'radial-gradient(circle at center, rgba(139, 92, 246, 0.4) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }}
-      />
+      {/* Neural pulse effect - only if animations enabled and not reduced motion */}
+      {!prefersReducedMotion && isInView && (
+        <motion.div
+          className="skill-badge-pulse"
+          animate={{
+            scale: [1, 1.5, 1],
+            opacity: [0.3, 0, 0.3],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: animationDelay,
+          }}
+          style={{
+            position: 'absolute',
+            inset: '-20%',
+            background: 'radial-gradient(circle at center, rgba(139, 92, 246, 0.4) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }}
+        />
+      )}
 
       {/* Hover glow effect */}
       <motion.div
@@ -79,7 +116,7 @@ const SkillBadge: React.FC<SkillBadgeProps> = ({
       {/* Icon */}
       {IconComponent && (
         <motion.div
-          whileHover={{ rotate: [0, -10, 10, 0] }}
+          whileHover={!prefersReducedMotion ? { rotate: [0, -10, 10, 0] } : {}}
           transition={{ duration: 0.5 }}
           style={{
             fontSize: '2.5rem',
@@ -109,7 +146,7 @@ const SkillBadge: React.FC<SkillBadgeProps> = ({
         {name}
       </span>
 
-      {/* Optional Proficiency Indicator - Neural synapse style */}
+      {/* Optional Proficiency Indicator - Optimized for performance */}
       {proficiency !== undefined && (
         <div
           style={{
@@ -122,16 +159,15 @@ const SkillBadge: React.FC<SkillBadgeProps> = ({
             position: 'relative',
           }}
         >
-          <motion.div
-            initial={{ width: 0 }}
-            whileInView={{ width: `${proficiency}%` }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
+          {/* Use CSS transition instead of Framer Motion for better performance */}
+          <div
             style={{
               height: '100%',
               background: 'linear-gradient(90deg, rgba(139, 92, 246, 0.8) 0%, rgba(167, 139, 250, 1) 100%)',
               borderRadius: '2px',
               boxShadow: '0 0 8px rgba(139, 92, 246, 0.6)',
+              width: isInView ? `${proficiency}%` : '0%',
+              transition: `width ${prefersReducedMotion ? '0s' : '0.8s'} ease-out ${animationDelay + 0.2}s`,
             }}
           />
         </div>

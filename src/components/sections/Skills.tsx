@@ -119,6 +119,7 @@ const Skills: React.FC = () => {
                     name={skill.name}
                     icon={skill.icon}
                     proficiency={skill.proficiency}
+                    index={skillIndex}
                   />
                 ))}
               </div>

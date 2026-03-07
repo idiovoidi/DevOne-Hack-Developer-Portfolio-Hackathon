@@ -4,5 +4,6 @@ export { default as ArtGallery } from './ArtGallery';
 export { default as NFTGallery } from './NFTGallery';
 export { Music } from './Music';
 export { Videos } from './Videos';
+export { ThreeD } from './ThreeD';
 export { default as Skills } from './Skills';
 export { default as Contact } from './Contact';

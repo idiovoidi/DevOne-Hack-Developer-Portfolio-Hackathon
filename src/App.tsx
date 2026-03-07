@@ -1,5 +1,5 @@
 import { Header, Footer } from './components/layout';
-import { Hero, Projects, ArtGallery, NFTGallery, Music, Videos, Skills, Contact } from './components/sections';
+import { Hero, Projects, ArtGallery, NFTGallery, Music, Videos, ThreeD, Skills, Contact } from './components/sections';
 import { ScrollProgress, CosmicBackground, PerformanceToggle } from './components/ui';
 import { PerformanceProvider, usePerformance } from './contexts/PerformanceContext';
 
@@ -44,6 +44,9 @@ function AppContent() {
 
         {/* Videos Section */}
         <Videos />
+
+        {/* 3D Section */}
+        <ThreeD />
 
         {/* Skills Section */}
         <Skills />

@@ -16,6 +16,7 @@ const navLinks: NavLink[] = [
   { id: "nft-gallery", label: "NFTs", href: "#nft-gallery", isArtGroup: true },
   { id: "music", label: "Music", href: "#music", isArtGroup: true },
   { id: "videos", label: "Videos", href: "#videos", isArtGroup: true },
+  { id: "three-d", label: "3D", href: "#three-d", isArtGroup: true },
   { id: "skills", label: "Skills", href: "#skills" },
   { id: "contact", label: "Contact", href: "#contact" },
 ];

@@ -6,4 +6,5 @@ export { Music } from './Music';
 export { Videos } from './Videos';
 export { ThreeD } from './ThreeD';
 export { default as Skills } from './Skills';
+export { default as SoftwareExperience } from './SoftwareExperience';
 export { default as Contact } from './Contact';

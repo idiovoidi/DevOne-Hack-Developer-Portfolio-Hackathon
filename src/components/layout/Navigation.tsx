@@ -18,6 +18,7 @@ const navLinks: NavLink[] = [
   { id: "videos", label: "Videos", href: "#videos", isArtGroup: true },
   { id: "three-d", label: "3D", href: "#three-d", isArtGroup: true },
   { id: "skills", label: "Skills", href: "#skills" },
+  { id: "software-experience", label: "Software Experience", href: "#software-experience" },
   { id: "contact", label: "Contact", href: "#contact" },
 ];
 

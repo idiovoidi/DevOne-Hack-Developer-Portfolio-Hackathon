@@ -1,3 +1,7 @@
+FBX to glb conversion script:
+node scripts/convert-fbx-to-glb.js "public/3D/your-model.fbx"
+
+
 File Formats
 glTF/GLB (Recommended)
 

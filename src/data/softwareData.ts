@@ -10,12 +10,17 @@
  *      id: 'software-name',           // Unique identifier (kebab-case)
  *      name: 'Software Name',         // Display name
  *      category: 'main',              // 'main' for current, 'past' for retired
- *      icon: '/software/logo.webp',   // Path to logo (WebP format)
+ *      icon: 'SiSoftwarename',        // Icon name from react-icons/si (Simple Icons)
  *      version: '4.2',                // Optional: version number
  *      yearLastUsed: 2022,            // Optional: for 'past' category only
  *      tags: ['3d', 'modeling'],      // Optional: for future filtering
  *      portfolioIds: [],              // Optional: for future filtering
  *    }
+ *
+ * ICON REFERENCE:
+ * - Use Simple Icons from react-icons: https://react-icons.github.io/react-icons/icons/si/
+ * - Format: 'Si' + PascalCaseName (e.g., 'SiBlender', 'SiReact', 'SiTypescript')
+ * - Same icon system as Skills section for consistency
  *
  * FUTURE TAG ASSOCIATION IMPLEMENTATION:
  * 
@@ -57,7 +62,7 @@ export interface SoftwareEntry {
   id: string;                    // Unique identifier (kebab-case)
   name: string;                  // Display name
   category: SoftwareCategory;    // 'main' for current, 'past' for retired
-  icon: string;                  // Path to logo/icon (WebP format)
+  icon: string;                  // Icon name from react-icons/si (e.g., 'SiBlender', 'SiReact')
   version?: string;              // Optional: version number (e.g., "4.2")
   yearLastUsed?: number;         // Optional: year last used (for 'past' category)
   tags?: string[];               // Optional: tags for filtering (e.g., ['3d', 'modeling'])
@@ -71,7 +76,7 @@ export const softwareData: SoftwareEntry[] = [
     id: 'blender',
     name: 'Blender',
     category: 'main',
-    icon: '/software/blender.webp',
+    icon: 'SiBlender',
     version: '4.2',
     tags: ['3d', 'modeling', 'animation', 'rendering'],
     portfolioIds: [], // Future: Add IDs of 3D projects and artworks
@@ -80,7 +85,7 @@ export const softwareData: SoftwareEntry[] = [
     id: 'photoshop',
     name: 'Adobe Photoshop',
     category: 'main',
-    icon: '/software/photoshop.webp',
+    icon: 'SiAdobephotoshop',
     tags: ['design', 'image-editing', 'digital-art'],
     portfolioIds: [], // Future: Add IDs of art pieces and design projects
   },
@@ -88,7 +93,7 @@ export const softwareData: SoftwareEntry[] = [
     id: 'react',
     name: 'React',
     category: 'main',
-    icon: '/software/react.webp',
+    icon: 'SiReact',
     tags: ['frontend', 'web-development', 'javascript'],
     portfolioIds: [], // Future: Add IDs of web projects
   },
@@ -96,7 +101,7 @@ export const softwareData: SoftwareEntry[] = [
     id: 'typescript',
     name: 'TypeScript',
     category: 'main',
-    icon: '/software/typescript.webp',
+    icon: 'SiTypescript',
     tags: ['frontend', 'backend', 'web-development'],
     portfolioIds: [], // Future: Add IDs of TypeScript projects
   },
@@ -106,7 +111,7 @@ export const softwareData: SoftwareEntry[] = [
     id: 'unity',
     name: 'Unity',
     category: 'past',
-    icon: '/software/unity.webp',
+    icon: 'SiUnity',
     yearLastUsed: 2022,
     tags: ['game-dev', '3d', 'c-sharp'],
     portfolioIds: [], // Future: Add IDs of Unity game projects
@@ -115,7 +120,7 @@ export const softwareData: SoftwareEntry[] = [
     id: 'maya',
     name: 'Autodesk Maya',
     category: 'past',
-    icon: '/software/maya.webp',
+    icon: 'SiAutodesk',
     yearLastUsed: 2020,
     tags: ['3d', 'modeling', 'animation'],
     portfolioIds: [], // Future: Add IDs of Maya projects

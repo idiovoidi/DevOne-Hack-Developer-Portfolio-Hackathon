@@ -32,3 +32,6 @@ dist-ssr
 
 # 3D Models
 public/3D/
+
+# Generated commercial WebP thumbnails (regenerate with npm run thumbs:commercial)
+public/commercial/thumbs/

@@ -126,7 +126,7 @@ export const Commercial = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.25 }}
-              className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-x-8 sm:gap-y-12 lg:grid-cols-3 xl:grid-cols-4"
+              className="columns-1 gap-x-8 sm:columns-2 lg:columns-3 xl:columns-4 [column-fill:_balance] space-y-8 sm:space-y-10"
             >
               {filteredWorks.map((work, index) => (
                 <CommercialCard

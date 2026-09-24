@@ -1,12 +1,13 @@
 # Commercial assets
 
 ## Folders
-- Root: design & print (menus, posters, reports)
-- Music Photography (Commercial)/ — live music shoots (tag: music-photography)
-- Photography Commercial/ — events, portraits, festivals (tag: photography)
-  - Costume/ — also tagged costume
+- Root: design & print
+- Music Photography (Commercial)/ — tag: music-photography
+- Photography Commercial/ — tag: photography (+ Costume/ → costume)
+- thumbs/ — optimized WebP thumbnails (auto-generated)
 
 ## Adding photos
-1. Drop files in the right folder.
+1. Drop files in the right folder
 2. Add the filename to src/data/commercialManifests.ts
-3. New filter types: add id in commercialTags.ts and tags[] on each work.
+3. Run: npm run thumbs:commercial
+4. New filter types: commercialTags.ts + tags[] on works

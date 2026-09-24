@@ -39,7 +39,7 @@ const CommercialCard = ({ work, index, onClick }: CommercialCardProps) => {
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="group relative cursor-pointer"
+      className="group relative w-full cursor-pointer break-inside-avoid"
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
@@ -55,9 +55,12 @@ const CommercialCard = ({ work, index, onClick }: CommercialCardProps) => {
           : "drop-shadow(0 14px 28px rgba(0, 0, 0, 0.4))",
       }}
     >
-      <div className="relative aspect-[4/5] overflow-hidden bg-transparent">
+      <div className="relative w-full overflow-hidden bg-transparent">
         {!imageLoaded && (
-          <div className="absolute inset-0 flex items-center justify-center rounded-sm bg-black/30">
+          <div
+            className="flex w-full items-center justify-center rounded-sm bg-black/25"
+            style={{ aspectRatio: "3 / 4", minHeight: "12rem" }}
+          >
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-amber-200/40 border-t-amber-400" />
           </div>
         )}
@@ -67,12 +70,12 @@ const CommercialCard = ({ work, index, onClick }: CommercialCardProps) => {
           loading="lazy"
           decoding="async"
           onLoad={() => setImageLoaded(true)}
-          className={`h-full w-full object-cover transition-opacity duration-500 ${
-            imageLoaded ? "opacity-100" : "opacity-0"
+          className={`block h-auto w-full transition-opacity duration-500 ${
+            imageLoaded ? "opacity-100" : "absolute inset-0 opacity-0"
           }`}
         />
 
-        {work.tags[0] && (
+        {work.tags[0] && imageLoaded && (
           <span
             className="absolute top-3 left-3 max-w-[85%] truncate rounded px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-stone-900/90"
             style={{

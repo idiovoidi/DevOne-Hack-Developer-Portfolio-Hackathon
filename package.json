@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "test": "vitest --run",
     "test:watch": "vitest",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "thumbs:commercial": "node scripts/generate-commercial-thumbs.mjs"
   },
   "keywords": [
     "portfolio",

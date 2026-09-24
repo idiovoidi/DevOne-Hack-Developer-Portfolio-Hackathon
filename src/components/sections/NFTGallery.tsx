@@ -9,27 +9,11 @@ export const NFTGallery: FC = () => {
     <Section
       id="nft-gallery"
       title="NFT Collection"
-      subtitle={
-        <span className="inline-flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-          <span className="font-bold text-text-primary">Featured:</span>
-          {nfts.map((nft) => (
-            <a
-              key={nft.id}
-              href={nft.marketplaceUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-text-secondary hover:text-primary transition-colors"
-            >
-              {nft.title}
-              <FiExternalLink className="shrink-0" size={14} aria-hidden />
-            </a>
-          ))}
-        </span>
-      }
+      sectionStyle={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 1400px' }}
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-        {nfts.map((nft, index) => (
-          <NFTCard key={nft.id} nft={nft} index={index} />
+        {nfts.map((nft) => (
+          <NFTCard key={nft.id} nft={nft} />
         ))}
       </div>
 
@@ -50,7 +34,7 @@ export const NFTGallery: FC = () => {
               href={collection.collectionUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative bg-black/40 backdrop-blur-sm border border-purple-500/20 rounded-lg overflow-hidden hover:border-purple-500/50 transition-all duration-300"
+              className="group relative bg-black/70 border border-purple-500/20 rounded-lg overflow-hidden hover:border-purple-500/50 transition-colors duration-300"
               style={{
                 boxShadow: "0 0 20px rgba(168, 85, 247, 0.15)",
               }}
@@ -59,8 +43,9 @@ export const NFTGallery: FC = () => {
                 <img
                   src={collection.coverImage}
                   alt={collection.name}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-full object-cover"
                   loading="lazy"
+                  decoding="async"
                 />
               </div>
               <div className="p-6">

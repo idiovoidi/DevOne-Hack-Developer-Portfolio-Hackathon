@@ -29,8 +29,7 @@ export const nfts: NFT[] = [
     id: "nft-1",
     title: ".Br!†h._//",
     description: "",
-    image:
-      "https://assets.objkt.media/file/assets-003/QmbtUvGdxFuaauaYYSBnySzEYqruaMdJ6p74kAhr5A7TN5/artifact",
+    image: "/nft/nft-1.webp",
     collection: "𖣐ƿ℮ɲ ΣĐ!էὶꝋn",
     blockchain: "Tezos",
     contractAddress: "KT1SJawrAnz4qnt3XLGa924WQR5Jkp95UL9K",
@@ -45,8 +44,7 @@ export const nfts: NFT[] = [
     id: "nft-2",
     title: "₦ɄⱠⱠ{E₦₮ⱤɎ",
     description: "",
-    image:
-      "https://assets.objkt.media/file/assets-003/QmW66bkjRdN65RtuwFmVNQtJX57zwhbCjVmqRSC5jxuYk3/artifact",
+    image: "/nft/nft-2.webp",
     collection: "M¡ɲƋ_Ƌ∆T∆_",
     blockchain: "Tezos",
     contractAddress: "KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew",
@@ -61,8 +59,7 @@ export const nfts: NFT[] = [
     id: "nft-3",
     title: "E҉Я҉丨҉\\҉",
     description: "",
-    image:
-      "https://assets.objkt.media/file/assets-003/QmXRLk4VACrzL6z1u3eAy8ffwdiXH7mjPtxkDc48xUh3fp/artifact",
+    image: "/nft/nft-3.webp",
     collection: "𐌼!ɳɖ~ʍɛꝆ₸Ɀ",
     blockchain: "Tezos",
     contractAddress: "KT1EQFjF1qDm99nkZvqNtw14kNb6YJAnDM5M",
@@ -77,8 +74,7 @@ export const nfts: NFT[] = [
     id: "nft-4",
     title: "†ЯΞΞ|_1N3.ΔΞ]",
     description: "",
-    image:
-      "https://assets.objkt.media/file/assets-003/bafybeihh6ms2oqiwjav4l5vqy7edomdt5wz36hpzbhkjxpu23tznlqgf6a/artifact",
+    image: "/nft/nft-4.webp",
     collection: "M¡ɲƋ_Ƌ∆T∆_",
     blockchain: "Tezos",
     contractAddress: "KT1D8cNYvhvoE5URCoj6Q5iPhc2EQzWaR9ew",

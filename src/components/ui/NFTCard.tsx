@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { NFT } from '../../data/nfts';
 import { FaEthereum } from 'react-icons/fa';
 import { RiNftLine } from 'react-icons/ri';
@@ -7,10 +6,9 @@ import { useTilt } from '../../hooks/useTilt';
 
 export interface NFTCardProps {
   nft: NFT;
-  index: number;
 }
 
-const NFTCard: React.FC<NFTCardProps> = ({ nft, index }) => {
+const NFTCard: React.FC<NFTCardProps> = ({ nft }) => {
   const getBlockchainIcon = () => {
     switch (nft.blockchain.toLowerCase()) {
       case 'tezos':
@@ -44,18 +42,11 @@ const NFTCard: React.FC<NFTCardProps> = ({ nft, index }) => {
         transformStyle: 'preserve-3d',
       }}
     >
-      <motion.a
+      <a
         href={nft.marketplaceUrl}
         target="_blank"
         rel="noopener noreferrer"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: index * 0.1 }}
-        className="group relative bg-black/40 backdrop-blur-sm border border-purple-500/20 rounded-lg overflow-hidden hover:border-purple-500/50 transition-all duration-300 cursor-pointer"
-        style={{
-          boxShadow: '0 0 20px rgba(168, 85, 247, 0.15)',
-          transformStyle: 'preserve-3d',
-        }}
+        className="group relative block bg-black/70 border border-purple-500/20 rounded-lg overflow-hidden hover:border-purple-500/50 transition-colors duration-300 cursor-pointer"
       >
         {/* Glare Effect Overlay */}
         {glareStyle && <div style={glareStyle} />}
@@ -64,8 +55,9 @@ const NFTCard: React.FC<NFTCardProps> = ({ nft, index }) => {
         <img
           src={nft.image}
           alt={nft.title}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          className="w-full h-full object-cover"
           loading="lazy"
+          decoding="async"
         />
         
         {/* Hover Overlay */}
@@ -74,7 +66,7 @@ const NFTCard: React.FC<NFTCardProps> = ({ nft, index }) => {
         </div>
 
         {/* Blockchain Badge */}
-        <div className="absolute top-3 right-3 bg-background/80 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-2 border border-accent-primary/30">
+        <div className="absolute top-3 right-3 bg-background/90 px-3 py-1.5 rounded-full flex items-center gap-2 border border-accent-primary/30">
           {getBlockchainIcon()}
           <span className="text-xs font-medium text-text-primary">{nft.blockchain}</span>
         </div>
@@ -101,7 +93,7 @@ const NFTCard: React.FC<NFTCardProps> = ({ nft, index }) => {
         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
           <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-pink-500/10" />
         </div>
-      </motion.a>
+      </a>
     </div>
   );
 };

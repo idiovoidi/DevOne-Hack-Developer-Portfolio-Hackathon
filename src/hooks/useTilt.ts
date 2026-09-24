@@ -106,10 +106,10 @@ export const useTilt = (options: TiltOptions = {}) => {
     };
   }, [maxTilt, perspective, scale, speed, glare, maxGlare, disabled]);
 
-  const tiltStyle = disabled ? {} : {
+  const isTilting = tiltState.rotateX !== 0 || tiltState.rotateY !== 0 || tiltState.scale !== 1;
+  const tiltStyle = disabled || !isTilting ? {} : {
     transform: `perspective(${perspective}px) rotateX(${tiltState.rotateX}deg) rotateY(${tiltState.rotateY}deg) scale3d(${tiltState.scale}, ${tiltState.scale}, ${tiltState.scale})`,
     transition: `transform ${speed}ms cubic-bezier(0.03, 0.98, 0.52, 0.99)`,
-    willChange: 'transform',
   };
 
   const glareStyle = glare

@@ -1,7 +1,9 @@
 import type { CommercialTagId } from "./commercialTags";
 import {
   MUSIC_PHOTOGRAPHY_DIR,
+  VIDEO_DIR,
   commercialPhotographyPaths,
+  commercialVideoItems,
   musicPhotographyFiles,
 } from "./commercialManifests";
 
@@ -12,6 +14,7 @@ import {
  * - Folder batches: add filenames to commercialManifests.ts
  * - Filtering: tags[] + commercialTags.ts
  * - Thumbnails: public/commercial/thumbs/.../*.webp (regenerate via npm run thumbs:commercial)
+ * - Video cards: set videoSrc; poster comes from thumbs/Video/*.webp
  */
 
 export interface CommercialWork {
@@ -20,8 +23,10 @@ export interface CommercialWork {
   description?: string;
   /** Optimized WebP thumbnail for the grid */
   image: string;
-  /** Full-resolution original for lightbox */
+  /** Full-resolution original for lightbox (images) */
   fullImage?: string;
+  /** When set, lightbox plays this video instead of showing fullImage */
+  videoSrc?: string;
   medium: string;
   tools: string[];
   date: string;
@@ -151,10 +156,39 @@ const commercialPhotographyWorks = commercialPhotographyPaths.map((relativePath)
   return photoEntry(segments, tags);
 });
 
+const videoWorks: CommercialWork[] = commercialVideoItems.map((item) => {
+  const pathSegments = [VIDEO_DIR, item.file];
+  const base = {
+    id: slugify(pathSegments.join("/")),
+    title: item.title ?? titleFromFilename(item.file),
+    medium: item.medium ?? (item.kind === "video" ? "Video" : "Video still"),
+    tools: item.tools ?? ["Premiere"],
+    date: item.date ?? "",
+    tags: ["video"] as CommercialTagId[],
+    client: item.client,
+    description: item.description,
+    image: commercialThumb(...pathSegments),
+  };
+
+  if (item.kind === "video") {
+    return {
+      ...base,
+      fullImage: commercialThumb(...pathSegments),
+      videoSrc: commercialAsset(...pathSegments),
+    };
+  }
+
+  return {
+    ...base,
+    fullImage: commercialAsset(...pathSegments),
+  };
+});
+
 export const commercialWorks: CommercialWork[] = [
   ...designWorks,
   ...musicPhotographyWorks,
   ...commercialPhotographyWorks,
+  ...videoWorks,
 ];
 
 export const filterCommercialWorks = (

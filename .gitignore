@@ -35,3 +35,14 @@ public/3D/
 
 # Generated commercial WebP thumbnails (regenerate with npm run thumbs:commercial)
 public/commercial/thumbs/
+
+# Large commercial video binaries (keep locally / host for deploy)
+public/commercial/Video/*.mp4
+public/commercial/Video/*.mov
+public/commercial/Video/*.m4v
+public/commercial/Video/*.webm
+public/commercial/Video/**/*.mp4
+public/commercial/Video/**/*.mov
+public/commercial/Video/**/*.m4v
+public/commercial/Video/**/*.webm
+

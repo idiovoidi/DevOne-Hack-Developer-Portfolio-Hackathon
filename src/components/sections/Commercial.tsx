@@ -174,6 +174,7 @@ export const Commercial = () => {
           onClose={() => setSelectedWork(null)}
           imageSrc={selectedWork.fullImage || selectedWork.image}
           imageAlt={selectedWork.title}
+          videoSrc={selectedWork.videoSrc}
           title={
             selectedWork.client
               ? `${selectedWork.title} — ${selectedWork.client}`

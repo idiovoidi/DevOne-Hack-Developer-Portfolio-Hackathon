@@ -7,8 +7,10 @@ export interface LightboxProps {
   imageSrc: string;
   imageAlt?: string;
   title?: string;
-  embedUrl?: string; // Optional: For NFT or other embeddable content
-  nftUrl?: string; // Optional: Link to NFT marketplace
+  embedUrl?: string;
+  nftUrl?: string;
+  /** When set, plays an HTML5 video instead of showing the image */
+  videoSrc?: string;
 }
 
 const Lightbox: React.FC<LightboxProps> = ({
@@ -19,46 +21,43 @@ const Lightbox: React.FC<LightboxProps> = ({
   title,
   embedUrl,
   nftUrl,
+  videoSrc,
 }) => {
   useEffect(() => {
     if (isOpen) {
-      // Prevent body scroll when lightbox is open
       document.body.style.overflow = 'hidden';
-      
-      // Handle ESC key press
+
       const handleEscape = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
           onClose();
         }
       };
-      
+
       document.addEventListener('keydown', handleEscape);
-      
+
       return () => {
         document.body.style.overflow = 'unset';
         document.removeEventListener('keydown', handleEscape);
       };
     }
   }, [isOpen, onClose]);
-  
+
   if (!isOpen) return null;
-  
-  // Handle click outside to close
+
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       onClose();
     }
   };
-  
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 p-4 animate-fadeIn"
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
-      aria-label="Image lightbox"
+      aria-label={videoSrc ? 'Video lightbox' : 'Image lightbox'}
     >
-      {/* Close button */}
       <button
         onClick={onClose}
         className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors duration-200 z-10 p-2 rounded-full hover:bg-white hover:bg-opacity-10"
@@ -66,16 +65,14 @@ const Lightbox: React.FC<LightboxProps> = ({
       >
         <IoClose size={32} />
       </button>
-      
-      {/* Content container */}
+
       <div className="relative max-w-7xl max-h-[90vh] w-full h-full flex flex-col items-center justify-center">
         {title && (
           <h3 className="text-white text-xl font-semibold mb-4 text-center">
             {title}
           </h3>
         )}
-        
-        {/* NFT Embed or Regular Image */}
+
         {embedUrl ? (
           <div className="w-full max-w-4xl flex flex-col items-center" onClick={(e) => e.stopPropagation()}>
             <iframe
@@ -97,6 +94,19 @@ const Lightbox: React.FC<LightboxProps> = ({
               </a>
             )}
           </div>
+        ) : videoSrc ? (
+          <video
+            key={videoSrc}
+            src={videoSrc}
+            poster={imageSrc}
+            controls
+            autoPlay
+            playsInline
+            className="max-w-full max-h-[80vh] w-full rounded-lg shadow-2xl bg-black"
+            onClick={(e) => e.stopPropagation()}
+          >
+            Your browser does not support the video tag.
+          </video>
         ) : (
           <img
             src={imageSrc}

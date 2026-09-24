@@ -4,10 +4,19 @@
 - Root: design & print
 - Music Photography (Commercial)/ — tag: music-photography
 - Photography Commercial/ — tag: photography (+ Costume/ → costume)
-- thumbs/ — optimized WebP thumbnails (auto-generated)
+- Video/ — tag: video (images and/or .mp4 files)
+- thumbs/ — optimized WebP thumbnails (auto-generated, gitignored)
 
 ## Adding photos
 1. Drop files in the right folder
 2. Add the filename to src/data/commercialManifests.ts
 3. Run: npm run thumbs:commercial
 4. New filter types: commercialTags.ts + tags[] on works
+
+## Adding video
+1. Put stills and/or .mp4/.mov in Video/
+2. Add an entry to commercialVideoItems in commercialManifests.ts
+   - kind: "image" for stills / promo cards
+   - kind: "video" for playable files (poster extracted automatically)
+3. Run: npm run thumbs:commercial
+4. Large videos are gitignored — keep them locally or host for deploy

@@ -61,3 +61,49 @@ export const commercialPhotographyPaths = [
   `${PHOTO_ROOT}/Costume/The-King.jpg`,
   `${PHOTO_ROOT}/Costume/Watchman3-sfx.jpg`,
 ] as const;
+
+export const VIDEO_DIR = "Video";
+
+/**
+ * Commercial video section mix:
+ * - Images: stills / promo cards (poster art for a project)
+ * - Videos: playable mp4/webm with poster thumb under thumbs/Video/
+ */
+export type CommercialVideoManifestItem = {
+  file: string;
+  kind: "image" | "video";
+  title?: string;
+  medium?: string;
+  tools?: string[];
+  client?: string;
+  date?: string;
+  description?: string;
+};
+
+export const commercialVideoItems: CommercialVideoManifestItem[] = [
+  {
+    file: "Wedding Videography Adobe Premiere.png",
+    kind: "image",
+    title: "Wedding Videography",
+    medium: "Video editing",
+    tools: ["Adobe Premiere"],
+    description: "Wedding highlight edit workflow in Premiere",
+  },
+  {
+    file: "Drone Footage Nestbox Installation (On-going project).png",
+    kind: "image",
+    title: "Nestbox Installation — Drone Footage",
+    medium: "Drone / documentary",
+    tools: ["Drone", "Premiere"],
+    description: "On-going nestbox installation documentation",
+  },
+  {
+    file: "C0668_Misty Thank You.mp4",
+    kind: "video",
+    title: "Misty — Thank You",
+    medium: "Music video",
+    client: "Misty Harlowe",
+    tools: ["Premiere", "After Effects"],
+  },
+];
+

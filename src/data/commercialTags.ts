@@ -6,7 +6,8 @@ export type CommercialTagId =
   | "design"
   | "music-photography"
   | "photography"
-  | "costume";
+  | "costume"
+  | "video";
 
 export interface CommercialTagDefinition {
   id: CommercialTagId;
@@ -19,6 +20,7 @@ export const commercialTagDefinitions: CommercialTagDefinition[] = [
   { id: "music-photography", label: "Music photography" },
   { id: "photography", label: "Commercial photography" },
   { id: "costume", label: "Costume" },
+  { id: "video", label: "Video" },
 ];
 
 export const commercialTagLabel = (id: CommercialTagId): string =>

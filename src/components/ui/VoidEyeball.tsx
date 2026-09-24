@@ -10,16 +10,30 @@ type Shard = {
   fall: number;
   color: string;
   width: number;
+  wobble: number;
+  wobbleAmp: number;
+  wobbleFreq: number;
+  ellipse: number;
+  curve: number;
+  ox: number;
+  oy: number;
 };
 
 const spawnShard = (shard: Shard, maxR: number, atRim: boolean) => {
   const band = atRim ? 0.86 + Math.random() * 0.14 : 0.2 + Math.random() * 0.8;
   shard.radius = maxR * band;
   shard.angle = Math.random() * Math.PI * 2;
-  shard.spin = (0.7 + Math.random() * 1.3) * (Math.random() < 0.5 ? 1 : -1);
-  shard.fall = 22 + Math.random() * 36;
+  shard.spin = (0.55 + Math.random() * 1.15) * (Math.random() < 0.5 ? 1 : -1);
+  shard.fall = 16 + Math.random() * 34;
   shard.color = SHARD_COLORS[Math.floor(Math.random() * SHARD_COLORS.length)];
   shard.width = 1.1 + Math.random() * 2.2;
+  shard.wobble = Math.random() * Math.PI * 2;
+  shard.wobbleAmp = 8 + Math.random() * 26;
+  shard.wobbleFreq = 0.45 + Math.random() * 1.7;
+  shard.ellipse = 0.78 + Math.random() * 0.4;
+  shard.curve = (Math.random() - 0.5) * 1.6;
+  shard.ox = 0;
+  shard.oy = 0;
 };
 
 /** Face-on accretion field. Debris spirals faster as it falls into the core. */
@@ -43,12 +57,24 @@ const PortalVortex: React.FC<{ offsetX: MotionValue<number>; offsetY: MotionValu
     });
 
     const center = { x: 0, y: 0 };
+    const pointer = { clientX: -9999, clientY: -9999, vx: 0, vy: 0, energy: 0 };
     const unsubX = offsetX.on("change", (value) => {
       center.x = value;
     });
     const unsubY = offsetY.on("change", (value) => {
       center.y = value;
     });
+
+    const onPointerMove = (event: MouseEvent) => {
+      if (pointer.clientX > -1000) {
+        pointer.vx = event.clientX - pointer.clientX;
+        pointer.vy = event.clientY - pointer.clientY;
+        pointer.energy = Math.min(1, Math.hypot(pointer.vx, pointer.vy) / 16);
+      }
+      pointer.clientX = event.clientX;
+      pointer.clientY = event.clientY;
+    };
+    window.addEventListener("mousemove", onPointerMove);
 
     let frame = 0;
     let last = performance.now();
@@ -82,43 +108,77 @@ const PortalVortex: React.FC<{ offsetX: MotionValue<number>; offsetY: MotionValu
       ctx.globalCompositeOperation = "lighter";
 
       const spinTime = reduced ? 0 : now / 1000;
+      const bounds = canvas.getBoundingClientRect();
+      const pointerX = pointer.clientX - bounds.left - width / 2 - center.x;
+      const pointerY = pointer.clientY - bounds.top - height / 2 - center.y;
+      pointer.energy *= reduced ? 0 : 0.9;
       ctx.lineCap = "round";
       for (let arm = 0; arm < 3; arm += 1) {
         ctx.beginPath();
-        const offset = arm * ((Math.PI * 2) / 3) + spinTime * 0.35;
+        const offset = arm * ((Math.PI * 2) / 3) + spinTime * 0.28;
         for (let step = 0; step <= 64; step += 1) {
           const t = step / 64;
-          const radius = horizon + (maxR * 0.92 - horizon) * t * t;
-          const angle = offset + (1 - t) * 6.2;
+          const flutter = Math.sin(spinTime * 0.8 + t * 9 + arm) * (10 + t * 16);
+          const radius = horizon + (maxR * 0.92 - horizon) * t * t + flutter;
+          const angle = offset + (1 - t) * 5.4 + Math.sin(spinTime * 0.5 + t * 6) * 0.18;
           const x = Math.cos(angle) * radius;
-          const y = Math.sin(angle) * radius;
+          const y = Math.sin(angle) * radius * (0.92 + arm * 0.04);
           if (step === 0) ctx.moveTo(x, y);
           else ctx.lineTo(x, y);
         }
-        ctx.strokeStyle = "rgba(167, 139, 250, 0.16)";
-        ctx.lineWidth = 10;
+        ctx.strokeStyle = "rgba(167, 139, 250, 0.1)";
+        ctx.lineWidth = 7;
         ctx.stroke();
       }
 
       for (const shard of shards) {
         const closeness = 1 - Math.min(1, shard.radius / maxR);
-        const whirl = shard.spin * (0.4 + closeness * closeness * 8);
-        const pull = shard.fall * (0.3 + closeness * closeness * 6.5);
+        const drift = 0.72 + 0.28 * Math.sin(spinTime * shard.wobbleFreq + shard.wobble);
+        const whirl = shard.spin * (0.32 + closeness * closeness * 6.2) * drift;
+        const pull = shard.fall * (0.22 + closeness * closeness * 5.4) * (0.7 + 0.3 * drift);
 
         if (!reduced) {
           shard.angle += whirl * dt;
           shard.radius -= pull * dt;
+          shard.ox *= 0.9;
+          shard.oy *= 0.9;
           if (shard.radius <= horizon || shard.radius > maxR) spawnShard(shard, maxR, true);
         }
 
-        const streak = Math.min(shard.radius * 0.55, 14 + closeness * 86);
-        const tailRadius = Math.min(maxR, shard.radius + streak);
-        const tailAngle = shard.angle - Math.sign(shard.spin || 1) * Math.min(0.9, streak / Math.max(shard.radius, 24));
-        const headX = Math.cos(shard.angle) * shard.radius;
-        const headY = Math.sin(shard.angle) * shard.radius;
-        const tailX = Math.cos(tailAngle) * tailRadius;
-        const tailY = Math.sin(tailAngle) * tailRadius;
-        const alpha = 0.12 + closeness * 0.82;
+        const breathe = Math.sin(spinTime * shard.wobbleFreq + shard.wobble) * shard.wobbleAmp * (1 - closeness * 0.45);
+        const angle = shard.angle + Math.sin(spinTime * shard.wobbleFreq * 0.65 + shard.wobble) * 0.18 * (1 - closeness * 0.4);
+        const radius = Math.max(horizon, shard.radius + breathe);
+        let headX = Math.cos(angle) * radius + shard.ox;
+        let headY = Math.sin(angle) * radius * shard.ellipse + shard.oy;
+
+        if (!reduced && pointer.energy > 0.05) {
+          const mdx = headX - pointerX;
+          const mdy = headY - pointerY;
+          const md = Math.hypot(mdx, mdy) || 1;
+          const reach = 150;
+          if (md < reach) {
+            const falloff = (1 - md / reach) ** 2 * pointer.energy;
+            const swirlX = (-mdy / md) * 22 * falloff;
+            const swirlY = (mdx / md) * 22 * falloff;
+            shard.ox += pointer.vx * 0.55 * falloff + swirlX + (mdx / md) * 8 * falloff;
+            shard.oy += pointer.vy * 0.55 * falloff + swirlY + (mdy / md) * 8 * falloff;
+            headX += swirlX;
+            headY += swirlY;
+          }
+        }
+
+        const streak = Math.min(radius * 0.42, 12 + closeness * 64);
+        const tailRadius = Math.min(maxR, radius + streak);
+        const tailAngle = angle - Math.sign(shard.spin || 1) * Math.min(0.7, streak / Math.max(radius, 28));
+        const tailX = Math.cos(tailAngle) * tailRadius + shard.ox * 0.35;
+        const tailY = Math.sin(tailAngle) * tailRadius * shard.ellipse + shard.oy * 0.35;
+        const midAngle = (angle + tailAngle) / 2;
+        const midRadius = (radius + tailRadius) / 2;
+        const bend = shard.curve * (14 + closeness * 18);
+        const controlX = Math.cos(midAngle) * midRadius - Math.sin(midAngle) * bend + shard.ox * 0.6;
+        const controlY = Math.sin(midAngle) * midRadius * shard.ellipse + Math.cos(midAngle) * bend + shard.oy * 0.6;
+        const nearPointer = pointer.energy > 0.05 ? Math.max(0, 1 - Math.hypot(headX - pointerX, headY - pointerY) / 150) : 0;
+        const alpha = Math.min(1, 0.12 + closeness * 0.72 + nearPointer * pointer.energy * 0.45);
 
         const gradient = ctx.createLinearGradient(tailX, tailY, headX, headY);
         gradient.addColorStop(0, `rgba(${shard.color}, 0)`);
@@ -127,9 +187,9 @@ const PortalVortex: React.FC<{ offsetX: MotionValue<number>; offsetY: MotionValu
 
         ctx.beginPath();
         ctx.moveTo(tailX, tailY);
-        ctx.lineTo(headX, headY);
+        ctx.quadraticCurveTo(controlX, controlY, headX, headY);
         ctx.strokeStyle = gradient;
-        ctx.lineWidth = shard.width * (1.5 - closeness * 0.9);
+        ctx.lineWidth = shard.width * (1.35 - closeness * 0.55);
         ctx.stroke();
       }
 
@@ -148,6 +208,7 @@ const PortalVortex: React.FC<{ offsetX: MotionValue<number>; offsetY: MotionValu
       running = false;
       cancelAnimationFrame(frame);
       observer.disconnect();
+      window.removeEventListener("mousemove", onPointerMove);
       unsubX();
       unsubY();
     };

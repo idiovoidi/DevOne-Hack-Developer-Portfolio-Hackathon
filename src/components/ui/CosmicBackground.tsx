@@ -69,6 +69,18 @@ export const CosmicBackground = () => {
       });
     }
 
+    const pointer = { x: -9999, y: -9999, vx: 0, vy: 0, energy: 0 };
+    const onPointerMove = (event: MouseEvent) => {
+      if (pointer.x > -1000) {
+        pointer.vx = event.clientX - pointer.x;
+        pointer.vy = event.clientY - pointer.y;
+        pointer.energy = Math.min(1, Math.hypot(pointer.vx, pointer.vy) / 18);
+      }
+      pointer.x = event.clientX;
+      pointer.y = event.clientY;
+    };
+    window.addEventListener('mousemove', onPointerMove);
+
     let animationFrameId = 0;
     let last = performance.now();
 
@@ -94,7 +106,21 @@ export const CosmicBackground = () => {
         }
       }
 
+      pointer.energy *= reduced ? 0 : 0.88;
+
       particles.forEach((particle) => {
+        if (pull > 0.04 && pointer.energy > 0.06) {
+          const pdx = particle.x - pointer.x;
+          const pdy = particle.y - pointer.y;
+          const pd = Math.hypot(pdx, pdy) || 1;
+          const reach = 170;
+          if (pd < reach) {
+            const falloff = (1 - pd / reach) ** 2 * pointer.energy;
+            particle.vx += pointer.vx * 14 * falloff + (-pdy / pd) * 36 * falloff;
+            particle.vy += pointer.vy * 14 * falloff + (pdx / pd) * 36 * falloff;
+          }
+        }
+
         if (pull > 0.04) {
           const dx = portalX - particle.x;
           const dy = portalY - particle.y;
@@ -140,7 +166,9 @@ export const CosmicBackground = () => {
 
         const distToPortal = Math.hypot(portalX - particle.x, portalY - particle.y);
         const proximity = pull > 0 ? Math.max(0, 1 - distToPortal / 520) : 0;
-        const alpha = Math.min(0.95, particle.opacity + proximity * 0.45);
+        const cursorGlow =
+          pointer.energy > 0.06 ? Math.max(0, 1 - Math.hypot(particle.x - pointer.x, particle.y - pointer.y) / 170) : 0;
+        const alpha = Math.min(0.95, particle.opacity + proximity * 0.45 + cursorGlow * pointer.energy * 0.4);
 
         if (speed > 40 && pull > 0.04) {
           ctx.beginPath();
@@ -167,6 +195,7 @@ export const CosmicBackground = () => {
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
+      window.removeEventListener('mousemove', onPointerMove);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);

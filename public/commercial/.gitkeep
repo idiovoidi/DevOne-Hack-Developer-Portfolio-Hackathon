@@ -1,16 +1,12 @@
-# Commercial Portfolio Images
+# Commercial assets
 
-Place commercial photography and client work images here.
+## Folders
+- Root: design & print (menus, posters, reports)
+- Music Photography (Commercial)/ — live music shoots (tag: music-photography)
+- Photography Commercial/ — events, portraits, festivals (tag: photography)
+  - Costume/ — also tagged costume
 
-## Naming Convention:
-- Use descriptive kebab-case names
-- Thumbnails: `work-name-thumb.webp`
-- Full size: `work-name-full.webp`
-
-## Image Optimization:
-- Thumbnails should be < 200KB
-- Full-size images should be < 500KB
-- Use WebP format for better compression
-- Recommended dimensions:
-  - Thumbnails: 600x600px
-  - Full-size: 1920x1920px (max)
+## Adding photos
+1. Drop files in the right folder.
+2. Add the filename to src/data/commercialManifests.ts
+3. New filter types: add id in commercialTags.ts and tags[] on each work.

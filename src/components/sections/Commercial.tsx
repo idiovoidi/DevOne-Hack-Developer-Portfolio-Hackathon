@@ -1,15 +1,52 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { commercialWorks } from "../../data/commercial";
+import { useMemo, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  commercialWorks,
+  filterCommercialWorks,
+  type CommercialWork,
+} from "../../data/commercial";
+import {
+  commercialTagDefinitions,
+  type CommercialTagId,
+} from "../../data/commercialTags";
 import { CommercialCard } from "../ui/CommercialCard";
 import { CommercialBackground } from "../ui/CommercialBackground";
 import Lightbox from "../ui/Lightbox";
 import { Section } from "../ui/Section";
+import { useInView } from "../../hooks";
+import { createFadeInUp, fadeIn, revealState } from "../../utils/animations";
+import { usePerformanceSettings } from "../../contexts/PerformanceContext";
+
+type CommercialFilter = "all" | CommercialTagId;
+
+const filterOptions: { value: CommercialFilter; label: string }[] = [
+  { value: "all", label: "All" },
+  ...commercialTagDefinitions.map((tag) => ({
+    value: tag.id,
+    label: tag.label,
+  })),
+];
 
 export const Commercial = () => {
-  const [selectedWork, setSelectedWork] = useState<number | null>(null);
+  const [activeFilter, setActiveFilter] = useState<CommercialFilter>("all");
+  const [selectedWork, setSelectedWork] = useState<CommercialWork | null>(null);
+  const { ref: filtersRef, inView: filtersInView } = useInView({ threshold: 0.2 });
+  const settings = usePerformanceSettings();
 
-  const currentWork = selectedWork !== null ? commercialWorks[selectedWork] : null;
+  const filteredWorks = useMemo(
+    () => filterCommercialWorks(commercialWorks, activeFilter),
+    [activeFilter]
+  );
+
+  const visibleTagFilters = useMemo(() => {
+    const used = new Set<CommercialTagId>();
+    commercialWorks.forEach((work) => {
+      work.tags.forEach((tag) => used.add(tag));
+    });
+    return filterOptions.filter(
+      (option) => option.value === "all" || used.has(option.value as CommercialTagId)
+    );
+  }, []);
 
   return (
     <Section
@@ -41,17 +78,78 @@ export const Commercial = () => {
         </p>
       }
     >
+      {commercialWorks.length > 0 && (
+        <motion.div
+          ref={filtersRef}
+          variants={createFadeInUp(0.15)}
+          initial="initial"
+          animate={revealState(filtersInView, settings.enableAnimations)}
+          className="mb-10 flex flex-wrap justify-center gap-2 sm:gap-3"
+        >
+          {visibleTagFilters.map((option) => {
+            const isActive = activeFilter === option.value;
+            return (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => setActiveFilter(option.value)}
+                className="rounded-full px-5 py-2 text-sm font-medium transition-all duration-300 focus-visible-ring"
+                style={{
+                  background: isActive
+                    ? "rgba(253, 230, 138, 0.95)"
+                    : "rgba(20, 14, 10, 0.45)",
+                  color: isActive ? "#1c1410" : "#f5e6c8",
+                  border: `1px solid ${
+                    isActive ? "rgba(250, 204, 21, 0.8)" : "rgba(253, 230, 138, 0.35)"
+                  }`,
+                  boxShadow: isActive
+                    ? "0 0 20px rgba(253, 224, 165, 0.35)"
+                    : "none",
+                  transform: isActive ? "scale(1.03)" : "scale(1)",
+                }}
+                aria-label={`Filter by ${option.label}`}
+                aria-pressed={isActive}
+              >
+                {option.label}
+              </button>
+            );
+          })}
+        </motion.div>
+      )}
+
       {commercialWorks.length > 0 ? (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {commercialWorks.map((work, index) => (
-            <CommercialCard
-              key={work.id}
-              work={work}
-              index={index}
-              onClick={() => setSelectedWork(index)}
-            />
-          ))}
-        </div>
+        <AnimatePresence mode="wait">
+          {filteredWorks.length > 0 ? (
+            <motion.div
+              key={activeFilter}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25 }}
+              className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+            >
+              {filteredWorks.map((work, index) => (
+                <CommercialCard
+                  key={work.id}
+                  work={work}
+                  index={index}
+                  onClick={() => setSelectedWork(work)}
+                />
+              ))}
+            </motion.div>
+          ) : (
+            <motion.p
+              key="empty"
+              variants={fadeIn}
+              initial="initial"
+              animate="animate"
+              className="text-center text-sm"
+              style={{ color: "#e8d5a8" }}
+            >
+              No pieces in this category yet.
+            </motion.p>
+          )}
+        </AnimatePresence>
       ) : (
         <motion.div
           initial={{ opacity: 0, y: 12 }}
@@ -67,22 +165,19 @@ export const Commercial = () => {
           <p className="text-lg font-medium" style={{ color: "#fff7e6" }}>
             Selected client work will live here.
           </p>
-          <p className="mt-3 text-sm" style={{ color: "#e8d5a8" }}>
-            Commissioned photography and commercial pieces, shown in the light.
-          </p>
         </motion.div>
       )}
 
-      {currentWork && (
+      {selectedWork && (
         <Lightbox
           isOpen={selectedWork !== null}
           onClose={() => setSelectedWork(null)}
-          imageSrc={currentWork.fullImage || currentWork.image}
-          imageAlt={currentWork.title}
+          imageSrc={selectedWork.fullImage || selectedWork.image}
+          imageAlt={selectedWork.title}
           title={
-            currentWork.client
-              ? `${currentWork.title} — ${currentWork.client}`
-              : currentWork.title
+            selectedWork.client
+              ? `${selectedWork.title} — ${selectedWork.client}`
+              : selectedWork.title
           }
         />
       )}

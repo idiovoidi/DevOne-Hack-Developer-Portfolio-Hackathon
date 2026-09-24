@@ -1,5 +1,166 @@
-import React, { useEffect } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import React, { useEffect, useRef } from "react";
+import { motion, useMotionValue, useSpring, type MotionValue } from "framer-motion";
+
+const SHARD_COLORS = ["167, 139, 250", "236, 72, 153", "196, 181, 253", "125, 211, 252"];
+
+type Shard = {
+  angle: number;
+  radius: number;
+  spin: number;
+  fall: number;
+  color: string;
+  width: number;
+};
+
+const spawnShard = (shard: Shard, maxR: number, atRim: boolean) => {
+  const band = atRim ? 0.86 + Math.random() * 0.14 : 0.2 + Math.random() * 0.8;
+  shard.radius = maxR * band;
+  shard.angle = Math.random() * Math.PI * 2;
+  shard.spin = (0.7 + Math.random() * 1.3) * (Math.random() < 0.5 ? 1 : -1);
+  shard.fall = 22 + Math.random() * 36;
+  shard.color = SHARD_COLORS[Math.floor(Math.random() * SHARD_COLORS.length)];
+  shard.width = 1.1 + Math.random() * 2.2;
+};
+
+/** Face-on accretion field. Debris spirals faster as it falls into the core. */
+const PortalVortex: React.FC<{ offsetX: MotionValue<number>; offsetY: MotionValue<number> }> = ({
+  offsetX,
+  offsetY,
+}) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const shards: Shard[] = Array.from({ length: 120 }, () => {
+      const shard = {} as Shard;
+      spawnShard(shard, 320, false);
+      return shard;
+    });
+
+    const center = { x: 0, y: 0 };
+    const unsubX = offsetX.on("change", (value) => {
+      center.x = value;
+    });
+    const unsubY = offsetY.on("change", (value) => {
+      center.y = value;
+    });
+
+    let frame = 0;
+    let last = performance.now();
+    let running = true;
+
+    const resize = () => {
+      const size = canvas.parentElement?.clientWidth ?? 700;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.max(1, size * dpr);
+      canvas.height = Math.max(1, size * dpr);
+      canvas.style.width = `${size}px`;
+      canvas.style.height = `${size}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+
+    const draw = (now: number) => {
+      if (!running) return;
+      const dt = reduced ? 0 : Math.min(0.033, (now - last) / 1000);
+      last = now;
+
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+      const cx = width / 2 + center.x;
+      const cy = height / 2 + center.y;
+      const maxR = Math.min(width, height) * 0.5;
+      const horizon = maxR * 0.07;
+
+      ctx.clearRect(0, 0, width, height);
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.globalCompositeOperation = "lighter";
+
+      const spinTime = reduced ? 0 : now / 1000;
+      ctx.lineCap = "round";
+      for (let arm = 0; arm < 3; arm += 1) {
+        ctx.beginPath();
+        const offset = arm * ((Math.PI * 2) / 3) + spinTime * 0.35;
+        for (let step = 0; step <= 64; step += 1) {
+          const t = step / 64;
+          const radius = horizon + (maxR * 0.92 - horizon) * t * t;
+          const angle = offset + (1 - t) * 6.2;
+          const x = Math.cos(angle) * radius;
+          const y = Math.sin(angle) * radius;
+          if (step === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = "rgba(167, 139, 250, 0.16)";
+        ctx.lineWidth = 10;
+        ctx.stroke();
+      }
+
+      for (const shard of shards) {
+        const closeness = 1 - Math.min(1, shard.radius / maxR);
+        const whirl = shard.spin * (0.4 + closeness * closeness * 8);
+        const pull = shard.fall * (0.3 + closeness * closeness * 6.5);
+
+        if (!reduced) {
+          shard.angle += whirl * dt;
+          shard.radius -= pull * dt;
+          if (shard.radius <= horizon || shard.radius > maxR) spawnShard(shard, maxR, true);
+        }
+
+        const streak = Math.min(shard.radius * 0.55, 14 + closeness * 86);
+        const tailRadius = Math.min(maxR, shard.radius + streak);
+        const tailAngle = shard.angle - Math.sign(shard.spin || 1) * Math.min(0.9, streak / Math.max(shard.radius, 24));
+        const headX = Math.cos(shard.angle) * shard.radius;
+        const headY = Math.sin(shard.angle) * shard.radius;
+        const tailX = Math.cos(tailAngle) * tailRadius;
+        const tailY = Math.sin(tailAngle) * tailRadius;
+        const alpha = 0.12 + closeness * 0.82;
+
+        const gradient = ctx.createLinearGradient(tailX, tailY, headX, headY);
+        gradient.addColorStop(0, `rgba(${shard.color}, 0)`);
+        gradient.addColorStop(0.65, `rgba(${shard.color}, ${alpha * 0.75})`);
+        gradient.addColorStop(1, `rgba(255, 255, 255, ${Math.min(0.95, alpha)})`);
+
+        ctx.beginPath();
+        ctx.moveTo(tailX, tailY);
+        ctx.lineTo(headX, headY);
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = shard.width * (1.5 - closeness * 0.9);
+        ctx.stroke();
+      }
+
+      ctx.restore();
+
+      if (reduced) return;
+      frame = requestAnimationFrame(draw);
+    };
+
+    resize();
+    const observer = new ResizeObserver(resize);
+    if (canvas.parentElement) observer.observe(canvas.parentElement);
+    frame = requestAnimationFrame(draw);
+
+    return () => {
+      running = false;
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      unsubX();
+      unsubY();
+    };
+  }, [offsetX, offsetY]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      aria-hidden="true"
+      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }}
+    />
+  );
+};
 
 const VoidEyeball: React.FC = () => {
   // Chaotic movement with jittery spring
@@ -44,7 +205,7 @@ const VoidEyeball: React.FC = () => {
         initial={{ scale: 0, opacity: 0 }}
         animate={{
           scale: 1,
-          opacity: 0.35,
+          opacity: 0.72,
         }}
         transition={{ duration: 2, ease: "easeOut" }}
         style={{
@@ -62,54 +223,35 @@ const VoidEyeball: React.FC = () => {
             height: "100%",
           }}
         >
-          {/* Floating void particles */}
-          {Array.from({ length: 30 }).map((_, i) => {
-            const angle = (i / 30) * Math.PI * 2;
-            const distance = 120 + (i % 4) * 40;
-            const size = 2 + (i % 3);
-            const isSquare = i % 4 === 0;
+          <PortalVortex offsetX={eyeXSpring} offsetY={eyeYSpring} />
 
-            return (
-              <motion.div
-                key={`particle-${i}`}
-                style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  width: `${size}px`,
-                  height: `${size}px`,
-                  borderRadius: isSquare ? "0%" : "50%",
-                  background: `rgba(${
-                    i % 2 === 0 ? "167, 139, 250" : "236, 72, 153"
-                  }, ${0.7 + (i % 3) * 0.1})`,
-                  boxShadow: `0 0 ${
-                    8 + (i % 3) * 4
-                  }px rgba(167, 139, 250, 0.8)`,
-                }}
-                animate={{
-                  x: [
-                    Math.cos(angle) * distance,
-                    Math.cos(angle + Math.PI * 0.5) * (distance * 0.6),
-                    Math.cos(angle + Math.PI) * (distance * 0.4),
-                  ],
-                  y: [
-                    Math.sin(angle) * distance,
-                    Math.sin(angle + Math.PI * 0.5) * (distance * 0.6),
-                    Math.sin(angle + Math.PI) * (distance * 0.4),
-                  ],
-                  scale: [1, 0.6, 0.2],
-                  opacity: [0.8, 0.5, 0],
-                  rotate: [0, 180, 360],
-                }}
-                transition={{
-                  duration: 4 + (i % 3) * 2,
-                  repeat: Infinity,
-                  ease: "easeIn",
-                  delay: (i * 0.15) % 3,
-                }}
-              />
-            );
-          })}
+          {[0, 1, 2, 3].map((ring) => (
+            <motion.div
+              key={`infall-${ring}`}
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                width: "88%",
+                height: "88%",
+                borderRadius: "50%",
+                border: "1px solid rgba(196, 181, 253, 0.55)",
+                boxShadow: "0 0 18px rgba(124, 58, 237, 0.35), inset 0 0 18px rgba(236, 72, 153, 0.2)",
+                x: eyeXSpring,
+                y: eyeYSpring,
+                translateX: "-50%",
+                translateY: "-50%",
+                pointerEvents: "none",
+              }}
+              animate={{ scale: [1, 0.08], opacity: [0, 0.7, 0] }}
+              transition={{
+                duration: 2.8,
+                repeat: Infinity,
+                ease: "easeIn",
+                delay: ring * 0.7,
+              }}
+            />
+          ))}
 
           {/* Chaotic void core with RGB split */}
           <motion.div
@@ -140,7 +282,7 @@ const VoidEyeball: React.FC = () => {
                   scale: [1, 1.02, 1],
                 }}
                 transition={{
-                  duration: 0.8 + Math.random() * 0.4,
+                  duration: 0.75 + idx * 0.18,
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}

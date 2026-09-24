@@ -105,6 +105,7 @@ describe('App - SoftwareExperience Integration Tests', () => {
         'music',
         'videos',
         'three-d',
+        'commercial',
         'skills',
         'software-experience',
         'contact',

@@ -5,6 +5,7 @@ export { NFTGallery } from './NFTGallery';
 export { Music } from './Music';
 export { Videos } from './Videos';
 export { ThreeD } from './ThreeD';
+export { Commercial } from './Commercial';
 export { Skills } from './Skills';
 export { SoftwareExperience } from './SoftwareExperience';
 export { Contact } from './Contact';

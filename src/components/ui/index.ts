@@ -47,6 +47,9 @@ export type { NFTCardProps } from './NFTCard';
 export { SoftwareCard } from './SoftwareCard';
 
 export { GalleryBackground } from './GalleryBackground';
+export { CommercialBackground } from './CommercialBackground';
+export { CommercialCard } from './CommercialCard';
+export type { CommercialCardProps } from './CommercialCard';
 export { NeuralBackground } from './NeuralBackground';
 export { GlitchText } from './GlitchText';
 export { VoidEyeball } from './VoidEyeball';

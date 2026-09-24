@@ -16,6 +16,7 @@ const NFTGallery = lazySection(() => import('./components/sections/NFTGallery'),
 const Music = lazySection(() => import('./components/sections/Music'), 'Music');
 const Videos = lazySection(() => import('./components/sections/Videos'), 'Videos');
 const ThreeD = lazySection(() => import('./components/sections/ThreeD'), 'ThreeD');
+const Commercial = lazySection(() => import('./components/sections/Commercial'), 'Commercial');
 
 const SectionFallback = ({ id }: { id: string }) => (
   <section id={id} className="section" style={{ minHeight: '40rem' }} aria-busy="true" />
@@ -55,6 +56,9 @@ function AppContent() {
         </Suspense>
         <Suspense fallback={<SectionFallback id="three-d" />}>
           <ThreeD />
+        </Suspense>
+        <Suspense fallback={<SectionFallback id="commercial" />}>
+          <Commercial />
         </Suspense>
         <Skills />
         <SoftwareExperience />

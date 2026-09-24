@@ -845,4 +845,35 @@
     text-shadow: -2px 0 #00fff9, 2px 2px #ff00c1;
     animation: glitch-anim2 1s infinite linear alternate-reverse;
   }
+
+  @keyframes commercialGodray {
+    0%,
+    100% {
+      opacity: 0.55;
+      transform: translateX(-1.5%);
+    }
+    50% {
+      opacity: 0.85;
+      transform: translateX(1.5%);
+    }
+  }
+
+  .commercial-godrays {
+    animation: commercialGodray 9s ease-in-out infinite;
+    transform-origin: top center;
+  }
+
+  .commercial-godray-core {
+    animation: commercialGodrayGlow 11s ease-in-out infinite;
+  }
+
+  @keyframes commercialGodrayGlow {
+    0%,
+    100% {
+      opacity: 0.45;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
 }

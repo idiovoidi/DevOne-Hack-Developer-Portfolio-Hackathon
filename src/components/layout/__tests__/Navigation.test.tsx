@@ -846,7 +846,8 @@ describe('Navigation - Unit Tests', () => {
         '#projects',
         '#skills',
         '#software-experience',
-        '#contact'
+        '#contact',
+        '#commercial',
       ];
 
       expectedLinks.forEach(href => {

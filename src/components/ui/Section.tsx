@@ -4,12 +4,13 @@ import { useInView } from '../../hooks';
 import { fadeInUp, revealState } from '../../utils/animations';
 import { usePerformanceSettings } from '../../contexts/PerformanceContext';
 
-export type SectionTone = 'background' | 'surface' | 'secondary';
+export type SectionTone = 'background' | 'surface' | 'secondary' | 'light';
 
 const toneColor: Record<SectionTone, string> = {
   background: 'var(--color-background)',
   surface: 'var(--color-surface)',
   secondary: 'var(--color-background-secondary)',
+  light: 'transparent',
 };
 
 export interface SectionProps {

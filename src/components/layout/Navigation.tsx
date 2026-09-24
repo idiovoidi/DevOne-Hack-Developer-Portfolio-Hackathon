@@ -1,7 +1,184 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useScrollSpy } from "../../hooks";
-import { navLinks } from "../../data/navigation";
+import { navLinks, type NavGroup, type NavLink } from "../../data/navigation";
+
+const GROUP_THEME: Record<
+  NavGroup,
+  {
+    background: string;
+    border: string;
+    boxShadow: string;
+    activeColor: string;
+    inactiveColor: string;
+    particleA: string;
+    particleB: string;
+    mobileLabel: string;
+    mobileAccent: string;
+  }
+> = {
+  art: {
+    background:
+      "linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(236, 72, 153, 0.08))",
+    border: "1px solid rgba(168, 85, 247, 0.2)",
+    boxShadow:
+      "0 0 20px rgba(168, 85, 247, 0.15), inset 0 0 20px rgba(168, 85, 247, 0.05)",
+    activeColor: "var(--color-primary)",
+    inactiveColor: "var(--color-text-secondary)",
+    particleA: "var(--color-primary)",
+    particleB: "var(--color-accent)",
+    mobileLabel: "Creative Works",
+    mobileAccent: "var(--color-primary)",
+  },
+  commercial: {
+    background:
+      "linear-gradient(135deg, rgba(255, 251, 235, 0.28), rgba(253, 230, 138, 0.16))",
+    border: "1px solid rgba(252, 211, 77, 0.45)",
+    boxShadow:
+      "0 0 18px rgba(253, 224, 165, 0.28), inset 0 0 16px rgba(255, 255, 255, 0.12)",
+    activeColor: "#facc15",
+    inactiveColor: "#fde68a",
+    particleA: "#fef3c7",
+    particleB: "#f8fafc",
+    mobileLabel: "Commercial Work",
+    mobileAccent: "#facc15",
+  },
+};
+
+const collectConsecutiveGroups = (startIndex: number) => {
+  const groups: { name: NavGroup; links: NavLink[] }[] = [];
+
+  for (let i = startIndex; i < navLinks.length; i++) {
+    const groupName = navLinks[i].group;
+    if (!groupName) break;
+
+    const last = groups[groups.length - 1];
+    if (last?.name === groupName) {
+      last.links.push(navLinks[i]);
+    } else {
+      groups.push({ name: groupName, links: [navLinks[i]] });
+    }
+  }
+
+  return groups;
+};
+
+interface ConjoinedNavGroupsProps {
+  groups: { name: NavGroup; links: NavLink[] }[];
+  activeSection: string;
+  onNavClick: (e: React.MouseEvent<HTMLAnchorElement>, href: string) => void;
+}
+
+const ConjoinedNavGroups: React.FC<ConjoinedNavGroupsProps> = ({
+  groups,
+  activeSection,
+  onNavClick,
+}) => (
+  <div className="relative flex items-stretch">
+    {groups.map((group, groupIndex) => {
+      const theme = GROUP_THEME[group.name];
+      const isFirst = groupIndex === 0;
+      const isLast = groupIndex === groups.length - 1;
+      const radiusClass =
+        groups.length === 1
+          ? "rounded-lg"
+          : isFirst
+            ? "rounded-l-lg rounded-r-none"
+            : isLast
+              ? "rounded-r-lg rounded-l-none"
+              : "rounded-none";
+
+      return (
+        <div
+          key={group.name}
+          className={`relative px-3 py-2 ${radiusClass} ${!isFirst ? "-ml-px" : ""}`}
+          style={{
+            background: theme.background,
+            border: theme.border,
+            boxShadow: theme.boxShadow,
+          }}
+        >
+          <motion.div
+            className="absolute top-1 left-2 w-1 h-1 rounded-full pointer-events-none"
+            style={{
+              background: theme.particleA,
+              boxShadow: `0 0 4px ${theme.particleA}`,
+            }}
+            animate={{
+              opacity: [0.3, 0.8, 0.3],
+              scale: [0.8, 1.2, 0.8],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+          <motion.div
+            className="absolute bottom-1 right-3 w-0.5 h-0.5 rounded-full pointer-events-none"
+            style={{
+              background: theme.particleB,
+              boxShadow: `0 0 3px ${theme.particleB}`,
+            }}
+            animate={{
+              opacity: [0.4, 0.9, 0.4],
+              scale: [0.7, 1.3, 0.7],
+            }}
+            transition={{
+              duration: 2.5,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 0.5,
+            }}
+          />
+
+          <div className="flex items-center gap-2">
+            {group.links.map((groupLink) => (
+              <a
+                key={groupLink.id}
+                href={groupLink.href}
+                onClick={(e) => onNavClick(e, groupLink.href)}
+                className={`relative text-sm font-medium whitespace-nowrap transition-all duration-300 focus-visible-ring px-2 py-1 rounded hover:scale-105 ${
+                  activeSection === groupLink.id
+                    ? "text-primary"
+                    : "text-text-secondary hover:text-primary"
+                }`}
+                style={{
+                  color:
+                    activeSection === groupLink.id
+                      ? theme.activeColor
+                      : theme.inactiveColor,
+                  textShadow:
+                    activeSection === groupLink.id
+                      ? `0 0 10px ${theme.activeColor}`
+                      : "none",
+                }}
+              >
+                {groupLink.label}
+                {activeSection === groupLink.id && (
+                  <motion.div
+                    layoutId="activeSection"
+                    className="absolute -bottom-0.5 left-0 right-0 h-0.5 rounded-full"
+                    style={{
+                      backgroundColor: theme.activeColor,
+                      boxShadow: `0 0 8px ${theme.activeColor}`,
+                    }}
+                    initial={false}
+                    transition={{
+                      type: "spring",
+                      stiffness: 380,
+                      damping: 30,
+                    }}
+                  />
+                )}
+              </a>
+            ))}
+          </div>
+        </div>
+      );
+    })}
+  </div>
+);
 
 const Navigation: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -69,113 +246,23 @@ const Navigation: React.FC = () => {
         </a>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-4 lg:gap-5">
           {navLinks.map((link, index) => {
             const prevLink = navLinks[index - 1];
-            const isFirstArtItem = link.isArtGroup && !prevLink?.isArtGroup;
-            const isArtGroupItem = link.isArtGroup;
+            const isFirstGroupedItem = Boolean(link.group) && !prevLink?.group;
 
-            // Render art group as a single block
-            if (isFirstArtItem) {
-              const artLinks = navLinks.filter((l) => l.isArtGroup);
+            if (isFirstGroupedItem) {
               return (
-                <div key="art-group" className="relative">
-                  {/* Void-themed container block */}
-                  <div
-                    className="relative px-4 py-2 rounded-lg"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, rgba(168, 85, 247, 0.08), rgba(236, 72, 153, 0.08))",
-                      border: "1px solid rgba(168, 85, 247, 0.2)",
-                      boxShadow:
-                        "0 0 20px rgba(168, 85, 247, 0.15), inset 0 0 20px rgba(168, 85, 247, 0.05)",
-                    }}
-                  >
-                    {/* Cosmic particles */}
-                    <motion.div
-                      className="absolute top-1 left-2 w-1 h-1 rounded-full pointer-events-none"
-                      style={{
-                        background: "var(--color-primary)",
-                        boxShadow: "0 0 4px var(--color-primary)",
-                      }}
-                      animate={{
-                        opacity: [0.3, 0.8, 0.3],
-                        scale: [0.8, 1.2, 0.8],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                    />
-                    <motion.div
-                      className="absolute bottom-1 right-3 w-0.5 h-0.5 rounded-full pointer-events-none"
-                      style={{
-                        background: "var(--color-accent)",
-                        boxShadow: "0 0 3px var(--color-accent)",
-                      }}
-                      animate={{
-                        opacity: [0.4, 0.9, 0.4],
-                        scale: [0.7, 1.3, 0.7],
-                      }}
-                      transition={{
-                        duration: 2.5,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: 0.5,
-                      }}
-                    />
-
-                    {/* Art group items with minimal spacing */}
-                    <div className="flex items-center gap-2">
-                      {artLinks.map((artLink) => (
-                        <a
-                          key={artLink.id}
-                          href={artLink.href}
-                          onClick={(e) => handleNavClick(e, artLink.href)}
-                          className={`relative text-sm font-medium transition-all duration-300 focus-visible-ring px-2 py-1 rounded hover:scale-105 ${
-                            activeSection === artLink.id
-                              ? "text-primary"
-                              : "text-text-secondary hover:text-primary"
-                          }`}
-                          style={{
-                            color:
-                              activeSection === artLink.id
-                                ? "var(--color-primary)"
-                                : "var(--color-text-secondary)",
-                            textShadow:
-                              activeSection === artLink.id
-                                ? "0 0 10px var(--color-primary)"
-                                : "none",
-                          }}
-                        >
-                          {artLink.label}
-                          {activeSection === artLink.id && (
-                            <motion.div
-                              layoutId="activeSection"
-                              className="absolute -bottom-0.5 left-0 right-0 h-0.5 bg-primary rounded-full"
-                              style={{
-                                backgroundColor: "var(--color-primary)",
-                                boxShadow: "0 0 8px var(--color-primary)",
-                              }}
-                              initial={false}
-                              transition={{
-                                type: "spring",
-                                stiffness: 380,
-                                damping: 30,
-                              }}
-                            />
-                          )}
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                <ConjoinedNavGroups
+                  key="nav-groups"
+                  groups={collectConsecutiveGroups(index)}
+                  activeSection={activeSection}
+                  onNavClick={handleNavClick}
+                />
               );
             }
 
-            // Skip other art items as they're rendered in the block above
-            if (isArtGroupItem) {
+            if (link.group) {
               return null;
             }
 
@@ -212,7 +299,7 @@ const Navigation: React.FC = () => {
                 <a
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className={`relative text-base font-medium transition-all duration-300 focus-visible-ring px-3 py-1.5 rounded-lg ${
+                  className={`relative text-base font-medium whitespace-nowrap transition-all duration-300 focus-visible-ring px-3 py-1.5 rounded-lg ${
                     activeSection === link.id
                       ? "text-primary"
                       : "text-text-secondary hover:text-primary"
@@ -357,25 +444,27 @@ const Navigation: React.FC = () => {
                 {navLinks.map((link, index) => {
                   const prevLink = navLinks[index - 1];
                   const nextLink = navLinks[index + 1];
-                  const isFirstArtItem =
-                    link.isArtGroup && !prevLink?.isArtGroup;
-                  const isLastArtItem =
-                    link.isArtGroup && !nextLink?.isArtGroup;
+                  const groupTheme = link.group
+                    ? GROUP_THEME[link.group]
+                    : null;
+                  const isGroupStart =
+                    Boolean(link.group) && prevLink?.group !== link.group;
+                  const isGroupEnd =
+                    Boolean(link.group) && nextLink?.group !== link.group;
 
                   return (
                     <div key={link.id} className="relative">
-                      {/* Void-themed art group container for mobile */}
-                      {isFirstArtItem && (
+                      {isGroupStart && groupTheme && (
                         <div className="mb-3 pb-2 relative">
                           <div
                             className="text-xs uppercase tracking-wider mb-2 flex items-center gap-2"
-                            style={{ color: "var(--color-primary)" }}
+                            style={{ color: groupTheme.mobileAccent }}
                           >
                             <motion.span
                               className="w-1.5 h-1.5 rounded-full"
                               style={{
-                                background: "var(--color-primary)",
-                                boxShadow: "0 0 6px var(--color-primary)",
+                                background: groupTheme.particleA,
+                                boxShadow: `0 0 6px ${groupTheme.particleA}`,
                               }}
                               animate={{
                                 opacity: [0.4, 1, 0.4],
@@ -387,12 +476,12 @@ const Navigation: React.FC = () => {
                                 ease: "easeInOut",
                               }}
                             />
-                            Creative Works
+                            {groupTheme.mobileLabel}
                             <motion.span
                               className="w-1 h-1 rounded-full"
                               style={{
-                                background: "var(--color-accent)",
-                                boxShadow: "0 0 4px var(--color-accent)",
+                                background: groupTheme.particleB,
+                                boxShadow: `0 0 4px ${groupTheme.particleB}`,
                               }}
                               animate={{
                                 opacity: [0.3, 0.9, 0.3],
@@ -406,13 +495,11 @@ const Navigation: React.FC = () => {
                               }}
                             />
                           </div>
-                          {/* Glowing underline */}
                           <div
                             className="absolute bottom-0 left-0 right-0 h-[2px] rounded-full"
                             style={{
-                              background:
-                                "linear-gradient(90deg, var(--color-primary), var(--color-accent), var(--color-primary))",
-                              boxShadow: "0 0 6px var(--color-primary)",
+                              background: `linear-gradient(90deg, ${groupTheme.particleA}, ${groupTheme.particleB}, ${groupTheme.particleA})`,
+                              boxShadow: `0 0 6px ${groupTheme.particleA}`,
                               opacity: 0.5,
                             }}
                           />
@@ -429,7 +516,7 @@ const Navigation: React.FC = () => {
                           activeSection === link.id
                             ? "text-primary"
                             : "text-text-secondary hover:text-primary"
-                        } ${link.isArtGroup ? "pl-6 relative" : ""}`}
+                        } ${link.group ? "pl-6 relative" : ""}`}
                         style={{
                           color:
                             activeSection === link.id
@@ -437,11 +524,13 @@ const Navigation: React.FC = () => {
                                 ? "#3b82f6"
                                 : link.id === "contact"
                                 ? "#22c55e"
-                                : "var(--color-primary)"
-                              : "var(--color-text-secondary)",
+                                : groupTheme?.activeColor ??
+                                  "var(--color-primary)"
+                              : groupTheme?.inactiveColor ??
+                                "var(--color-text-secondary)",
                           textShadow:
-                            link.isArtGroup && activeSection === link.id
-                              ? "0 0 8px var(--color-primary)"
+                            link.group && activeSection === link.id
+                              ? `0 0 8px ${groupTheme?.activeColor}`
                               : link.id === "home" && activeSection === link.id
                               ? "0 0 10px rgba(59, 130, 246, 0.6)"
                               : link.id === "contact" &&
@@ -463,25 +552,23 @@ const Navigation: React.FC = () => {
                               : "transparent",
                         }}
                       >
-                        {/* Void dot indicator for art items */}
-                        {link.isArtGroup && (
+                        {link.group && groupTheme && (
                           <span
                             className="absolute left-2 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full"
                             style={{
                               background:
                                 activeSection === link.id
-                                  ? "var(--color-primary)"
-                                  : "var(--color-text-secondary)",
+                                  ? groupTheme.activeColor
+                                  : groupTheme.inactiveColor,
                               boxShadow:
                                 activeSection === link.id
-                                  ? "0 0 6px var(--color-primary)"
+                                  ? `0 0 6px ${groupTheme.activeColor}`
                                   : "none",
                               opacity: 0.7,
                             }}
                           />
                         )}
 
-                        {/* Special icon indicators for Home and Contact */}
                         {link.id === "home" && (
                           <motion.span
                             className="inline-block mr-2"
@@ -521,17 +608,18 @@ const Navigation: React.FC = () => {
                             layoutId="activeSectionMobile"
                             className="h-0.5 bg-primary mt-1"
                             style={{
-                              backgroundColor: "var(--color-primary)",
-                              boxShadow: link.isArtGroup
-                                ? "0 0 6px var(--color-primary)"
+                              backgroundColor:
+                                groupTheme?.activeColor ??
+                                "var(--color-primary)",
+                              boxShadow: link.group
+                                ? `0 0 6px ${groupTheme?.activeColor}`
                                 : "none",
                             }}
                           />
                         )}
                       </motion.a>
 
-                      {/* Spacing after art group */}
-                      {isLastArtItem && <div className="h-4" />}
+                      {isGroupEnd && <div className="h-4" />}
                     </div>
                   );
                 })}

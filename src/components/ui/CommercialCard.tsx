@@ -9,16 +9,33 @@ export interface CommercialCardProps {
   onClick: () => void;
 }
 
+/** Slight organic offsets so the grid doesn't read as a rigid card wall. */
+const floatOffset = (index: number) => {
+  const rotations = [-1.4, 0.8, -0.6, 1.2, -1, 0.5, 1.5, -0.9];
+  const lifts = [0, 10, -6, 14, -4, 8, -10, 4];
+  return {
+    rotate: rotations[index % rotations.length],
+    y: lifts[index % lifts.length],
+  };
+};
+
 const CommercialCard = ({ work, index, onClick }: CommercialCardProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const offset = floatOffset(index);
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 20 + offset.y, rotate: offset.rotate }}
+      whileInView={{ opacity: 1, y: offset.y, rotate: offset.rotate }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.45, delay: index * 0.08 }}
+      transition={{ duration: 0.5, delay: Math.min(index * 0.05, 0.4) }}
+      whileHover={{
+        y: offset.y - 10,
+        rotate: 0,
+        scale: 1.03,
+        transition: { duration: 0.35 },
+      }}
       onClick={onClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -32,59 +49,57 @@ const CommercialCard = ({ work, index, onClick }: CommercialCardProps) => {
         }
       }}
       aria-label={`View ${work.title} in full size`}
+      style={{
+        filter: isHovered
+          ? "drop-shadow(0 22px 36px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 24px rgba(253, 230, 138, 0.22))"
+          : "drop-shadow(0 14px 28px rgba(0, 0, 0, 0.4))",
+      }}
     >
-      <div
-        className="relative rounded-sm p-[10px] shadow-xl"
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(255, 252, 245, 0.95) 0%, rgba(245, 230, 196, 0.92) 100%)",
-          boxShadow: isHovered
-            ? "0 18px 40px rgba(0, 0, 0, 0.35), 0 0 28px rgba(253, 230, 138, 0.28)"
-            : "0 10px 28px rgba(0, 0, 0, 0.28)",
-        }}
-      >
-        <div className="relative aspect-[4/5] overflow-hidden bg-stone-100">
-          {!imageLoaded && (
-            <div className="absolute inset-0 flex items-center justify-center bg-amber-50/80">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-amber-200 border-t-amber-500" />
-            </div>
-          )}
-          <img
-            src={work.image}
-            alt={work.title}
-            loading="lazy"
-            decoding="async"
-            onLoad={() => setImageLoaded(true)}
-            className={`h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.02] ${
-              imageLoaded ? "opacity-100" : "opacity-0"
-            }`}
-          />
-          {work.tags[0] && (
-            <span
-              className="absolute top-3 left-3 max-w-[85%] truncate rounded px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-stone-900"
-              style={{ background: "rgba(253, 230, 138, 0.92)" }}
-            >
-              {commercialTagLabel(work.tags[0])}
-            </span>
-          )}
-          <motion.div
-            initial={{ y: "100%" }}
-            animate={isHovered ? { y: 0 } : { y: "100%" }}
-            transition={{ duration: 0.35, ease: "easeOut" }}
-            className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-stone-900/95 via-stone-900/75 to-transparent p-4 pt-8"
+      <div className="relative aspect-[4/5] overflow-hidden bg-transparent">
+        {!imageLoaded && (
+          <div className="absolute inset-0 flex items-center justify-center rounded-sm bg-black/30">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-amber-200/40 border-t-amber-400" />
+          </div>
+        )}
+        <img
+          src={work.image}
+          alt={work.title}
+          loading="lazy"
+          decoding="async"
+          onLoad={() => setImageLoaded(true)}
+          className={`h-full w-full object-cover transition-opacity duration-500 ${
+            imageLoaded ? "opacity-100" : "opacity-0"
+          }`}
+        />
+
+        {work.tags[0] && (
+          <span
+            className="absolute top-3 left-3 max-w-[85%] truncate rounded px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-stone-900/90"
+            style={{
+              background: "rgba(253, 230, 138, 0.85)",
+              boxShadow: "0 2px 10px rgba(0, 0, 0, 0.25)",
+            }}
           >
-            <h3 className="mb-1 text-lg font-semibold text-amber-50">{work.title}</h3>
-            <p className="text-sm text-amber-100/80">{work.medium}</p>
-            {work.client && (
-              <p className="mt-1 text-xs uppercase tracking-wider text-amber-200/70">
-                {work.client}
-              </p>
-            )}
-            {work.description && (
-              <p className="mt-2 line-clamp-2 text-xs text-amber-100/70">{work.description}</p>
-            )}
-          </motion.div>
-        </div>
+            {commercialTagLabel(work.tags[0])}
+          </span>
+        )}
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={isHovered ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent p-4 pt-12"
+        >
+          <h3 className="mb-0.5 text-base font-semibold text-amber-50 drop-shadow-md">
+            {work.title}
+          </h3>
+          <p className="text-sm text-amber-100/75">{work.medium}</p>
+          {work.client && (
+            <p className="mt-1 text-xs uppercase tracking-wider text-amber-200/65">
+              {work.client}
+            </p>
+          )}
+        </motion.div>
       </div>
     </motion.div>
   );

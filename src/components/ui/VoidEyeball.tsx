@@ -24,7 +24,8 @@ type Shard = {
 };
 
 const spawnShard = (shard: Shard, maxR: number, atRim: boolean) => {
-  const band = atRim ? 0.88 + Math.random() * 0.12 : 0.24 + Math.random() * 0.72;
+  let band = atRim ? 0.9 + Math.random() * 0.1 : 0.68 + Math.random() * 0.28;
+  if (!atRim && band > 0.34 && band < 0.62) band = 0.72 + Math.random() * 0.22;
   shard.radius = maxR * band;
   shard.angle = Math.random() * Math.PI * 2;
   shard.spin = (0.35 + Math.random() * 1.1) * (Math.random() < 0.5 ? 1 : -1);
@@ -38,7 +39,7 @@ const spawnShard = (shard: Shard, maxR: number, atRim: boolean) => {
   shard.wobbleFreq = 0.4 + Math.random() * 1.6;
   shard.ellipse = 0.65 + Math.random() * 0.58;
   shard.curve = (Math.random() - 0.5) * 3;
-  shard.girth = 12 + Math.random() * 24;
+  shard.girth = 6 + Math.random() * 12;
   shard.length = 0.4 + Math.random() * 1.25;
   shard.ox = 0;
   shard.oy = 0;
@@ -58,7 +59,7 @@ const PortalVortex: React.FC<{ offsetX: MotionValue<number>; offsetY: MotionValu
     if (!ctx) return;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const shards: Shard[] = Array.from({ length: 72 }, () => {
+    const shards: Shard[] = Array.from({ length: 26 }, () => {
       const shard = {} as Shard;
       spawnShard(shard, 320, false);
       return shard;
@@ -162,19 +163,23 @@ const PortalVortex: React.FC<{ offsetX: MotionValue<number>; offsetY: MotionValu
         }
 
         const body =
-          shard.girth * (0.82 + 0.38 * Math.sin(spinTime * shard.wobbleFreq + shard.tumble) * shard.skew);
-        const span = body * (1.6 + shard.length * 1.9);
+          shard.girth * (0.88 + 0.22 * Math.sin(spinTime * shard.wobbleFreq + shard.tumble) * shard.skew);
+        const span = body * (1.35 + shard.length * 1.35);
         const tangentX = Math.cos(angle);
         const tangentY = Math.sin(angle) * shard.ellipse;
         const sideX = -Math.sin(angle);
         const sideY = Math.cos(angle);
-        const bend = shard.curve * body;
-        const flap = Math.sin(spinTime * shard.wobbleFreq * 1.35 + shard.tumble) * body * shard.skew;
-        const twist = Math.cos(spinTime * shard.wobbleFreq * 0.85 + shard.wobble) * body * 0.55;
+        const bend = shard.curve * body * 0.65;
+        const flap = Math.sin(spinTime * shard.wobbleFreq * 1.35 + shard.tumble) * body * shard.skew * 0.45;
+        const twist = Math.cos(spinTime * shard.wobbleFreq * 0.85 + shard.wobble) * body * 0.3;
         const tailX = headX - tangentX * span;
         const tailY = headY - tangentY * span;
+        const orbitT = shard.radius / maxR;
+        const inDirectOrbit = orbitT > 0.32 && orbitT < 0.64;
+        const orbitFade = inDirectOrbit ? 0.14 : orbitT >= 0.64 ? 0.55 : 0.28 + closeness * 0.35;
         const nearPointer = pointer.energy > 0.05 ? Math.max(0, 1 - Math.hypot(headX - pointerX, headY - pointerY) / 150) : 0;
-        const alpha = Math.min(0.48, 0.12 + closeness * 0.22 + nearPointer * pointer.energy * 0.14);
+        const alpha = Math.min(0.26, (0.06 + closeness * 0.12 + nearPointer * pointer.energy * 0.08) * orbitFade);
+        if (alpha < 0.025) continue;
 
         const gradient = ctx.createLinearGradient(tailX, tailY, headX, headY);
         gradient.addColorStop(0, `rgba(${shard.color}, 0)`);

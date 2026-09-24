@@ -1,3 +1,14 @@
+export interface ModelTextures {
+  albedo?: string;
+  normal?: string;
+  emission?: string;
+  /** Unity-style packed map: R = metalness, A = smoothness */
+  metallicSmoothness?: string;
+  metalness?: string;
+  roughness?: string;
+  ao?: string;
+}
+
 export interface ThreeDWork {
   id: string;
   title: string;
@@ -5,6 +16,7 @@ export interface ThreeDWork {
   modelPath: string;
   thumbnail?: string;
   category?: string;
+  textures?: ModelTextures;
 }
 
 export const threeDWorks: ThreeDWork[] = [
@@ -19,8 +31,15 @@ export const threeDWorks: ThreeDWork[] = [
     id: "corrupted-healthpack",
     title: "Corrupted Healthpack",
     description: "Corrupted health restoration item with PBR textures",
-    modelPath: "/3D/corrupted-healthpack-textured.glb",
+    // Use base mesh + external maps (embedded bake hits blob Image() issues in some browsers)
+    modelPath: "/3D/corrupted-healthpack.glb",
     category: "Model",
+    textures: {
+      albedo: "/3D/Corrupted_Healthpack/openPBR_shader1_AlbedoTransparency.png",
+      normal: "/3D/Corrupted_Healthpack/openPBR_shader1_Normal.png",
+      emission: "/3D/Corrupted_Healthpack/openPBR_shader1_Emission.png",
+      metallicSmoothness: "/3D/Corrupted_Healthpack/openPBR_shader1_MetallicSmoothness.png",
+    },
   },
   {
     id: "enemy",

@@ -47,6 +47,7 @@ export const ThreeD = () => {
                     src={work.modelPath}
                     alt={work.title}
                     poster={work.thumbnail}
+                    textures={work.textures}
                     autoRotate={true}
                     cameraControls={false}
                     className="w-full h-full"
@@ -98,6 +99,7 @@ export const ThreeD = () => {
             <ModelViewer
               src={selectedModel.modelPath}
               alt={selectedModel.title}
+              textures={selectedModel.textures}
               autoRotate={true}
               cameraControls={true}
               className="w-full h-full"

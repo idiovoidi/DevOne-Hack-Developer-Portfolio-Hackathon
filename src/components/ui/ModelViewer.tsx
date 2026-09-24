@@ -2,15 +2,173 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import * as THREE from "three";
 import { GLTFLoader, OrbitControls, RoomEnvironment } from "three-stdlib";
+import type { ModelTextures } from "../../data/threeD";
 
 interface ModelViewerProps {
   src: string;
   alt: string;
   poster?: string;
+  textures?: ModelTextures;
   autoRotate?: boolean;
   cameraControls?: boolean;
   className?: string;
 }
+
+const loadTexture = (
+  loader: THREE.TextureLoader,
+  url: string,
+  colorSpace: THREE.ColorSpace = THREE.NoColorSpace,
+) =>
+  new Promise<THREE.Texture>((resolve, reject) => {
+    loader.load(
+      url,
+      (texture) => {
+        texture.colorSpace = colorSpace;
+        texture.flipY = false;
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.wrapT = THREE.RepeatWrapping;
+        texture.needsUpdate = true;
+        resolve(texture);
+      },
+      undefined,
+      reject,
+    );
+  });
+
+/** Unity MetallicSmoothness: R = metalness, A = smoothness → roughness = 1 - smoothness */
+const splitMetallicSmoothness = (source: THREE.Texture) => {
+  const image = source.image as HTMLImageElement | ImageBitmap;
+  const width = "width" in image ? image.width : 0;
+  const height = "height" in image ? image.height : 0;
+  if (!width || !height) {
+    throw new Error("MetallicSmoothness image has no dimensions");
+  }
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("Could not create canvas context");
+
+  ctx.drawImage(image as CanvasImageSource, 0, 0);
+  const { data } = ctx.getImageData(0, 0, width, height);
+
+  const metalData = new Uint8ClampedArray(data.length);
+  const roughData = new Uint8ClampedArray(data.length);
+
+  for (let i = 0; i < data.length; i += 4) {
+    const metal = data[i];
+    const rough = 255 - data[i + 3];
+    metalData[i] = metalData[i + 1] = metalData[i + 2] = metal;
+    metalData[i + 3] = 255;
+    roughData[i] = roughData[i + 1] = roughData[i + 2] = rough;
+    roughData[i + 3] = 255;
+  }
+
+  const metalCanvas = document.createElement("canvas");
+  metalCanvas.width = width;
+  metalCanvas.height = height;
+  const metalCtx = metalCanvas.getContext("2d")!;
+  metalCtx.putImageData(new ImageData(metalData, width, height), 0, 0);
+
+  const roughCanvas = document.createElement("canvas");
+  roughCanvas.width = width;
+  roughCanvas.height = height;
+  const roughCtx = roughCanvas.getContext("2d")!;
+  roughCtx.putImageData(new ImageData(roughData, width, height), 0, 0);
+
+  const metalnessMap = new THREE.CanvasTexture(metalCanvas);
+  const roughnessMap = new THREE.CanvasTexture(roughCanvas);
+  for (const tex of [metalnessMap, roughnessMap]) {
+    tex.colorSpace = THREE.NoColorSpace;
+    tex.flipY = false;
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    tex.needsUpdate = true;
+  }
+
+  return { metalnessMap, roughnessMap };
+};
+
+const applyTexturesToObject = async (
+  root: THREE.Object3D,
+  textures: ModelTextures,
+  disposable: THREE.Texture[],
+) => {
+  const loader = new THREE.TextureLoader();
+  const maps: Partial<Record<string, THREE.Texture>> = {};
+
+  if (textures.albedo) {
+    maps.map = await loadTexture(loader, textures.albedo, THREE.SRGBColorSpace);
+    disposable.push(maps.map);
+  }
+  if (textures.normal) {
+    maps.normalMap = await loadTexture(loader, textures.normal);
+    disposable.push(maps.normalMap);
+  }
+  if (textures.emission) {
+    maps.emissiveMap = await loadTexture(loader, textures.emission, THREE.SRGBColorSpace);
+    disposable.push(maps.emissiveMap);
+  }
+  if (textures.ao) {
+    maps.aoMap = await loadTexture(loader, textures.ao);
+    disposable.push(maps.aoMap);
+  }
+
+  if (textures.metallicSmoothness) {
+    const packed = await loadTexture(loader, textures.metallicSmoothness);
+    disposable.push(packed);
+    const { metalnessMap, roughnessMap } = splitMetallicSmoothness(packed);
+    maps.metalnessMap = metalnessMap;
+    maps.roughnessMap = roughnessMap;
+    disposable.push(metalnessMap, roughnessMap);
+  } else {
+    if (textures.metalness) {
+      maps.metalnessMap = await loadTexture(loader, textures.metalness);
+      disposable.push(maps.metalnessMap);
+    }
+    if (textures.roughness) {
+      maps.roughnessMap = await loadTexture(loader, textures.roughness);
+      disposable.push(maps.roughnessMap);
+    }
+  }
+
+  root.traverse((child) => {
+    if (!(child instanceof THREE.Mesh) || !child.material) return;
+
+    const materials = Array.isArray(child.material) ? child.material : [child.material];
+    const next = materials.map((mat) => {
+      const material =
+        mat instanceof THREE.MeshStandardMaterial
+          ? mat
+          : new THREE.MeshStandardMaterial({
+              color: (mat as THREE.MeshStandardMaterial).color?.clone?.() ?? 0xffffff,
+            });
+
+      if (maps.map) material.map = maps.map;
+      if (maps.normalMap) material.normalMap = maps.normalMap;
+      if (maps.metalnessMap) {
+        material.metalnessMap = maps.metalnessMap;
+        material.metalness = 1;
+      }
+      if (maps.roughnessMap) {
+        material.roughnessMap = maps.roughnessMap;
+        material.roughness = 1;
+      }
+      if (maps.emissiveMap) {
+        material.emissiveMap = maps.emissiveMap;
+        material.emissive = new THREE.Color(0xffffff);
+        material.emissiveIntensity = 1;
+      }
+      if (maps.aoMap) material.aoMap = maps.aoMap;
+
+      material.needsUpdate = true;
+      return material;
+    });
+
+    child.material = next.length === 1 ? next[0] : next;
+  });
+};
 
 /**
  * 3D Model Viewer — Three.js canvas for GLB/GLTF models.
@@ -19,6 +177,7 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({
   src,
   alt,
   poster,
+  textures,
   autoRotate = true,
   cameraControls = true,
   className = "",
@@ -32,6 +191,9 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({
   autoRotateRef.current = autoRotate;
   cameraControlsRef.current = cameraControls;
 
+  // Stable key so texture object identity changes don't thrash the scene.
+  const texturesKey = textures ? JSON.stringify(textures) : "";
+
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -39,6 +201,7 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({
     let disposed = false;
     let frameId = 0;
     let modelRoot: THREE.Object3D | null = null;
+    const disposableTextures: THREE.Texture[] = [];
 
     setIsLoaded(false);
     setError(null);
@@ -65,17 +228,13 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({
     const pmrem = new THREE.PMREMGenerator(renderer);
     scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 
-    const ambient = new THREE.AmbientLight(0xffffff, 0.35);
-    scene.add(ambient);
-
+    scene.add(new THREE.AmbientLight(0xffffff, 0.35));
     const keyLight = new THREE.DirectionalLight(0xffffff, 1.1);
     keyLight.position.set(3, 5, 4);
     scene.add(keyLight);
-
     const fillLight = new THREE.DirectionalLight(0x88ccff, 0.35);
     fillLight.position.set(-4, 1, -2);
     scene.add(fillLight);
-
     const rimLight = new THREE.DirectionalLight(0xffaa88, 0.25);
     rimLight.position.set(0, 2, -4);
     scene.add(rimLight);
@@ -86,7 +245,6 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({
     controls.enablePan = false;
     controls.autoRotate = autoRotateRef.current;
     controls.autoRotateSpeed = 1.2;
-    // Preview cards: keep auto-rotate, but let card click-through open the lightbox.
     const interactive = cameraControlsRef.current;
     controls.enableZoom = interactive;
     controls.enableRotate = interactive || autoRotateRef.current;
@@ -124,10 +282,14 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({
     const resizeObserver = new ResizeObserver(setSize);
     resizeObserver.observe(container);
 
+    const parsedTextures: ModelTextures | undefined = texturesKey
+      ? (JSON.parse(texturesKey) as ModelTextures)
+      : undefined;
+
     const loader = new GLTFLoader();
     loader.load(
       src,
-      (gltf) => {
+      async (gltf) => {
         if (disposed) {
           gltf.scene.traverse((child) => {
             if (child instanceof THREE.Mesh) {
@@ -141,11 +303,27 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({
           return;
         }
 
-        modelRoot = gltf.scene;
-        scene.add(modelRoot);
-        frameModel(modelRoot);
-        setIsLoaded(true);
-        setError(null);
+        try {
+          if (parsedTextures) {
+            await applyTexturesToObject(gltf.scene, parsedTextures, disposableTextures);
+          }
+          if (disposed) return;
+
+          modelRoot = gltf.scene;
+          scene.add(modelRoot);
+          frameModel(modelRoot);
+          setIsLoaded(true);
+          setError(null);
+        } catch (err) {
+          if (disposed) return;
+          console.error("Texture loading error:", err);
+          // Still show the mesh even if textures fail
+          modelRoot = gltf.scene;
+          scene.add(modelRoot);
+          frameModel(modelRoot);
+          setIsLoaded(true);
+          setError(null);
+        }
       },
       undefined,
       (err) => {
@@ -158,11 +336,11 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({
 
     const animate = () => {
       frameId = requestAnimationFrame(animate);
-      const interactive = cameraControlsRef.current;
+      const canInteract = cameraControlsRef.current;
       controls.autoRotate = autoRotateRef.current;
-      controls.enableZoom = interactive;
-      controls.enableRotate = interactive || autoRotateRef.current;
-      renderer.domElement.style.pointerEvents = interactive ? "auto" : "none";
+      controls.enableZoom = canInteract;
+      controls.enableRotate = canInteract || autoRotateRef.current;
+      renderer.domElement.style.pointerEvents = canInteract ? "auto" : "none";
       controls.update();
       renderer.render(scene, camera);
     };
@@ -187,6 +365,7 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({
         });
       }
 
+      disposableTextures.forEach((t) => t.dispose());
       renderer.dispose();
       pmrem.dispose();
       if (scene.environment) {
@@ -196,7 +375,7 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({
         container.removeChild(renderer.domElement);
       }
     };
-  }, [src, alt]);
+  }, [src, alt, texturesKey]);
 
   return (
     <div className={`relative ${className}`}>

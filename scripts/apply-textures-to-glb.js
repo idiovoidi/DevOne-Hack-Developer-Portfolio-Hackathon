@@ -1,222 +1,319 @@
 #!/usr/bin/env node
 
 /**
- * Apply Textures to GLB Script
- * 
- * Loads a GLB file and applies PBR textures to it
- * Usage: node scripts/apply-textures-to-glb.js <model.glb> <texture-folder> [output.glb]
+ * Bake PBR textures into a GLB (embeds images).
+ *
+ * Usage:
+ *   node scripts/apply-textures-to-glb.js <model.glb> <texture-folder> [output.glb]
+ *
+ * Supports Unity-style MetallicSmoothness maps (R=metalness, A=smoothness).
  */
 
-import { readFileSync, writeFileSync, existsSync, statSync, readdirSync } from 'fs';
-import { resolve, join, extname, basename } from 'path';
-import { JSDOM } from 'jsdom';
-import { Canvas } from 'canvas';
-import * as THREE from 'three';
-import { GLTFLoader } from 'three-stdlib';
-import { GLTFExporter } from 'three-stdlib';
+import { readFileSync, writeFileSync, existsSync, statSync, readdirSync } from "fs";
+import { resolve, join, extname, basename } from "path";
+import { JSDOM } from "jsdom";
+import { createCanvas, loadImage, Image } from "canvas";
+import * as THREE from "three";
+import { GLTFLoader, GLTFExporter } from "three-stdlib";
 
-// Setup DOM environment for Three.js
-const dom = new JSDOM('<!DOCTYPE html><html><body></body></html>');
-global.document = dom.window.document;
+const dom = new JSDOM("<!DOCTYPE html><html><body></body></html>");
 global.window = dom.window;
-global.HTMLCanvasElement = Canvas;
-global.HTMLImageElement = Canvas.Image;
+global.document = dom.window.document;
+global.self = global;
+global.Image = Image;
+global.HTMLCanvasElement = createCanvas(1, 1).constructor;
+global.HTMLImageElement = Image;
 
-// Get command line arguments
 const args = process.argv.slice(2);
-
 if (args.length < 2) {
-  console.error('❌ Error: Missing required arguments');
-  console.log('\nUsage: node scripts/apply-textures-to-glb.js <model.glb> <texture-folder> [output.glb]');
-  console.log('\nExample:');
-  console.log('  node scripts/apply-textures-to-glb.js public/3D/model.glb public/3D/textures');
-  console.log('  node scripts/apply-textures-to-glb.js public/3D/model.glb public/3D/textures public/3D/model-textured.glb');
+  console.error("Usage: node scripts/apply-textures-to-glb.js <model.glb> <texture-folder> [output.glb]");
   process.exit(1);
 }
 
 const modelPath = resolve(args[0]);
 const textureFolderPath = resolve(args[1]);
-const outputPath = args[2] 
+const outputPath = args[2]
   ? resolve(args[2])
-  : modelPath.replace('.glb', '-textured.glb');
+  : modelPath.replace(/\.glb$/i, "-textured.glb");
 
-// Validate inputs
 if (!existsSync(modelPath)) {
-  console.error(`❌ Error: Model file not found: ${modelPath}`);
+  console.error(`Model not found: ${modelPath}`);
   process.exit(1);
 }
-
 if (!existsSync(textureFolderPath)) {
-  console.error(`❌ Error: Texture folder not found: ${textureFolderPath}`);
+  console.error(`Texture folder not found: ${textureFolderPath}`);
   process.exit(1);
 }
 
-console.log('🎨 Applying textures to GLB...');
-console.log(`   Model:    ${modelPath}`);
-console.log(`   Textures: ${textureFolderPath}`);
-console.log(`   Output:   ${outputPath}`);
+const MAX_TEXTURE_SIZE = Number(process.env.MAX_TEXTURE_SIZE || 2048);
 
-try {
-  // Find texture files
-  console.log('\n📂 Scanning for textures...');
-  const textureFiles = readdirSync(textureFolderPath).filter(file => 
-    /\.(png|jpg|jpeg)$/i.test(file)
-  );
-  
-  if (textureFiles.length === 0) {
-    console.error('❌ No texture files found in folder');
-    process.exit(1);
-  }
-  
-  console.log(`✓ Found ${textureFiles.length} texture files:`);
-  textureFiles.forEach(file => console.log(`  - ${file}`));
-  
-  // Categorize textures by type
+console.log("Applying textures to GLB...");
+console.log(`  Model:    ${modelPath}`);
+console.log(`  Textures: ${textureFolderPath}`);
+console.log(`  Output:   ${outputPath}`);
+console.log(`  Max tex:  ${MAX_TEXTURE_SIZE}px`);
+
+function categorizeTextures(files) {
   const textures = {
     albedo: null,
     normal: null,
+    metallicSmoothness: null,
     metallic: null,
     roughness: null,
     emission: null,
-    ao: null
+    ao: null,
   };
-  
-  textureFiles.forEach(file => {
-    const lowerFile = file.toLowerCase();
+
+  for (const file of files) {
+    const lower = file.toLowerCase();
     const fullPath = join(textureFolderPath, file);
-    
-    if (lowerFile.includes('albedo') || lowerFile.includes('diffuse') || lowerFile.includes('color') || lowerFile.includes('transparency')) {
+
+    if (lower.includes("metallicsmoothness") || lower.includes("metallic_smoothness")) {
+      textures.metallicSmoothness = fullPath;
+    } else if (lower.includes("albedo") || lower.includes("diffuse") || lower.includes("basecolor") || lower.includes("base_color")) {
       textures.albedo = fullPath;
-    } else if (lowerFile.includes('normal')) {
+    } else if (lower.includes("normal")) {
       textures.normal = fullPath;
-    } else if (lowerFile.includes('metallic') || lowerFile.includes('smoothness')) {
+    } else if (lower.includes("metallic") || lower.includes("metalness")) {
       textures.metallic = fullPath;
-    } else if (lowerFile.includes('roughness')) {
+    } else if (lower.includes("roughness")) {
       textures.roughness = fullPath;
-    } else if (lowerFile.includes('emission') || lowerFile.includes('emissive')) {
+    } else if (lower.includes("emission") || lower.includes("emissive")) {
       textures.emission = fullPath;
-    } else if (lowerFile.includes('ao') || lowerFile.includes('ambient')) {
+    } else if (lower.includes("ao") || lower.includes("occlusion") || lower.includes("ambient")) {
       textures.ao = fullPath;
+    } else if (lower.includes("transparency") && !textures.albedo) {
+      // e.g. AlbedoTransparency.png fallback if albedo key missed
+      textures.albedo = fullPath;
     }
-  });
-  
-  console.log('\n🔍 Texture mapping:');
-  Object.entries(textures).forEach(([type, path]) => {
-    if (path) console.log(`  ✓ ${type}: ${basename(path)}`);
-  });
-  
-  // Load GLB
-  console.log('\n📖 Loading GLB file...');
-  const glbData = readFileSync(modelPath);
-  const loader = new GLTFLoader();
-  
-  loader.parse(glbData.buffer, '', (gltf) => {
-    console.log('✓ GLB loaded successfully');
-    
-    // Load textures
-    const textureLoader = new THREE.TextureLoader();
-    const loadedTextures = {};
-    
-    console.log('\n🖼️  Loading textures...');
-    Object.entries(textures).forEach(([type, path]) => {
-      if (path) {
-        try {
-          const textureData = readFileSync(path);
-          const base64 = textureData.toString('base64');
-          const ext = extname(path).slice(1);
-          const dataUrl = `data:image/${ext};base64,${base64}`;
-          loadedTextures[type] = textureLoader.load(dataUrl);
-          console.log(`  ✓ Loaded ${type} texture`);
-        } catch (err) {
-          console.log(`  ⚠️  Failed to load ${type}: ${err.message}`);
-        }
-      }
-    });
-    
-    // Apply textures to materials
-    console.log('\n🎨 Applying textures to materials...');
-    let materialCount = 0;
-    
-    gltf.scene.traverse((child) => {
-      if (child.isMesh && child.material) {
-        const materials = Array.isArray(child.material) ? child.material : [child.material];
-        
-        materials.forEach(mat => {
-          // Convert to MeshStandardMaterial if needed
-          if (!(mat instanceof THREE.MeshStandardMaterial)) {
-            const newMat = new THREE.MeshStandardMaterial();
-            newMat.copy(mat);
-            child.material = newMat;
-          }
-          
-          const material = child.material;
-          
-          // Apply textures
-          if (loadedTextures.albedo) {
-            material.map = loadedTextures.albedo;
-            material.map.colorSpace = THREE.SRGBColorSpace;
-          }
-          if (loadedTextures.normal) {
-            material.normalMap = loadedTextures.normal;
-          }
-          if (loadedTextures.metallic) {
-            material.metalnessMap = loadedTextures.metallic;
-            material.roughnessMap = loadedTextures.metallic; // Often combined
-          }
-          if (loadedTextures.roughness) {
-            material.roughnessMap = loadedTextures.roughness;
-          }
-          if (loadedTextures.emission) {
-            material.emissiveMap = loadedTextures.emission;
-            material.emissive = new THREE.Color(0xffffff);
-            material.emissiveIntensity = 1.0;
-          }
-          if (loadedTextures.ao) {
-            material.aoMap = loadedTextures.ao;
-          }
-          
-          material.needsUpdate = true;
-          materialCount++;
-        });
-      }
-    });
-    
-    console.log(`✓ Applied textures to ${materialCount} materials`);
-    
-    // Export textured GLB
-    console.log('\n📦 Exporting textured GLB...');
-    const exporter = new GLTFExporter();
-    
-    exporter.parse(
-      gltf.scene,
-      (result) => {
-        const buffer = Buffer.from(result);
-        writeFileSync(outputPath, buffer);
-        
-        const stats = statSync(outputPath);
-        const fileSizeInMB = (stats.size / (1024 * 1024)).toFixed(2);
-        
-        console.log('\n✅ Success!');
-        console.log(`📦 Output: ${outputPath}`);
-        console.log(`📊 Size: ${fileSizeInMB} MB`);
-      },
-      (error) => {
-        console.error('\n❌ Export failed:', error.message);
-        process.exit(1);
-      },
-      {
-        binary: true,
-        embedImages: true,
-        maxTextureSize: 2048
-      }
-    );
-  }, (error) => {
-    console.error('\n❌ Failed to load GLB:', error);
-    process.exit(1);
-  });
-  
-} catch (error) {
-  console.error('\n❌ Error:', error.message);
-  console.error(error);
-  process.exit(1);
+  }
+
+  return textures;
 }
+
+async function imageToTexture(imagePath, { colorSpace = THREE.NoColorSpace, flipY = false } = {}) {
+  const img = await loadImage(imagePath);
+  let width = img.width;
+  let height = img.height;
+
+  if (width > MAX_TEXTURE_SIZE || height > MAX_TEXTURE_SIZE) {
+    const scale = MAX_TEXTURE_SIZE / Math.max(width, height);
+    width = Math.max(1, Math.round(width * scale));
+    height = Math.max(1, Math.round(height * scale));
+  }
+
+  const canvas = createCanvas(width, height);
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(img, 0, 0, width, height);
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = colorSpace;
+  texture.flipY = flipY;
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.needsUpdate = true;
+  return { texture, width, height, canvas, ctx };
+}
+
+/** Unity MetallicSmoothness → separate metalness (R) + roughness (1 - A) maps */
+async function splitMetallicSmoothness(imagePath) {
+  const img = await loadImage(imagePath);
+  let width = img.width;
+  let height = img.height;
+
+  if (width > MAX_TEXTURE_SIZE || height > MAX_TEXTURE_SIZE) {
+    const scale = MAX_TEXTURE_SIZE / Math.max(width, height);
+    width = Math.max(1, Math.round(width * scale));
+    height = Math.max(1, Math.round(height * scale));
+  }
+
+  const src = createCanvas(width, height);
+  const srcCtx = src.getContext("2d");
+  srcCtx.drawImage(img, 0, 0, width, height);
+  const { data } = srcCtx.getImageData(0, 0, width, height);
+
+  const metalCanvas = createCanvas(width, height);
+  const roughCanvas = createCanvas(width, height);
+  const metalCtx = metalCanvas.getContext("2d");
+  const roughCtx = roughCanvas.getContext("2d");
+  const metalImg = metalCtx.createImageData(width, height);
+  const roughImg = roughCtx.createImageData(width, height);
+
+  for (let i = 0; i < data.length; i += 4) {
+    const metal = data[i]; // R
+    const smooth = data[i + 3]; // A
+    const rough = 255 - smooth;
+
+    metalImg.data[i] = metal;
+    metalImg.data[i + 1] = metal;
+    metalImg.data[i + 2] = metal;
+    metalImg.data[i + 3] = 255;
+
+    roughImg.data[i] = rough;
+    roughImg.data[i + 1] = rough;
+    roughImg.data[i + 2] = rough;
+    roughImg.data[i + 3] = 255;
+  }
+
+  metalCtx.putImageData(metalImg, 0, 0);
+  roughCtx.putImageData(roughImg, 0, 0);
+
+  const metalnessMap = new THREE.CanvasTexture(metalCanvas);
+  const roughnessMap = new THREE.CanvasTexture(roughCanvas);
+  for (const tex of [metalnessMap, roughnessMap]) {
+    tex.colorSpace = THREE.NoColorSpace;
+    tex.flipY = false;
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.wrapT = THREE.RepeatWrapping;
+    tex.needsUpdate = true;
+  }
+
+  return { metalnessMap, roughnessMap, width, height };
+}
+
+function parseGlb(buffer) {
+  return new Promise((resolvePromise, reject) => {
+    const loader = new GLTFLoader();
+    loader.parse(
+      buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength),
+      "",
+      resolvePromise,
+      reject,
+    );
+  });
+}
+
+function exportGlb(scene) {
+  return new Promise((resolvePromise, reject) => {
+    const exporter = new GLTFExporter();
+    exporter.parse(
+      scene,
+      (result) => resolvePromise(Buffer.from(result)),
+      reject,
+      { binary: true, embedImages: true, maxTextureSize: MAX_TEXTURE_SIZE },
+    );
+  });
+}
+
+async function main() {
+  const textureFiles = readdirSync(textureFolderPath).filter((f) =>
+    /\.(png|jpg|jpeg)$/i.test(f),
+  );
+  if (textureFiles.length === 0) {
+    throw new Error("No texture files found in folder");
+  }
+
+  console.log(`\nFound ${textureFiles.length} texture files:`);
+  textureFiles.forEach((f) => console.log(`  - ${f}`));
+
+  const paths = categorizeTextures(textureFiles);
+  console.log("\nMapped:");
+  for (const [k, v] of Object.entries(paths)) {
+    if (v) console.log(`  ${k}: ${basename(v)}`);
+  }
+
+  console.log("\nLoading GLB...");
+  const glbData = readFileSync(modelPath);
+  const gltf = await parseGlb(glbData);
+  console.log("GLB loaded");
+
+  console.log("\nLoading / converting textures...");
+  const maps = {};
+
+  if (paths.albedo) {
+    const { texture, width, height } = await imageToTexture(paths.albedo, {
+      colorSpace: THREE.SRGBColorSpace,
+    });
+    maps.map = texture;
+    console.log(`  albedo ${width}x${height}`);
+  }
+  if (paths.normal) {
+    const { texture, width, height } = await imageToTexture(paths.normal);
+    maps.normalMap = texture;
+    console.log(`  normal ${width}x${height}`);
+  }
+  if (paths.emission) {
+    const { texture, width, height } = await imageToTexture(paths.emission, {
+      colorSpace: THREE.SRGBColorSpace,
+    });
+    maps.emissiveMap = texture;
+    console.log(`  emission ${width}x${height}`);
+  }
+  if (paths.ao) {
+    const { texture, width, height } = await imageToTexture(paths.ao);
+    maps.aoMap = texture;
+    console.log(`  ao ${width}x${height}`);
+  }
+
+  if (paths.metallicSmoothness) {
+    const { metalnessMap, roughnessMap, width, height } =
+      await splitMetallicSmoothness(paths.metallicSmoothness);
+    maps.metalnessMap = metalnessMap;
+    maps.roughnessMap = roughnessMap;
+    console.log(`  metallicSmoothness split ${width}x${height}`);
+  } else {
+    if (paths.metallic) {
+      const { texture, width, height } = await imageToTexture(paths.metallic);
+      maps.metalnessMap = texture;
+      console.log(`  metallic ${width}x${height}`);
+    }
+    if (paths.roughness) {
+      const { texture, width, height } = await imageToTexture(paths.roughness);
+      maps.roughnessMap = texture;
+      console.log(`  roughness ${width}x${height}`);
+    }
+  }
+
+  let materialCount = 0;
+  gltf.scene.traverse((child) => {
+    if (!child.isMesh || !child.material) return;
+
+    const materials = Array.isArray(child.material) ? child.material : [child.material];
+    const next = materials.map((mat) => {
+      const material =
+        mat instanceof THREE.MeshStandardMaterial
+          ? mat.clone()
+          : new THREE.MeshStandardMaterial({
+              color: mat.color?.clone?.() ?? 0xffffff,
+              name: mat.name,
+            });
+
+      if (maps.map) material.map = maps.map;
+      if (maps.normalMap) material.normalMap = maps.normalMap;
+      if (maps.metalnessMap) {
+        material.metalnessMap = maps.metalnessMap;
+        material.metalness = 1;
+      }
+      if (maps.roughnessMap) {
+        material.roughnessMap = maps.roughnessMap;
+        material.roughness = 1;
+      }
+      if (maps.emissiveMap) {
+        material.emissiveMap = maps.emissiveMap;
+        material.emissive = new THREE.Color(0xffffff);
+        material.emissiveIntensity = 1;
+      }
+      if (maps.aoMap) material.aoMap = maps.aoMap;
+
+      material.needsUpdate = true;
+      materialCount += 1;
+      return material;
+    });
+
+    child.material = next.length === 1 ? next[0] : next;
+  });
+
+  console.log(`\nApplied maps to ${materialCount} material(s)`);
+  console.log("Exporting GLB...");
+
+  const outBuffer = await exportGlb(gltf.scene);
+  writeFileSync(outputPath, outBuffer);
+
+  const mb = (statSync(outputPath).size / (1024 * 1024)).toFixed(2);
+  console.log(`\nDone: ${outputPath} (${mb} MB)`);
+}
+
+main().catch((err) => {
+  console.error("\nFailed:", err);
+  process.exit(1);
+});

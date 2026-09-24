@@ -15,23 +15,29 @@ type Shard = {
   wobbleFreq: number;
   ellipse: number;
   curve: number;
+  girth: number;
+  length: number;
   ox: number;
   oy: number;
 };
 
 const spawnShard = (shard: Shard, maxR: number, atRim: boolean) => {
-  const band = atRim ? 0.86 + Math.random() * 0.14 : 0.2 + Math.random() * 0.8;
+  const band = atRim ? 0.86 + Math.random() * 0.14 : 0.4 + Math.random() * 0.34;
   shard.radius = maxR * band;
   shard.angle = Math.random() * Math.PI * 2;
-  shard.spin = (0.55 + Math.random() * 1.15) * (Math.random() < 0.5 ? 1 : -1);
-  shard.fall = 16 + Math.random() * 34;
+  shard.spin = (0.28 + Math.random() * 0.7) * (Math.random() < 0.5 ? 1 : -1);
+  shard.fall = 8 + Math.random() * 16;
   shard.color = SHARD_COLORS[Math.floor(Math.random() * SHARD_COLORS.length)];
   shard.width = 1.1 + Math.random() * 2.2;
   shard.wobble = Math.random() * Math.PI * 2;
-  shard.wobbleAmp = 8 + Math.random() * 26;
-  shard.wobbleFreq = 0.45 + Math.random() * 1.7;
-  shard.ellipse = 0.78 + Math.random() * 0.4;
-  shard.curve = (Math.random() - 0.5) * 1.6;
+  const inOrbit = !atRim && shard.radius / maxR > 0.38 && shard.radius / maxR < 0.78;
+  shard.wobbleAmp = inOrbit ? 4 + Math.random() * 8 : 10 + Math.random() * 28;
+  shard.wobbleFreq = inOrbit ? 0.18 + Math.random() * 0.35 : 0.3 + Math.random() * 0.9;
+  shard.ellipse = inOrbit ? 0.9 + Math.random() * 0.08 : 0.72 + Math.random() * 0.5;
+  shard.curve = inOrbit ? (Math.random() - 0.5) * 0.35 : (Math.random() - 0.5) * 2.2;
+  if (inOrbit) shard.spin = Math.abs(shard.spin);
+  shard.girth = 14 + Math.random() * 22;
+  shard.length = 0.45 + Math.random() * 1.1;
   shard.ox = 0;
   shard.oy = 0;
 };
@@ -50,7 +56,7 @@ const PortalVortex: React.FC<{ offsetX: MotionValue<number>; offsetY: MotionValu
     if (!ctx) return;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const shards: Shard[] = Array.from({ length: 120 }, () => {
+    const shards: Shard[] = Array.from({ length: 64 }, () => {
       const shard = {} as Shard;
       spawnShard(shard, 320, false);
       return shard;
@@ -112,30 +118,15 @@ const PortalVortex: React.FC<{ offsetX: MotionValue<number>; offsetY: MotionValu
       const pointerX = pointer.clientX - bounds.left - width / 2 - center.x;
       const pointerY = pointer.clientY - bounds.top - height / 2 - center.y;
       pointer.energy *= reduced ? 0 : 0.9;
-      ctx.lineCap = "round";
-      for (let arm = 0; arm < 3; arm += 1) {
-        ctx.beginPath();
-        const offset = arm * ((Math.PI * 2) / 3) + spinTime * 0.28;
-        for (let step = 0; step <= 64; step += 1) {
-          const t = step / 64;
-          const flutter = Math.sin(spinTime * 0.8 + t * 9 + arm) * (10 + t * 16);
-          const radius = horizon + (maxR * 0.92 - horizon) * t * t + flutter;
-          const angle = offset + (1 - t) * 5.4 + Math.sin(spinTime * 0.5 + t * 6) * 0.18;
-          const x = Math.cos(angle) * radius;
-          const y = Math.sin(angle) * radius * (0.92 + arm * 0.04);
-          if (step === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        }
-        ctx.strokeStyle = "rgba(167, 139, 250, 0.1)";
-        ctx.lineWidth = 7;
-        ctx.stroke();
-      }
 
       for (const shard of shards) {
         const closeness = 1 - Math.min(1, shard.radius / maxR);
-        const drift = 0.72 + 0.28 * Math.sin(spinTime * shard.wobbleFreq + shard.wobble);
-        const whirl = shard.spin * (0.32 + closeness * closeness * 6.2) * drift;
-        const pull = shard.fall * (0.22 + closeness * closeness * 5.4) * (0.7 + 0.3 * drift);
+        const orbitBand = shard.radius / maxR;
+        const inOrbit = orbitBand > 0.38 && orbitBand < 0.78;
+        const orbitCalm = inOrbit ? 0.55 + closeness * 0.45 : 0;
+        const drift = 1 - orbitCalm * 0.82 + (1 - orbitCalm) * 0.22 * Math.sin(spinTime * shard.wobbleFreq + shard.wobble);
+        const whirl = shard.spin * (0.22 + closeness * closeness * 3.4) * drift;
+        const pull = shard.fall * (0.18 + closeness * closeness * 2.8) * (0.88 + 0.12 * drift);
 
         if (!reduced) {
           shard.angle += whirl * dt;
@@ -145,52 +136,65 @@ const PortalVortex: React.FC<{ offsetX: MotionValue<number>; offsetY: MotionValu
           if (shard.radius <= horizon || shard.radius > maxR) spawnShard(shard, maxR, true);
         }
 
-        const breathe = Math.sin(spinTime * shard.wobbleFreq + shard.wobble) * shard.wobbleAmp * (1 - closeness * 0.45);
-        const angle = shard.angle + Math.sin(spinTime * shard.wobbleFreq * 0.65 + shard.wobble) * 0.18 * (1 - closeness * 0.4);
+        const breathe =
+          Math.sin(spinTime * shard.wobbleFreq + shard.wobble) * shard.wobbleAmp * (1 - closeness * 0.45) * (1 - orbitCalm * 0.85);
+        const angle =
+          shard.angle + Math.sin(spinTime * shard.wobbleFreq * 0.65 + shard.wobble) * 0.18 * (1 - closeness * 0.4) * (1 - orbitCalm * 0.9);
         const radius = Math.max(horizon, shard.radius + breathe);
         let headX = Math.cos(angle) * radius + shard.ox;
         let headY = Math.sin(angle) * radius * shard.ellipse + shard.oy;
 
-        if (!reduced && pointer.energy > 0.05) {
+        if (!reduced && pointer.energy > 0.05 && orbitCalm < 0.35) {
           const mdx = headX - pointerX;
           const mdy = headY - pointerY;
           const md = Math.hypot(mdx, mdy) || 1;
           const reach = 150;
           if (md < reach) {
-            const falloff = (1 - md / reach) ** 2 * pointer.energy;
-            const swirlX = (-mdy / md) * 22 * falloff;
-            const swirlY = (mdx / md) * 22 * falloff;
-            shard.ox += pointer.vx * 0.55 * falloff + swirlX + (mdx / md) * 8 * falloff;
-            shard.oy += pointer.vy * 0.55 * falloff + swirlY + (mdy / md) * 8 * falloff;
+            const falloff = (1 - md / reach) ** 2 * pointer.energy * (1 - orbitCalm);
+            const swirlX = (-mdy / md) * 12 * falloff;
+            const swirlY = (mdx / md) * 12 * falloff;
+            shard.ox += pointer.vx * 0.35 * falloff + swirlX + (mdx / md) * 5 * falloff;
+            shard.oy += pointer.vy * 0.35 * falloff + swirlY + (mdy / md) * 5 * falloff;
             headX += swirlX;
             headY += swirlY;
           }
         }
 
-        const streak = Math.min(radius * 0.42, 12 + closeness * 64);
-        const tailRadius = Math.min(maxR, radius + streak);
-        const tailAngle = angle - Math.sign(shard.spin || 1) * Math.min(0.7, streak / Math.max(radius, 28));
-        const tailX = Math.cos(tailAngle) * tailRadius + shard.ox * 0.35;
-        const tailY = Math.sin(tailAngle) * tailRadius * shard.ellipse + shard.oy * 0.35;
-        const midAngle = (angle + tailAngle) / 2;
-        const midRadius = (radius + tailRadius) / 2;
-        const bend = shard.curve * (14 + closeness * 18);
-        const controlX = Math.cos(midAngle) * midRadius - Math.sin(midAngle) * bend + shard.ox * 0.6;
-        const controlY = Math.sin(midAngle) * midRadius * shard.ellipse + Math.cos(midAngle) * bend + shard.oy * 0.6;
+        const body =
+          shard.girth * (0.92 + (1 - orbitCalm) * 0.23 * Math.sin(spinTime * shard.wobbleFreq + shard.wobble));
+        const span = body * (1.8 + shard.length * 1.6);
+        const ellipse = shard.ellipse * (1 - orbitCalm) + 0.94 * orbitCalm;
+        const tangentX = Math.cos(angle);
+        const tangentY = Math.sin(angle) * ellipse;
+        const sideX = -Math.sin(angle);
+        const sideY = Math.cos(angle);
+        const bend = shard.curve * body * 0.85 * (1 - orbitCalm * 0.8);
+        const tailX = headX - tangentX * span;
+        const tailY = headY - tangentY * span;
         const nearPointer = pointer.energy > 0.05 ? Math.max(0, 1 - Math.hypot(headX - pointerX, headY - pointerY) / 150) : 0;
-        const alpha = Math.min(1, 0.12 + closeness * 0.72 + nearPointer * pointer.energy * 0.45);
+        const alpha = Math.min(0.42, 0.14 + closeness * 0.16 + nearPointer * pointer.energy * 0.16);
 
         const gradient = ctx.createLinearGradient(tailX, tailY, headX, headY);
         gradient.addColorStop(0, `rgba(${shard.color}, 0)`);
-        gradient.addColorStop(0.65, `rgba(${shard.color}, ${alpha * 0.75})`);
-        gradient.addColorStop(1, `rgba(255, 255, 255, ${Math.min(0.95, alpha)})`);
+        gradient.addColorStop(0.45, `rgba(${shard.color}, ${alpha})`);
+        gradient.addColorStop(1, `rgba(${shard.color}, ${alpha * 0.15})`);
 
         ctx.beginPath();
         ctx.moveTo(tailX, tailY);
-        ctx.quadraticCurveTo(controlX, controlY, headX, headY);
-        ctx.strokeStyle = gradient;
-        ctx.lineWidth = shard.width * (1.35 - closeness * 0.55);
-        ctx.stroke();
+        ctx.quadraticCurveTo(
+          headX - tangentX * span * 0.42 + sideX * body + bend,
+          headY - tangentY * span * 0.42 + sideY * body + bend * 0.4,
+          headX,
+          headY,
+        );
+        ctx.quadraticCurveTo(
+          headX - tangentX * span * 0.55 - sideX * body * 0.75 + bend * 0.3,
+          headY - tangentY * span * 0.55 - sideY * body * 0.75,
+          tailX,
+          tailY,
+        );
+        ctx.fillStyle = gradient;
+        ctx.fill();
       }
 
       ctx.restore();
@@ -266,7 +270,7 @@ const VoidEyeball: React.FC = () => {
         initial={{ scale: 0, opacity: 0 }}
         animate={{
           scale: 1,
-          opacity: 0.72,
+          opacity: 0.55,
         }}
         transition={{ duration: 2, ease: "easeOut" }}
         style={{
@@ -286,7 +290,7 @@ const VoidEyeball: React.FC = () => {
         >
           <PortalVortex offsetX={eyeXSpring} offsetY={eyeYSpring} />
 
-          {[0, 1, 2, 3].map((ring) => (
+          {[0, 1].map((ring) => (
             <motion.div
               key={`infall-${ring}`}
               style={{
@@ -296,20 +300,20 @@ const VoidEyeball: React.FC = () => {
                 width: "88%",
                 height: "88%",
                 borderRadius: "50%",
-                border: "1px solid rgba(196, 181, 253, 0.55)",
-                boxShadow: "0 0 18px rgba(124, 58, 237, 0.35), inset 0 0 18px rgba(236, 72, 153, 0.2)",
+                border: "1px solid rgba(196, 181, 253, 0.28)",
+                boxShadow: "0 0 12px rgba(124, 58, 237, 0.18)",
                 x: eyeXSpring,
                 y: eyeYSpring,
                 translateX: "-50%",
                 translateY: "-50%",
                 pointerEvents: "none",
               }}
-              animate={{ scale: [1, 0.08], opacity: [0, 0.7, 0] }}
+              animate={{ scale: [1, 0.12], opacity: [0, 0.32, 0] }}
               transition={{
-                duration: 2.8,
+                duration: 4.6,
                 repeat: Infinity,
                 ease: "easeIn",
-                delay: ring * 0.7,
+                delay: ring * 2.3,
               }}
             />
           ))}
@@ -360,26 +364,92 @@ const VoidEyeball: React.FC = () => {
               />
             ))}
 
-            {/* Unstable core pulse */}
+            {/* Quiet resting glow */}
             <motion.div
               animate={{
-                scale: [1, 1.4, 0.9, 1.2, 1],
-                opacity: [0.8, 1, 0.6, 1, 0.8],
-                rotate: [0, 90, 180, 270, 360],
+                scale: [1, 1.08, 1],
+                opacity: [0.45, 0.62, 0.45],
               }}
               transition={{
-                duration: 2,
+                duration: 5.5,
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
               style={{
                 position: "absolute",
-                inset: "20%",
+                inset: "18%",
                 borderRadius: "50%",
                 background:
-                  "radial-gradient(circle, rgba(167, 139, 250, 0.9) 0%, rgba(124, 58, 237, 0.5) 40%, transparent 70%)",
-                filter: "blur(12px)",
+                  "radial-gradient(circle, rgba(167, 139, 250, 0.55) 0%, rgba(124, 58, 237, 0.28) 46%, transparent 72%)",
+                filter: "blur(14px)",
                 mixBlendMode: "screen",
+              }}
+            />
+
+            {/* Occasional deep breath from the core */}
+            <motion.div
+              animate={{
+                scale: [1, 1, 2.35, 1.12, 1],
+                opacity: [0, 0, 0.95, 0.28, 0],
+              }}
+              transition={{
+                duration: 7.5,
+                times: [0, 0.62, 0.76, 0.88, 1],
+                repeat: Infinity,
+                ease: "easeOut",
+              }}
+              style={{
+                position: "absolute",
+                inset: "-55%",
+                borderRadius: "50%",
+                background:
+                  "radial-gradient(circle, rgba(255, 120, 200, 0.75) 0%, rgba(124, 58, 237, 0.55) 22%, rgba(76, 29, 149, 0.25) 48%, transparent 72%)",
+                filter: "blur(22px)",
+                mixBlendMode: "screen",
+                pointerEvents: "none",
+              }}
+            />
+            <motion.div
+              animate={{
+                scale: [0.2, 0.2, 2.1, 1.05],
+                opacity: [0, 0, 0.72, 0],
+              }}
+              transition={{
+                duration: 7.5,
+                times: [0, 0.62, 0.8, 1],
+                repeat: Infinity,
+                ease: "easeOut",
+              }}
+              style={{
+                position: "absolute",
+                inset: "-95%",
+                borderRadius: "50%",
+                border: "2px solid rgba(221, 214, 254, 0.65)",
+                boxShadow:
+                  "0 0 48px rgba(167, 139, 250, 0.65), inset 0 0 36px rgba(236, 72, 153, 0.35)",
+                pointerEvents: "none",
+              }}
+            />
+            <motion.div
+              animate={{
+                scale: [1, 1, 1.55, 1],
+                opacity: [0.35, 0.35, 0.9, 0.35],
+              }}
+              transition={{
+                duration: 7.5,
+                times: [0, 0.62, 0.74, 1],
+                repeat: Infinity,
+                ease: "easeOut",
+              }}
+              style={{
+                position: "absolute",
+                inset: "5%",
+                borderRadius: "50%",
+                background:
+                  "radial-gradient(circle, rgba(167, 139, 250, 0.85) 0%, rgba(124, 58, 237, 0.45) 38%, transparent 70%)",
+                filter: "blur(10px)",
+                mixBlendMode: "screen",
+                pointerEvents: "none",
               }}
             />
           </motion.div>
@@ -395,7 +465,7 @@ const VoidEyeball: React.FC = () => {
               <motion.div
                 key={`artifact-${i}`}
                 animate={{
-                  opacity: [0, 0.6, 0],
+                  opacity: [0, 0.22, 0],
                   scaleX: [0, 1, 0],
                   x: [0, xOffset],
                 }}
@@ -431,12 +501,13 @@ const VoidEyeball: React.FC = () => {
           {/* Distortion field with noise */}
           <motion.div
             animate={{
-              scale: [1, 1.1, 1],
-              opacity: [0.15, 0.25, 0.15],
+              scale: [1, 1, 1.28, 1.04, 1],
+              opacity: [0.12, 0.12, 0.38, 0.18, 0.12],
               rotate: [0, 360],
             }}
             transition={{
-              duration: 8,
+              duration: 7.5,
+              times: [0, 0.62, 0.76, 0.88, 1],
               repeat: Infinity,
               ease: "linear",
             }}

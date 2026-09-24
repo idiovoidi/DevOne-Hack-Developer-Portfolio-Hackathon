@@ -173,7 +173,7 @@ export const CosmicBackground = () => {
         if (speed > 40 && pull > 0.04) {
           ctx.beginPath();
           ctx.moveTo(particle.x, particle.y);
-          ctx.lineTo(particle.x - particle.vx * 0.045, particle.y - particle.vy * 0.045);
+          ctx.lineTo(particle.x - particle.vx * 0.02, particle.y - particle.vy * 0.02);
           ctx.strokeStyle = `rgba(196, 181, 253, ${alpha * 0.7})`;
           ctx.lineWidth = particle.size;
           ctx.stroke();

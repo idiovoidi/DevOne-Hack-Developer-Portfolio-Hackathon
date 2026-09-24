@@ -4,11 +4,14 @@ import type { ContactFormData } from "../components/ui/ContactForm";
 /**
  * Email Service Configuration
  *
- * Template variables used:
+ * Template variables the EmailJS dashboard template must include:
+ * - {{title}} - Subject line, sent as "Contact from {name}"
  * - {{name}} - Sender's name
  * - {{from_email}} - Sender's email (for reply-to)
  * - {{message}} - The message content
  * - {{time}} - Timestamp when message was sent
+ *
+ * Create or update the template in the EmailJS account so those variables match.
  *
  * To set up EmailJS:
  * 1. Create an account at https://www.emailjs.com/
@@ -57,10 +60,11 @@ export const sendContactEmail = async (
     });
 
     const templateParams = {
-      name: formData.name, // Matches {{name}} in your template
-      from_email: formData.email, // For reply-to functionality
-      message: formData.message, // Matches {{message}} in your template
-      time: timeString, // Matches {{time}} in your template
+      title: `Contact from ${formData.name}`,
+      name: formData.name,
+      from_email: formData.email,
+      message: formData.message,
+      time: timeString,
     };
 
     const response = await emailjs.send(

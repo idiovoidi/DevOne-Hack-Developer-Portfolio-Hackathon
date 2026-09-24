@@ -1,9 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { projects } from '../../data/projects';
-import { ProjectCard } from '../ui';
+import ProjectCard from '../ui/ProjectCard';
+import { Section } from '../ui/Section';
 import { useInView } from '../../hooks';
-import { usePerformance } from '../../contexts/PerformanceContext';
+import { createFadeInUp, fadeIn, revealState } from '../../utils/animations';
+import { usePerformanceSettings } from '../../contexts/PerformanceContext';
 
 type CategoryFilter = 'all' | 'development' | 'game';
 
@@ -13,11 +15,10 @@ const categories: { value: CategoryFilter; label: string }[] = [
   { value: 'game', label: 'Games' },
 ];
 
-const Projects: React.FC = () => {
+export const Projects: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>('all');
-  const { ref: headerRef, inView: headerInView } = useInView({ threshold: 0.2 });
   const { ref: filtersRef, inView: filtersInView } = useInView({ threshold: 0.2 });
-  const { settings } = usePerformance();
+  const settings = usePerformanceSettings();
 
   // Filter projects based on active category
   const filteredProjects = useMemo(() => {
@@ -28,28 +29,18 @@ const Projects: React.FC = () => {
   }, [activeCategory]);
 
   return (
-    <section id="projects" className="section" style={{ backgroundColor: 'var(--color-surface)' }}>
-      <div className="container-custom">
-        {/* Section Header */}
-        <motion.div
-          ref={headerRef}
-          initial={{ opacity: 0, y: 30 }}
-          animate={headerInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="text-center mb-12"
-        >
-          <h2 className="section-heading">Projects</h2>
-          <p className="section-subheading max-w-2xl mx-auto">
-            A collection of my work spanning web development, interactive games, and creative design
-          </p>
-        </motion.div>
-
+    <Section
+      id="projects"
+      tone="surface"
+      title="Projects"
+      subtitle="A collection of my work spanning web development, interactive games, and creative design"
+    >
         {/* Category Filter Tabs */}
         <motion.div
           ref={filtersRef}
-          initial={{ opacity: 0, y: 30 }}
-          animate={filtersInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
+          variants={createFadeInUp(0.2)}
+          initial="initial"
+          animate={revealState(filtersInView, settings.enableAnimations)}
           className="flex flex-wrap justify-center gap-3 mb-12"
         >
           {categories.map((category) => (
@@ -83,8 +74,9 @@ const Projects: React.FC = () => {
             ))
           ) : (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              variants={fadeIn}
+              initial="initial"
+              animate="animate"
               className="col-span-full text-center py-12"
             >
               <p className="text-text-secondary text-lg">
@@ -93,9 +85,6 @@ const Projects: React.FC = () => {
             </motion.div>
           )}
         </div>
-      </div>
-    </section>
+    </Section>
   );
 };
-
-export default Projects;

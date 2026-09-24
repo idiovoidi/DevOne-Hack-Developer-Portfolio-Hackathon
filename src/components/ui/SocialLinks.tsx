@@ -1,12 +1,9 @@
 import React from 'react';
 import { FaGithub, FaLinkedin, FaTwitter, FaEnvelope, FaInstagram, FaSpotify, FaYoutube } from 'react-icons/fa';
 import { SiTumblr } from 'react-icons/si';
+import type { SocialLink } from '../../data/personal';
 
-export interface SocialLink {
-  platform: 'github' | 'linkedin' | 'twitter' | 'email' | 'instagram' | 'spotify' | 'tumblr' | 'youtube' | 'other';
-  url: string;
-  label?: string;
-}
+export type { SocialLink };
 
 export interface SocialLinksProps {
   links: SocialLink[];
@@ -47,7 +44,7 @@ const SocialLinks: React.FC<SocialLinksProps> = ({
             target={isEmail ? undefined : '_blank'}
             rel={isEmail ? undefined : 'noopener noreferrer'}
             className="text-text-secondary hover:text-primary transition-all duration-300 hover:scale-110 active:scale-95 transform"
-            aria-label={link.label || `Visit ${link.platform}`}
+            aria-label={link.label || (link.username ? `Visit ${link.username}` : `Visit ${link.platform}`)}
           >
             <Icon size={iconSize} />
           </a>

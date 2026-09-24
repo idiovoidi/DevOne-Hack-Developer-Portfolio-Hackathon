@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ContactForm, ContactFormData, SocialLinks, SocialLink } from '../ui';
+import ContactForm, { type ContactFormData } from '../ui/ContactForm';
+import { Section } from '../ui/Section';
+import SocialLinks from '../ui/SocialLinks';
 import { personalInfo } from '../../data/personal';
 import { sendContactEmail, mockSendEmail, isEmailServiceConfigured } from '../../utils';
 import { FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 import { useInView } from '../../hooks';
+import { createFadeInUp, revealState } from '../../utils/animations';
+import { usePerformanceSettings } from '../../contexts/PerformanceContext';
 
-const Contact: React.FC = () => {
+export const Contact: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { ref: headerRef, inView: headerInView } = useInView({ threshold: 0.2 });
   const { ref: formRef, inView: formInView } = useInView({ threshold: 0.1 });
   const { ref: infoRef, inView: infoInView } = useInView({ threshold: 0.1 });
+  const settings = usePerformanceSettings();
 
   const handleSubmit = async (data: ContactFormData) => {
     setIsSubmitting(true);
@@ -28,48 +32,27 @@ const Contact: React.FC = () => {
     }
   };
 
-  // Convert personal info social links to SocialLinks component format
-  const socialLinks: SocialLink[] = personalInfo.social.map(link => ({
-    platform: link.platform,
-    url: link.url,
-    label: `Visit ${link.platform}`,
-  }));
+  const socialLinks = personalInfo.social;
 
   return (
-    <section 
-      id="contact" 
-      className="section py-20"
-      style={{ 
-        minHeight: '100vh',
-        backgroundColor: 'var(--color-surface)',
-      }}
+    <Section
+      id="contact"
+      tone="surface"
+      title="Get In Touch"
+      subtitle="Have a project in mind or want to collaborate? Feel free to reach out!"
+      className="py-20"
+      sectionStyle={{ minHeight: '100vh' }}
+      headerClassName="text-center mb-16"
     >
-      <div className="container-custom">
-        {/* Section Header */}
-        <motion.div
-          ref={headerRef}
-          initial={{ opacity: 0, y: 30 }}
-          animate={headerInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="text-center mb-16"
-        >
-          <h2 className="section-heading">Get In Touch</h2>
-          <p 
-            className="section-subheading max-w-2xl mx-auto"
-            style={{ color: 'var(--color-text-secondary)' }}
-          >
-            Have a project in mind or want to collaborate? Feel free to reach out!
-          </p>
-        </motion.div>
 
         {/* Two-Column Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
           {/* Contact Form */}
           <motion.div
             ref={formRef}
-            initial={{ opacity: 0, y: 40 }}
-            animate={formInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-            transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
+            variants={createFadeInUp(0.2)}
+            initial="initial"
+            animate={revealState(formInView, settings.enableAnimations)}
             className="card p-8"
           >
             <h3 
@@ -106,9 +89,9 @@ const Contact: React.FC = () => {
           {/* Contact Information */}
           <motion.div
             ref={infoRef}
-            initial={{ opacity: 0, y: 40 }}
-            animate={infoInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-            transition={{ duration: 0.6, delay: 0.4, ease: 'easeOut' }}
+            variants={createFadeInUp(0.4)}
+            initial="initial"
+            animate={revealState(infoInView, settings.enableAnimations)}
             className="space-y-8"
           >
             {/* Contact Details Card */}
@@ -212,9 +195,6 @@ const Contact: React.FC = () => {
             </div>
           </motion.div>
         </div>
-      </div>
-    </section>
+    </Section>
   );
 };
-
-export default Contact;

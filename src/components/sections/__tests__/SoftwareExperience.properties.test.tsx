@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { render } from '@testing-library/react';
 import fc from 'fast-check';
 import { axe } from 'vitest-axe';
-import SoftwareExperience from '../SoftwareExperience';
+import { SoftwareExperience } from '../SoftwareExperience';
 import type { SoftwareEntry, SoftwareCategory } from '../../../data/softwareData';
 
 /**

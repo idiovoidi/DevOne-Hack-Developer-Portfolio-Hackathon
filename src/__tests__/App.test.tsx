@@ -15,13 +15,9 @@ import App from '../App';
  */
 
 // Mock the ThreeD component to avoid WebGL context errors in tests
-vi.mock('../components/sections', async () => {
-  const actual = await vi.importActual('../components/sections');
-  return {
-    ...actual,
-    ThreeD: () => <section id="three-d" data-testid="three-d-mock">3D Section Mock</section>,
-  };
-});
+vi.mock('../components/sections/ThreeD', () => ({
+  ThreeD: () => <section id="three-d" data-testid="three-d-mock">3D Section Mock</section>,
+}));
 
 describe('App - SoftwareExperience Integration Tests', () => {
   beforeEach(() => {

@@ -31,6 +31,14 @@ portfolio/
 └── README.md
 ```
 
+## Conventions
+
+- Section and UI components use named exports. Content arrays live in `src/data/`, including music, videos, and 3D works.
+- Scroll motion uses `useInView` from `src/hooks` and the variants in `src/utils/animations.ts`.
+- Navigation and footer share `navLinks` from `src/data/navigation.ts`.
+- Content sections use the `Section` wrapper so `.section`, `.container-custom`, `.section-heading`, and `.section-subheading` stay consistent.
+- Heavy sections (art, NFTs, music, videos, 3D) load with `lazySection`. Music and video iframes mount only when the section is near the viewport.
+
 ## Component Architecture
 
 ### Layout Components (`src/components/layout/`)

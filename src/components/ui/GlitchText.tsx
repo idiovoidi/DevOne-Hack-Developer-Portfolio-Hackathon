@@ -119,4 +119,5 @@ const GlitchText: React.FC<GlitchTextProps> = ({ text, className = "" }) => {
   );
 };
 
+export { GlitchText };
 export default GlitchText;

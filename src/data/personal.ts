@@ -17,7 +17,8 @@ export interface SocialLink {
     | "tumblr"
     | "other";
   url: string;
-  username: string;
+  username?: string;
+  label?: string;
   icon?: string; // Optional: Custom icon name from react-icons
 }
 

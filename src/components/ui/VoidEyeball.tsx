@@ -261,4 +261,5 @@ const VoidEyeball: React.FC = () => {
   );
 };
 
+export { VoidEyeball };
 export default VoidEyeball;

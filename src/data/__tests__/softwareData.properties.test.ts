@@ -17,7 +17,7 @@ describe('Software Experience - Property Tests', () => {
    * 
    * Tests that all software entries have required fields (id, name, category, icon)
    * and that category values are valid.
-   * Optional fields (tags, portfolioIds) must be arrays when present.
+   * Optional fields (tags, portfolioIds, language) must be correct types when present.
    */
   it('Property 5: All software entries have valid data structure', () => {
     const validCategories: SoftwareCategory[] = [
@@ -25,9 +25,7 @@ describe('Software Experience - Property Tests', () => {
       'digital-media',
       '3d-game',
       'coding-languages',
-      'libraries-python',
-      'libraries-js-ts',
-      'libraries-dbs',
+      'databases',
       'other'
     ];
 
@@ -55,6 +53,11 @@ describe('Software Experience - Property Tests', () => {
       // Optional field: version (if present, must be a string)
       if (entry.version !== undefined) {
         expect(typeof entry.version).toBe('string');
+      }
+
+      // Optional field: language (if present, must be a string)
+      if (entry.language !== undefined) {
+        expect(typeof entry.language).toBe('string');
       }
 
       // Optional field: tags (if present, must be an array)
@@ -89,9 +92,7 @@ describe('Software Experience - Property Tests', () => {
       'digital-media',
       '3d-game',
       'coding-languages',
-      'libraries-python',
-      'libraries-js-ts',
-      'libraries-dbs',
+      'databases',
       'other'
     ];
 
@@ -106,13 +107,12 @@ describe('Software Experience - Property Tests', () => {
             'digital-media',
             '3d-game',
             'coding-languages',
-            'libraries-python',
-            'libraries-js-ts',
-            'libraries-dbs',
+            'databases',
             'other'
           ),
           icon: fc.string({ minLength: 1 }),
           version: fc.option(fc.string(), { nil: undefined }),
+          language: fc.option(fc.string(), { nil: undefined }),
           tags: fc.option(fc.array(fc.string()), { nil: undefined }),
           portfolioIds: fc.option(fc.array(fc.string()), { nil: undefined }),
         }),
@@ -136,6 +136,10 @@ describe('Software Experience - Property Tests', () => {
           // Validate optional fields when present
           if (generatedEntry.version !== undefined) {
             expect(typeof generatedEntry.version).toBe('string');
+          }
+
+          if (generatedEntry.language !== undefined) {
+            expect(typeof generatedEntry.language).toBe('string');
           }
 
           if (generatedEntry.tags !== undefined) {
@@ -162,9 +166,7 @@ describe('Software Experience - Property Tests', () => {
       'digital-media',
       '3d-game',
       'coding-languages',
-      'libraries-python',
-      'libraries-js-ts',
-      'libraries-dbs',
+      'databases',
       'other'
     ];
     

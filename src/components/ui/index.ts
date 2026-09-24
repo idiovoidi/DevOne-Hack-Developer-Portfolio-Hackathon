@@ -37,3 +37,16 @@ export type { ScreenshotCarouselProps } from './ScreenshotCarousel';
 export { CRTEffect } from './CRTEffect';
 
 export { ModelViewer } from './ModelViewer';
+
+export { Section } from './Section';
+export type { SectionProps, SectionTone } from './Section';
+
+export { NFTCard } from './NFTCard';
+export type { NFTCardProps } from './NFTCard';
+
+export { SoftwareCard } from './SoftwareCard';
+
+export { GalleryBackground } from './GalleryBackground';
+export { NeuralBackground } from './NeuralBackground';
+export { GlitchText } from './GlitchText';
+export { VoidEyeball } from './VoidEyeball';

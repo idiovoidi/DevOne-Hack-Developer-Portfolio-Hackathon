@@ -95,4 +95,5 @@ const GalleryBackground: React.FC = () => {
   );
 };
 
+export { GalleryBackground };
 export default GalleryBackground;

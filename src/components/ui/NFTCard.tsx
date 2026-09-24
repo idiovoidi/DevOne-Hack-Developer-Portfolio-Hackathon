@@ -5,13 +5,12 @@ import { FaEthereum } from 'react-icons/fa';
 import { RiNftLine } from 'react-icons/ri';
 import { useTilt } from '../../hooks/useTilt';
 
-interface NFTCardProps {
+export interface NFTCardProps {
   nft: NFT;
   index: number;
-  onClick: () => void;
 }
 
-const NFTCard: React.FC<NFTCardProps> = ({ nft, index, onClick }) => {
+const NFTCard: React.FC<NFTCardProps> = ({ nft, index }) => {
   const getBlockchainIcon = () => {
     switch (nft.blockchain.toLowerCase()) {
       case 'tezos':
@@ -45,12 +44,14 @@ const NFTCard: React.FC<NFTCardProps> = ({ nft, index, onClick }) => {
         transformStyle: 'preserve-3d',
       }}
     >
-      <motion.div
+      <motion.a
+        href={nft.marketplaceUrl}
+        target="_blank"
+        rel="noopener noreferrer"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: index * 0.1 }}
         className="group relative bg-black/40 backdrop-blur-sm border border-purple-500/20 rounded-lg overflow-hidden hover:border-purple-500/50 transition-all duration-300 cursor-pointer"
-        onClick={onClick}
         style={{
           boxShadow: '0 0 20px rgba(168, 85, 247, 0.15)',
           transformStyle: 'preserve-3d',
@@ -100,9 +101,10 @@ const NFTCard: React.FC<NFTCardProps> = ({ nft, index, onClick }) => {
         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
           <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-pink-500/10" />
         </div>
-      </motion.div>
+      </motion.a>
     </div>
   );
 };
 
+export { NFTCard };
 export default NFTCard;

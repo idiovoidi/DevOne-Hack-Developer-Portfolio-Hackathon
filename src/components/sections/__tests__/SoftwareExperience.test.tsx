@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import SoftwareExperience from '../SoftwareExperience';
+import { SoftwareExperience } from '../SoftwareExperience';
 import { getSoftwareByCategory } from '../../../data/softwareData';
 
 /**
@@ -245,16 +245,11 @@ describe('SoftwareExperience - Unit Tests', () => {
       expect(headingParent).toBeTruthy();
     });
 
-    it('should render animated emoji decorations in header', () => {
+    it('should render the shared section heading', () => {
       const { container } = render(<SoftwareExperience />);
 
-      // Find emoji elements (🛠️)
-      const emojis = Array.from(container.querySelectorAll('div')).filter(div => 
-        div.textContent === '🛠️'
-      );
-
-      // Should have two emoji decorations
-      expect(emojis.length).toBeGreaterThanOrEqual(2);
+      const heading = container.querySelector('.section-heading');
+      expect(heading?.textContent).toBe('Software Experience');
     });
 
     it('should render section subheading with description', () => {

@@ -1,7 +1,25 @@
+import { Suspense } from 'react';
 import { Header, Footer } from './components/layout';
-import { Hero, Projects, ArtGallery, NFTGallery, Music, Videos, ThreeD, Skills, SoftwareExperience, Contact } from './components/sections';
-import { ScrollProgress, CosmicBackground, PerformanceToggle } from './components/ui';
+import { Hero } from './components/sections/Hero';
+import { Projects } from './components/sections/Projects';
+import { Skills } from './components/sections/Skills';
+import { SoftwareExperience } from './components/sections/SoftwareExperience';
+import { Contact } from './components/sections/Contact';
+import { ScrollProgress } from './components/ui/ScrollProgress';
+import { CosmicBackground } from './components/ui/CosmicBackground';
+import { PerformanceToggle } from './components/ui/PerformanceToggle';
 import { PerformanceProvider, usePerformance } from './contexts/PerformanceContext';
+import { lazySection } from './utils/lazySection';
+
+const ArtGallery = lazySection(() => import('./components/sections/ArtGallery'), 'ArtGallery');
+const NFTGallery = lazySection(() => import('./components/sections/NFTGallery'), 'NFTGallery');
+const Music = lazySection(() => import('./components/sections/Music'), 'Music');
+const Videos = lazySection(() => import('./components/sections/Videos'), 'Videos');
+const ThreeD = lazySection(() => import('./components/sections/ThreeD'), 'ThreeD');
+
+const SectionFallback = ({ id }: { id: string }) => (
+  <section id={id} className="section" style={{ minHeight: '40rem' }} aria-busy="true" />
+);
 
 function AppContent() {
   const { settings } = usePerformance();
@@ -14,50 +32,33 @@ function AppContent() {
         color: 'var(--color-text-primary)'
       }}
     >
-      {/* Cosmic Background Effect */}
       {settings.enableParticles && <CosmicBackground />}
       
-      {/* Scroll Progress Indicator */}
       <ScrollProgress />
-      
-      {/* Performance Settings Toggle */}
       <PerformanceToggle />
       
-      {/* Main Content */}
       <div className="relative z-10">
         <Header />
-        
-        {/* Hero Section */}
         <Hero />
-
-        {/* Projects Section */}
         <Projects />
-
-        {/* Art Gallery Section */}
-        <ArtGallery />
-
-        {/* NFT Gallery Section */}
-        <NFTGallery />
-
-        {/* Music Section */}
-        <Music />
-
-        {/* Videos Section */}
-        <Videos />
-
-        {/* 3D Section */}
-        <ThreeD />
-
-        {/* Skills Section */}
+        <Suspense fallback={<SectionFallback id="art-gallery" />}>
+          <ArtGallery />
+        </Suspense>
+        <Suspense fallback={<SectionFallback id="nft-gallery" />}>
+          <NFTGallery />
+        </Suspense>
+        <Suspense fallback={<SectionFallback id="music" />}>
+          <Music />
+        </Suspense>
+        <Suspense fallback={<SectionFallback id="videos" />}>
+          <Videos />
+        </Suspense>
+        <Suspense fallback={<SectionFallback id="three-d" />}>
+          <ThreeD />
+        </Suspense>
         <Skills />
-
-        {/* Software Experience Section */}
         <SoftwareExperience />
-
-        {/* Contact Section */}
         <Contact />
-
-        {/* Footer */}
         <Footer />
       </div>
     </div>

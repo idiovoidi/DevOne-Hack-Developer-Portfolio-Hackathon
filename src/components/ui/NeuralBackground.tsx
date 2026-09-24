@@ -146,4 +146,5 @@ const NeuralBackground: React.FC = () => {
   );
 };
 
+export { NeuralBackground };
 export default NeuralBackground;

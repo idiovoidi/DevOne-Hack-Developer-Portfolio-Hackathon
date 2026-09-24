@@ -60,9 +60,7 @@ export type SoftwareCategory =
   | 'digital-media'
   | '3d-game'
   | 'coding-languages'
-  | 'libraries-python'
-  | 'libraries-js-ts'
-  | 'libraries-dbs'
+  | 'databases'
   | 'other';
 
 export interface SoftwareEntry {
@@ -71,6 +69,7 @@ export interface SoftwareEntry {
   category: SoftwareCategory;    // Category (music, digital-media, 3d-game, etc.)
   icon: string;                  // Icon name from react-icons/si (e.g., 'SiBlender', 'SiReact')
   version?: string;              // Optional: version number (e.g., "4.2")
+  language?: string;             // Optional: parent language for libraries (e.g., 'Python', 'JavaScript/TypeScript')
   tags?: string[];               // Optional: tags for filtering (e.g., ['3d', 'modeling'])
   portfolioIds?: string[];       // Optional: IDs of portfolio pieces using this software
 }
@@ -80,11 +79,9 @@ export const categoryConfig: Record<SoftwareCategory, { title: string; order: nu
   'music': { title: 'Music', order: 1 },
   'digital-media': { title: 'Digital Media', order: 2 },
   '3d-game': { title: '3D + Game', order: 3 },
-  'coding-languages': { title: 'Coding Languages', order: 4 },
-  'libraries-python': { title: 'Libraries - Python', order: 5 },
-  'libraries-js-ts': { title: 'Libraries - JavaScript/TypeScript', order: 6 },
-  'libraries-dbs': { title: 'Libraries & DBS', order: 7 },
-  'other': { title: 'Other', order: 8 },
+  'coding-languages': { title: 'Coding Languages & Libraries', order: 4 },
+  'databases': { title: 'Databases', order: 5 },
+  'other': { title: 'Other', order: 6 },
 };
 
 // Software entries organized by category
@@ -177,7 +174,7 @@ export const softwareData: SoftwareEntry[] = [
     portfolioIds: [],
   },
 
-  // Coding Languages
+  // Coding Languages & Libraries
   {
     id: 'javascript',
     name: 'JavaScript',
@@ -195,11 +192,56 @@ export const softwareData: SoftwareEntry[] = [
     portfolioIds: [],
   },
   {
+    id: 'babylonjs',
+    name: 'Babylon.js',
+    category: 'coding-languages',
+    language: 'JavaScript/TypeScript',
+    icon: 'SiBabylondotjs',
+    tags: ['3d', 'webgl', 'rendering'],
+    portfolioIds: [],
+  },
+  {
+    id: 'pixijs',
+    name: 'Pixi.js',
+    category: 'coding-languages',
+    language: 'JavaScript/TypeScript',
+    icon: 'SiPixi',
+    tags: ['2d', 'webgl', 'rendering'],
+    portfolioIds: [],
+  },
+  {
+    id: 'matterjs',
+    name: 'Matter.js',
+    category: 'coding-languages',
+    language: 'JavaScript/TypeScript',
+    icon: 'SiJavascript',
+    tags: ['physics', '2d', 'game-dev'],
+    portfolioIds: [],
+  },
+  {
+    id: 'react',
+    name: 'React',
+    category: 'coding-languages',
+    language: 'JavaScript/TypeScript',
+    icon: 'SiReact',
+    tags: ['frontend', 'web-development', 'ui'],
+    portfolioIds: [],
+  },
+  {
     id: 'python',
     name: 'Python',
     category: 'coding-languages',
     icon: 'SiPython',
     tags: ['backend', 'scripting', 'data'],
+    portfolioIds: [],
+  },
+  {
+    id: 'pyqt6',
+    name: 'PyQt6',
+    category: 'coding-languages',
+    language: 'Python',
+    icon: 'SiQt',
+    tags: ['python', 'gui', 'desktop'],
     portfolioIds: [],
   },
   {
@@ -227,55 +269,11 @@ export const softwareData: SoftwareEntry[] = [
     portfolioIds: [],
   },
 
-  // Libraries - Python
-  {
-    id: 'pyqt6',
-    name: 'PyQt6',
-    category: 'libraries-python',
-    icon: 'SiQt',
-    tags: ['python', 'gui', 'desktop'],
-    portfolioIds: [],
-  },
-
-  // Libraries - JavaScript/TypeScript
-  {
-    id: 'babylonjs',
-    name: 'Babylon.js',
-    category: 'libraries-js-ts',
-    icon: 'SiBabylondotjs',
-    tags: ['3d', 'webgl', 'rendering'],
-    portfolioIds: [],
-  },
-  {
-    id: 'pixijs',
-    name: 'Pixi.js',
-    category: 'libraries-js-ts',
-    icon: 'SiPixi',
-    tags: ['2d', 'webgl', 'rendering'],
-    portfolioIds: [],
-  },
-  {
-    id: 'matterjs',
-    name: 'Matter.js',
-    category: 'libraries-js-ts',
-    icon: 'SiJavascript',
-    tags: ['physics', '2d', 'game-dev'],
-    portfolioIds: [],
-  },
-  {
-    id: 'react',
-    name: 'React',
-    category: 'libraries-js-ts',
-    icon: 'SiReact',
-    tags: ['frontend', 'web-development', 'ui'],
-    portfolioIds: [],
-  },
-
-  // Libraries & DBS
+  // Databases
   {
     id: 'sql',
     name: 'SQL',
-    category: 'libraries-dbs',
+    category: 'databases',
     icon: 'SiMysql',
     tags: ['database', 'query'],
     portfolioIds: [],
@@ -283,7 +281,7 @@ export const softwareData: SoftwareEntry[] = [
   {
     id: 'sqlite',
     name: 'SQLite',
-    category: 'libraries-dbs',
+    category: 'databases',
     icon: 'SiSqlite',
     tags: ['database', 'embedded'],
     portfolioIds: [],
@@ -291,7 +289,7 @@ export const softwareData: SoftwareEntry[] = [
   {
     id: 'mariadb',
     name: 'MariaDB',
-    category: 'libraries-dbs',
+    category: 'databases',
     icon: 'SiMariadb',
     tags: ['database', 'sql'],
     portfolioIds: [],
@@ -299,7 +297,7 @@ export const softwareData: SoftwareEntry[] = [
   {
     id: 'mongodb',
     name: 'MongoDB',
-    category: 'libraries-dbs',
+    category: 'databases',
     icon: 'SiMongodb',
     tags: ['database', 'nosql'],
     portfolioIds: [],
@@ -323,6 +321,36 @@ export const softwareData: SoftwareEntry[] = [
  */
 export const getSoftwareByCategory = (category: SoftwareCategory): SoftwareEntry[] => {
   return softwareData.filter(software => software.category === category);
+};
+
+/**
+ * Get software entries grouped by language within a category
+ * Used for displaying libraries under their parent languages
+ * @param category - Category to filter by
+ * @returns Object with language groups and standalone entries
+ */
+export const getSoftwareGroupedByLanguage = (category: SoftwareCategory): {
+  standalone: SoftwareEntry[];
+  grouped: Record<string, SoftwareEntry[]>;
+} => {
+  const software = getSoftwareByCategory(category);
+  const standalone: SoftwareEntry[] = [];
+  const grouped: Record<string, SoftwareEntry[]> = {};
+
+  software.forEach(entry => {
+    if (entry.language) {
+      // This is a library/framework - group it under its language
+      if (!grouped[entry.language]) {
+        grouped[entry.language] = [];
+      }
+      grouped[entry.language].push(entry);
+    } else {
+      // This is a standalone language/tool
+      standalone.push(entry);
+    }
+  });
+
+  return { standalone, grouped };
 };
 
 /**

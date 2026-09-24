@@ -2,25 +2,12 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import SocialLinks from '../ui/SocialLinks';
 import { personalInfo } from '../../data/personal';
+import { navLinks } from '../../data/navigation';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
-  // Navigation sections
-  const navSections = [
-    { label: 'Home', href: '#hero' },
-    { label: 'Projects', href: '#projects' },
-    { label: 'Art Gallery', href: '#art-gallery' },
-    { label: 'Skills', href: '#skills' },
-    { label: 'Contact', href: '#contact' },
-  ];
-
-  // Convert personal social links to SocialLinks component format
-  const socialLinks = personalInfo.social.map(link => ({
-    platform: link.platform,
-    url: link.url,
-    label: `Visit ${link.platform}`,
-  }));
+  const socialLinks = personalInfo.social;
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
@@ -62,7 +49,7 @@ const Footer: React.FC = () => {
               Quick Links
             </h4>
             <nav className="flex flex-wrap justify-center gap-4">
-              {navSections.map((section) => (
+              {navLinks.map((section) => (
                 <a
                   key={section.href}
                   href={section.href}

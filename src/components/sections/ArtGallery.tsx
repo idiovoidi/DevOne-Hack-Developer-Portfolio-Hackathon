@@ -2,18 +2,15 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { artworks } from "../../data/artworks";
 import ArtPieceCard from "../ui/ArtPieceCard";
+import { GalleryBackground } from "../ui/GalleryBackground";
+import { GlitchText } from "../ui/GlitchText";
 import Lightbox from "../ui/Lightbox";
-import GlitchText from "../ui/GlitchText";
-import GalleryBackground from "../ui/GalleryBackground";
-import { useInView } from "../../hooks";
+import { Section } from "../ui/Section";
 
-const ArtGallery: React.FC = () => {
+export const ArtGallery: React.FC = () => {
   const [selectedArtwork, setSelectedArtwork] = useState<number | null>(null);
   const [visibleCount, setVisibleCount] = useState(8);
   const [isButtonHovered, setIsButtonHovered] = useState(false);
-  const { ref: headerRef, inView: headerInView } = useInView({
-    threshold: 0.2,
-  });
 
   const handleArtworkClick = (index: number) => {
     setSelectedArtwork(index);
@@ -34,46 +31,12 @@ const ArtGallery: React.FC = () => {
   const hasMore = visibleCount < artworks.length;
 
   return (
-    <section
+    <Section
       id="art-gallery"
-      className="section relative"
-      style={{ backgroundColor: "var(--color-background)" }}
+      title={<GlitchText text="Art Gallery" />}
+      subtitle="A showcase of my 2015 Photography / Photoshop artworks"
+      background={<GalleryBackground />}
     >
-      {/* Animated Background */}
-      <GalleryBackground />
-
-      <div className="container-custom relative z-10">
-        {/* Section Header */}
-        <motion.div
-          ref={headerRef}
-          initial={{ opacity: 0, y: 30 }}
-          animate={headerInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          className="text-center mb-12"
-        >
-          <div className="relative inline-block">
-            {/* Void connection indicator */}
-            <div
-              className="absolute -top-3 left-0 right-0 h-[2px] rounded-full mx-auto"
-              style={{
-                width: "60%",
-                background:
-                  "linear-gradient(90deg, transparent, var(--color-primary) 30%, var(--color-accent) 70%, transparent)",
-                boxShadow: "0 0 6px var(--color-primary)",
-                opacity: 0.4,
-              }}
-            />
-            <GlitchText text="Art Gallery" />
-          </div>
-          <p
-            className="section-subheading max-w-2xl mx-auto"
-            style={{
-              color: "var(--color-text-secondary)",
-            }}
-          >
-            A showcase of my 2015 Photography / Photoshop artworks
-          </p>
-        </motion.div>
 
         {/* Art Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -217,7 +180,6 @@ const ArtGallery: React.FC = () => {
             </div>
           </motion.div>
         )}
-      </div>
 
       {/* Lightbox for full-size viewing */}
       {currentArtwork && (
@@ -231,8 +193,6 @@ const ArtGallery: React.FC = () => {
           nftUrl={currentArtwork.nftUrl}
         />
       )}
-    </section>
+    </Section>
   );
 };
-
-export default ArtGallery;

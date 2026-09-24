@@ -1,10 +1,10 @@
 export { Hero } from './Hero';
-export { default as Projects } from './Projects';
-export { default as ArtGallery } from './ArtGallery';
-export { default as NFTGallery } from './NFTGallery';
+export { Projects } from './Projects';
+export { ArtGallery } from './ArtGallery';
+export { NFTGallery } from './NFTGallery';
 export { Music } from './Music';
 export { Videos } from './Videos';
 export { ThreeD } from './ThreeD';
-export { default as Skills } from './Skills';
-export { default as SoftwareExperience } from './SoftwareExperience';
-export { default as Contact } from './Contact';
+export { Skills } from './Skills';
+export { SoftwareExperience } from './SoftwareExperience';
+export { Contact } from './Contact';

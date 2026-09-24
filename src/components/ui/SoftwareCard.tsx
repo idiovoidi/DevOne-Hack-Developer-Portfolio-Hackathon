@@ -6,6 +6,7 @@ import SkillBadge from './SkillBadge';
 export interface SoftwareCardProps {
   software: SoftwareEntry;
   index: number;
+  isGrouped?: boolean; // Visual indicator for libraries grouped under languages
   onClick?: (softwareId: string) => void; // Future filtering handler
 }
 
@@ -26,6 +27,7 @@ export interface SoftwareCardProps {
 const SoftwareCard: React.FC<SoftwareCardProps> = ({ 
   software, 
   index = 0,
+  isGrouped = false,
   onClick
 }) => {
   // Handle click for future filtering
@@ -43,13 +45,8 @@ const SoftwareCard: React.FC<SoftwareCardProps> = ({
       label += `, version ${software.version}`;
     }
     
-    if (software.category === 'main') {
-      label += ', currently in use';
-    } else if (software.category === 'past') {
-      if (software.yearLastUsed) {
-        label += `, last used in ${software.yearLastUsed}`;
-      }
-      label += ', retired software';
+    if (software.language) {
+      label += `, ${software.language} library`;
     }
     
     return label;
@@ -85,6 +82,8 @@ const SoftwareCard: React.FC<SoftwareCardProps> = ({
       style={{
         cursor: onClick ? 'pointer' : 'default',
         position: 'relative',
+        opacity: isGrouped ? 0.85 : 1,
+        paddingLeft: isGrouped ? '1rem' : '0',
       }}
     >
       {/* Reuse SkillBadge for consistent styling */}
@@ -109,6 +108,24 @@ const SoftwareCard: React.FC<SoftwareCardProps> = ({
           pointerEvents: 'none',
         }}
       >
+        {/* Language indicator for grouped libraries */}
+        {software.language && (
+          <motion.span
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 + index * 0.03 }}
+            style={{
+              fontSize: '0.7rem',
+              fontWeight: '400',
+              color: 'rgba(167, 139, 250, 0.7)',
+              textAlign: 'center',
+              textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)',
+            }}
+          >
+            {software.language}
+          </motion.span>
+        )}
+
         {/* Version Number (conditional) */}
         {software.version && (
           <motion.span
@@ -126,28 +143,11 @@ const SoftwareCard: React.FC<SoftwareCardProps> = ({
             v{software.version}
           </motion.span>
         )}
-
-        {/* Year Last Used (conditional - only for 'past' category) */}
-        {software.category === 'past' && software.yearLastUsed && (
-          <motion.span
-            initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 + index * 0.03 }}
-            style={{
-              fontSize: '0.7rem',
-              fontWeight: '400',
-              color: 'rgba(148, 163, 184, 0.8)',
-              textAlign: 'center',
-              textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)',
-            }}
-          >
-            Last used: {software.yearLastUsed}
-          </motion.span>
-        )}
       </div>
     </div>
     </>
   );
 };
 
+export { SoftwareCard };
 export default SoftwareCard;

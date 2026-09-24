@@ -30,6 +30,11 @@ export const usePerformance = () => {
   return context;
 };
 
+export const usePerformanceSettings = (): PerformanceSettings => {
+  const context = useContext(PerformanceContext);
+  return context?.settings ?? defaultSettings;
+};
+
 interface PerformanceProviderProps {
   children: ReactNode;
 }

@@ -3,11 +3,11 @@
 ## Core Technologies
 
 **Frontend Framework:**
-- React 18+ with TypeScript for type safety
-- Vite as build tool for fast HMR and optimized production builds
+- React 19 with TypeScript for type safety
+- Vite 7 as build tool for fast HMR and optimized production builds
 
 **Styling:**
-- Tailwind CSS for utility-first responsive design
+- Tailwind CSS 4 for utility-first responsive design
 - CSS Modules for component-specific styles where needed
 - Custom CSS variables for theme consistency
 
@@ -91,12 +91,12 @@ No IE11 support required.
 
 ```json
 {
-  "react": "^18.x",
-  "react-dom": "^18.x",
+  "react": "^19.x",
+  "react-dom": "^19.x",
   "typescript": "^5.x",
-  "vite": "^5.x",
-  "tailwindcss": "^3.x",
-  "framer-motion": "^11.x",
+  "vite": "^7.x",
+  "tailwindcss": "^4.x",
+  "framer-motion": "^12.x",
   "react-hook-form": "^7.x",
   "react-icons": "^5.x",
   "react-intersection-observer": "^9.x"

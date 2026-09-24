@@ -21,6 +21,12 @@ export const getAnimationDuration = (duration: number): number => {
   return prefersReducedMotion() ? 0.01 : duration;
 };
 
+/** Show the final frame immediately when motion is disabled. */
+export const revealState = (inView: boolean, animationsEnabled: boolean): 'initial' | 'animate' => {
+  if (!animationsEnabled || prefersReducedMotion()) return 'animate';
+  return inView ? 'animate' : 'initial';
+};
+
 /**
  * Fade in from bottom animation variant
  */
@@ -33,7 +39,7 @@ export const fadeInUp: Variants = {
     opacity: 1, 
     y: 0,
     transition: {
-      duration: 0.6,
+      duration: getAnimationDuration(0.6),
       ease: 'easeOut',
     }
   },
@@ -49,7 +55,7 @@ export const fadeIn: Variants = {
   animate: { 
     opacity: 1,
     transition: {
-      duration: 0.6,
+      duration: getAnimationDuration(0.6),
       ease: 'easeOut',
     }
   },
@@ -98,7 +104,7 @@ export const slideInLeft: Variants = {
     opacity: 1, 
     x: 0,
     transition: {
-      duration: 0.6,
+      duration: getAnimationDuration(0.6),
       ease: 'easeOut',
     }
   },
@@ -116,7 +122,7 @@ export const slideInRight: Variants = {
     opacity: 1, 
     x: 0,
     transition: {
-      duration: 0.6,
+      duration: getAnimationDuration(0.6),
       ease: 'easeOut',
     }
   },
@@ -156,7 +162,7 @@ export const createFadeInUp = (delay: number = 0): Variants => ({
     opacity: 1, 
     y: 0,
     transition: {
-      duration: 0.6,
+      duration: getAnimationDuration(0.6),
       delay,
       ease: 'easeOut',
     }

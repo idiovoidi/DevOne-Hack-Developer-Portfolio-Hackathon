@@ -40,8 +40,8 @@ export const ThreeD = () => {
             className="relative group cursor-pointer"
             onClick={() => setSelectedModel(work)}
           >
-            <div className="relative overflow-hidden rounded-lg bg-black/40 backdrop-blur-sm border border-cyan-500/20 hover:border-cyan-500/50 transition-all duration-300 h-full">
-              <div className="relative aspect-square overflow-hidden">
+            <div className="relative overflow-hidden rounded-lg bg-black/40 border border-cyan-500/20 hover:border-cyan-500/50 transition-all duration-300 h-full">
+              <div className="relative aspect-square overflow-hidden bg-black/50">
                 {inView && (
                   <ModelViewer
                     src={work.modelPath}

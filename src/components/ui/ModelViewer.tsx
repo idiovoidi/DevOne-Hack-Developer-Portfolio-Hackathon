@@ -1,12 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import "@google/model-viewer";
-
-/**
- * 3D Model Viewer Component
- * 
- * Uses Google's Model Viewer web component for displaying GLB/GLTF models
- */
+import * as THREE from "three";
+import { GLTFLoader, OrbitControls, RoomEnvironment } from "three-stdlib";
 
 interface ModelViewerProps {
   src: string;
@@ -17,31 +12,9 @@ interface ModelViewerProps {
   className?: string;
 }
 
-// Extend JSX to include model-viewer element
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      'model-viewer': React.DetailedHTMLProps<
-        React.HTMLAttributes<HTMLElement> & {
-          src?: string;
-          alt?: string;
-          poster?: string;
-          'auto-rotate'?: boolean;
-          'camera-controls'?: boolean;
-          'shadow-intensity'?: string;
-          'exposure'?: string;
-          'shadow-softness'?: string;
-          loading?: string;
-          'interaction-prompt'?: string;
-          'ar'?: boolean;
-          'ar-modes'?: string;
-        },
-        HTMLElement
-      >;
-    }
-  }
-}
-
+/**
+ * 3D Model Viewer — Three.js canvas for GLB/GLTF models.
+ */
 export const ModelViewer: React.FC<ModelViewerProps> = ({
   src,
   alt,
@@ -50,109 +23,234 @@ export const ModelViewer: React.FC<ModelViewerProps> = ({
   cameraControls = true,
   className = "",
 }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const modelViewerRef = useRef<HTMLElement>(null);
+
+  const autoRotateRef = useRef(autoRotate);
+  const cameraControlsRef = useRef(cameraControls);
+  autoRotateRef.current = autoRotate;
+  cameraControlsRef.current = cameraControls;
 
   useEffect(() => {
-    const modelViewer = modelViewerRef.current;
-    if (!modelViewer) return;
+    const container = containerRef.current;
+    if (!container) return;
 
-    const handleLoad = () => {
-      console.log("✅ Model loaded successfully:", src);
-      setIsLoaded(true);
-      setError(null);
+    let disposed = false;
+    let frameId = 0;
+    let modelRoot: THREE.Object3D | null = null;
+
+    setIsLoaded(false);
+    setError(null);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(40, 1, 0.01, 5000);
+    camera.position.set(0, 0.5, 2.5);
+
+    const renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      alpha: true,
+      powerPreference: "high-performance",
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
+    renderer.domElement.style.width = "100%";
+    renderer.domElement.style.height = "100%";
+    renderer.domElement.style.display = "block";
+    renderer.domElement.setAttribute("aria-label", alt);
+    container.appendChild(renderer.domElement);
+
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+    const ambient = new THREE.AmbientLight(0xffffff, 0.35);
+    scene.add(ambient);
+
+    const keyLight = new THREE.DirectionalLight(0xffffff, 1.1);
+    keyLight.position.set(3, 5, 4);
+    scene.add(keyLight);
+
+    const fillLight = new THREE.DirectionalLight(0x88ccff, 0.35);
+    fillLight.position.set(-4, 1, -2);
+    scene.add(fillLight);
+
+    const rimLight = new THREE.DirectionalLight(0xffaa88, 0.25);
+    rimLight.position.set(0, 2, -4);
+    scene.add(rimLight);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.enablePan = false;
+    controls.autoRotate = autoRotateRef.current;
+    controls.autoRotateSpeed = 1.2;
+    // Preview cards: keep auto-rotate, but let card click-through open the lightbox.
+    const interactive = cameraControlsRef.current;
+    controls.enableZoom = interactive;
+    controls.enableRotate = interactive || autoRotateRef.current;
+    renderer.domElement.style.pointerEvents = interactive ? "auto" : "none";
+
+    const frameModel = (object: THREE.Object3D) => {
+      const box = new THREE.Box3().setFromObject(object);
+      const size = box.getSize(new THREE.Vector3());
+      const center = box.getCenter(new THREE.Vector3());
+      const maxDim = Math.max(size.x, size.y, size.z, 0.001);
+
+      object.position.sub(center);
+
+      const fitDist = maxDim / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2));
+      camera.position.set(0, maxDim * 0.15, fitDist * 1.55);
+      camera.near = maxDim / 100;
+      camera.far = maxDim * 100;
+      camera.updateProjectionMatrix();
+
+      controls.target.set(0, 0, 0);
+      controls.minDistance = fitDist * 0.5;
+      controls.maxDistance = fitDist * 4;
+      controls.update();
     };
 
-    const handleError = (event: Event) => {
-      console.error("❌ Model loading error:", event);
-      console.error("Model path:", src);
-      setError("Failed to load 3D model");
-      setIsLoaded(false);
+    const setSize = () => {
+      const width = container.clientWidth || 1;
+      const height = container.clientHeight || 400;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height, false);
     };
+    setSize();
 
-    const handleProgress = (event: Event) => {
-      const progressEvent = event as any;
-      if (progressEvent.detail?.totalProgress) {
-        console.log("Loading progress:", Math.round(progressEvent.detail.totalProgress * 100) + "%");
-      }
+    const resizeObserver = new ResizeObserver(setSize);
+    resizeObserver.observe(container);
+
+    const loader = new GLTFLoader();
+    loader.load(
+      src,
+      (gltf) => {
+        if (disposed) {
+          gltf.scene.traverse((child) => {
+            if (child instanceof THREE.Mesh) {
+              child.geometry.dispose();
+              const materials = Array.isArray(child.material)
+                ? child.material
+                : [child.material];
+              materials.forEach((m) => m.dispose());
+            }
+          });
+          return;
+        }
+
+        modelRoot = gltf.scene;
+        scene.add(modelRoot);
+        frameModel(modelRoot);
+        setIsLoaded(true);
+        setError(null);
+      },
+      undefined,
+      (err) => {
+        if (disposed) return;
+        console.error("Model loading error:", err, "path:", src);
+        setError("Failed to load 3D model");
+        setIsLoaded(false);
+      },
+    );
+
+    const animate = () => {
+      frameId = requestAnimationFrame(animate);
+      const interactive = cameraControlsRef.current;
+      controls.autoRotate = autoRotateRef.current;
+      controls.enableZoom = interactive;
+      controls.enableRotate = interactive || autoRotateRef.current;
+      renderer.domElement.style.pointerEvents = interactive ? "auto" : "none";
+      controls.update();
+      renderer.render(scene, camera);
     };
-
-    modelViewer.addEventListener("load", handleLoad);
-    modelViewer.addEventListener("error", handleError);
-    modelViewer.addEventListener("progress", handleProgress);
+    animate();
 
     return () => {
-      modelViewer.removeEventListener("load", handleLoad);
-      modelViewer.removeEventListener("error", handleError);
-      modelViewer.removeEventListener("progress", handleProgress);
+      disposed = true;
+      cancelAnimationFrame(frameId);
+      resizeObserver.disconnect();
+      controls.dispose();
+
+      if (modelRoot) {
+        scene.remove(modelRoot);
+        modelRoot.traverse((child) => {
+          if (child instanceof THREE.Mesh) {
+            child.geometry.dispose();
+            const materials = Array.isArray(child.material)
+              ? child.material
+              : [child.material];
+            materials.forEach((m) => m.dispose());
+          }
+        });
+      }
+
+      renderer.dispose();
+      pmrem.dispose();
+      if (scene.environment) {
+        scene.environment.dispose();
+      }
+      if (renderer.domElement.parentElement === container) {
+        container.removeChild(renderer.domElement);
+      }
     };
-  }, [src]);
+  }, [src, alt]);
 
   return (
     <div className={`relative ${className}`}>
-      {/* Loading State */}
       {!isLoaded && !error && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm rounded-lg z-10"
+          className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-lg z-10"
         >
           <div className="text-center">
+            {poster ? (
+              <img
+                src={poster}
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover opacity-40"
+              />
+            ) : null}
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-              className="w-12 h-12 border-4 border-cyan-500/30 border-t-cyan-500 rounded-full mx-auto mb-3"
+              className="relative w-12 h-12 border-4 border-cyan-500/30 border-t-cyan-500 rounded-full mx-auto mb-3"
             />
-            <p className="text-cyan-400 text-sm">Loading 3D model...</p>
+            <p className="relative text-cyan-400 text-sm">Loading 3D model...</p>
           </div>
         </motion.div>
       )}
 
-      {/* Error State */}
       {error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm rounded-lg z-10">
+        <div className="absolute inset-0 flex items-center justify-center bg-black/60 rounded-lg z-10">
           <div className="text-center p-4">
-            <p className="text-red-400 text-sm mb-2">⚠️ {error}</p>
-            <p className="text-gray-500 text-xs">Check console for details</p>
+            <p className="text-red-400 text-sm mb-2">{error}</p>
+            <p className="text-gray-500 text-xs">Unable to display this model</p>
           </div>
         </div>
       )}
 
-      {/* Model Viewer */}
-      <model-viewer
-        ref={modelViewerRef}
-        src={src}
-        alt={alt}
-        poster={poster}
-        auto-rotate={autoRotate}
-        camera-controls={cameraControls}
-        shadow-intensity="1"
-        exposure="1"
-        shadow-softness="0.5"
-        loading="eager"
-        interaction-prompt="none"
-        style={{
-          width: "100%",
-          height: "100%",
-          minHeight: "400px",
-          backgroundColor: "transparent",
-        }}
+      <div
+        ref={containerRef}
+        className="w-full h-full"
+        style={{ minHeight: "400px", backgroundColor: "transparent" }}
       />
 
-      {/* Controls Hint */}
-      {isLoaded && (
+      {isLoaded && cameraControls && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 backdrop-blur-sm px-4 py-2 rounded-full text-xs text-cyan-400 pointer-events-none"
+          className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 px-4 py-2 rounded-full text-xs text-cyan-400 pointer-events-none"
           style={{
             boxShadow: "0 0 20px rgba(0, 217, 255, 0.2)",
             border: "1px solid rgba(0, 217, 255, 0.3)",
           }}
         >
-          🖱️ Drag to rotate • Scroll to zoom
+          Drag to rotate • Scroll to zoom
         </motion.div>
       )}
     </div>

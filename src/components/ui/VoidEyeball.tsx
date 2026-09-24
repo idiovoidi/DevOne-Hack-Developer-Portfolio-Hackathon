@@ -17,27 +17,29 @@ type Shard = {
   curve: number;
   girth: number;
   length: number;
+  tumble: number;
+  skew: number;
   ox: number;
   oy: number;
 };
 
 const spawnShard = (shard: Shard, maxR: number, atRim: boolean) => {
-  const band = atRim ? 0.86 + Math.random() * 0.14 : 0.4 + Math.random() * 0.34;
+  const band = atRim ? 0.88 + Math.random() * 0.12 : 0.24 + Math.random() * 0.72;
   shard.radius = maxR * band;
   shard.angle = Math.random() * Math.PI * 2;
-  shard.spin = (0.28 + Math.random() * 0.7) * (Math.random() < 0.5 ? 1 : -1);
-  shard.fall = 8 + Math.random() * 16;
+  shard.spin = (0.35 + Math.random() * 1.1) * (Math.random() < 0.5 ? 1 : -1);
+  shard.fall = 14 + Math.random() * 26;
   shard.color = SHARD_COLORS[Math.floor(Math.random() * SHARD_COLORS.length)];
   shard.width = 1.1 + Math.random() * 2.2;
   shard.wobble = Math.random() * Math.PI * 2;
-  const inOrbit = !atRim && shard.radius / maxR > 0.38 && shard.radius / maxR < 0.78;
-  shard.wobbleAmp = inOrbit ? 4 + Math.random() * 8 : 10 + Math.random() * 28;
-  shard.wobbleFreq = inOrbit ? 0.18 + Math.random() * 0.35 : 0.3 + Math.random() * 0.9;
-  shard.ellipse = inOrbit ? 0.9 + Math.random() * 0.08 : 0.72 + Math.random() * 0.5;
-  shard.curve = inOrbit ? (Math.random() - 0.5) * 0.35 : (Math.random() - 0.5) * 2.2;
-  if (inOrbit) shard.spin = Math.abs(shard.spin);
-  shard.girth = 14 + Math.random() * 22;
-  shard.length = 0.45 + Math.random() * 1.1;
+  shard.tumble = Math.random() * Math.PI * 2;
+  shard.skew = 0.45 + Math.random() * 1.35;
+  shard.wobbleAmp = 14 + Math.random() * 34;
+  shard.wobbleFreq = 0.4 + Math.random() * 1.6;
+  shard.ellipse = 0.65 + Math.random() * 0.58;
+  shard.curve = (Math.random() - 0.5) * 3;
+  shard.girth = 12 + Math.random() * 24;
+  shard.length = 0.4 + Math.random() * 1.25;
   shard.ox = 0;
   shard.oy = 0;
 };
@@ -56,7 +58,7 @@ const PortalVortex: React.FC<{ offsetX: MotionValue<number>; offsetY: MotionValu
     if (!ctx) return;
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const shards: Shard[] = Array.from({ length: 64 }, () => {
+    const shards: Shard[] = Array.from({ length: 72 }, () => {
       const shard = {} as Shard;
       spawnShard(shard, 320, false);
       return shard;
@@ -121,38 +123,37 @@ const PortalVortex: React.FC<{ offsetX: MotionValue<number>; offsetY: MotionValu
 
       for (const shard of shards) {
         const closeness = 1 - Math.min(1, shard.radius / maxR);
-        const orbitBand = shard.radius / maxR;
-        const inOrbit = orbitBand > 0.38 && orbitBand < 0.78;
-        const orbitCalm = inOrbit ? 0.55 + closeness * 0.45 : 0;
-        const drift = 1 - orbitCalm * 0.82 + (1 - orbitCalm) * 0.22 * Math.sin(spinTime * shard.wobbleFreq + shard.wobble);
-        const whirl = shard.spin * (0.22 + closeness * closeness * 3.4) * drift;
-        const pull = shard.fall * (0.18 + closeness * closeness * 2.8) * (0.88 + 0.12 * drift);
+        const drift = 0.68 + 0.32 * Math.sin(spinTime * shard.wobbleFreq + shard.wobble);
+        const whirl = shard.spin * (0.2 + closeness * closeness * 4.2) * drift;
+        const pull = shard.fall * (0.28 + closeness ** 1.35 * 7.2);
 
         if (!reduced) {
           shard.angle += whirl * dt;
           shard.radius -= pull * dt;
-          shard.ox *= 0.9;
-          shard.oy *= 0.9;
-          if (shard.radius <= horizon || shard.radius > maxR) spawnShard(shard, maxR, true);
+          shard.ox *= 0.86;
+          shard.oy *= 0.86;
+          if (shard.radius <= horizon || shard.radius > maxR * 1.02) spawnShard(shard, maxR, true);
         }
 
-        const breathe =
-          Math.sin(spinTime * shard.wobbleFreq + shard.wobble) * shard.wobbleAmp * (1 - closeness * 0.45) * (1 - orbitCalm * 0.85);
+        const breathe = Math.sin(spinTime * shard.wobbleFreq + shard.wobble) * shard.wobbleAmp * (0.55 + closeness * 0.45);
+        const flutter = Math.sin(spinTime * shard.wobbleFreq * 1.55 + shard.tumble) * shard.wobbleAmp * 0.35;
         const angle =
-          shard.angle + Math.sin(spinTime * shard.wobbleFreq * 0.65 + shard.wobble) * 0.18 * (1 - closeness * 0.4) * (1 - orbitCalm * 0.9);
-        const radius = Math.max(horizon, shard.radius + breathe);
+          shard.angle +
+          Math.sin(spinTime * shard.wobbleFreq * 0.7 + shard.wobble) * 0.28 +
+          Math.cos(spinTime * shard.wobbleFreq * 1.1 + shard.tumble) * 0.12;
+        const radius = Math.max(horizon, shard.radius + breathe * 0.65 + flutter * 0.35);
         let headX = Math.cos(angle) * radius + shard.ox;
         let headY = Math.sin(angle) * radius * shard.ellipse + shard.oy;
 
-        if (!reduced && pointer.energy > 0.05 && orbitCalm < 0.35) {
+        if (!reduced && pointer.energy > 0.05) {
           const mdx = headX - pointerX;
           const mdy = headY - pointerY;
           const md = Math.hypot(mdx, mdy) || 1;
           const reach = 150;
           if (md < reach) {
-            const falloff = (1 - md / reach) ** 2 * pointer.energy * (1 - orbitCalm);
-            const swirlX = (-mdy / md) * 12 * falloff;
-            const swirlY = (mdx / md) * 12 * falloff;
+            const falloff = (1 - md / reach) ** 2 * pointer.energy * (0.35 + closeness * 0.35);
+            const swirlX = (-mdy / md) * 14 * falloff;
+            const swirlY = (mdx / md) * 14 * falloff;
             shard.ox += pointer.vx * 0.35 * falloff + swirlX + (mdx / md) * 5 * falloff;
             shard.oy += pointer.vy * 0.35 * falloff + swirlY + (mdy / md) * 5 * falloff;
             headX += swirlX;
@@ -161,35 +162,36 @@ const PortalVortex: React.FC<{ offsetX: MotionValue<number>; offsetY: MotionValu
         }
 
         const body =
-          shard.girth * (0.92 + (1 - orbitCalm) * 0.23 * Math.sin(spinTime * shard.wobbleFreq + shard.wobble));
-        const span = body * (1.8 + shard.length * 1.6);
-        const ellipse = shard.ellipse * (1 - orbitCalm) + 0.94 * orbitCalm;
+          shard.girth * (0.82 + 0.38 * Math.sin(spinTime * shard.wobbleFreq + shard.tumble) * shard.skew);
+        const span = body * (1.6 + shard.length * 1.9);
         const tangentX = Math.cos(angle);
-        const tangentY = Math.sin(angle) * ellipse;
+        const tangentY = Math.sin(angle) * shard.ellipse;
         const sideX = -Math.sin(angle);
         const sideY = Math.cos(angle);
-        const bend = shard.curve * body * 0.85 * (1 - orbitCalm * 0.8);
+        const bend = shard.curve * body;
+        const flap = Math.sin(spinTime * shard.wobbleFreq * 1.35 + shard.tumble) * body * shard.skew;
+        const twist = Math.cos(spinTime * shard.wobbleFreq * 0.85 + shard.wobble) * body * 0.55;
         const tailX = headX - tangentX * span;
         const tailY = headY - tangentY * span;
         const nearPointer = pointer.energy > 0.05 ? Math.max(0, 1 - Math.hypot(headX - pointerX, headY - pointerY) / 150) : 0;
-        const alpha = Math.min(0.42, 0.14 + closeness * 0.16 + nearPointer * pointer.energy * 0.16);
+        const alpha = Math.min(0.48, 0.12 + closeness * 0.22 + nearPointer * pointer.energy * 0.14);
 
         const gradient = ctx.createLinearGradient(tailX, tailY, headX, headY);
         gradient.addColorStop(0, `rgba(${shard.color}, 0)`);
-        gradient.addColorStop(0.45, `rgba(${shard.color}, ${alpha})`);
-        gradient.addColorStop(1, `rgba(${shard.color}, ${alpha * 0.15})`);
+        gradient.addColorStop(0.4, `rgba(${shard.color}, ${alpha * 0.85})`);
+        gradient.addColorStop(1, `rgba(${shard.color}, ${alpha * 0.12})`);
 
         ctx.beginPath();
         ctx.moveTo(tailX, tailY);
         ctx.quadraticCurveTo(
-          headX - tangentX * span * 0.42 + sideX * body + bend,
-          headY - tangentY * span * 0.42 + sideY * body + bend * 0.4,
+          headX - tangentX * span * 0.38 + sideX * (body + flap) + bend + twist,
+          headY - tangentY * span * 0.38 + sideY * (body - flap * 0.6) - twist * 0.5,
           headX,
           headY,
         );
         ctx.quadraticCurveTo(
-          headX - tangentX * span * 0.55 - sideX * body * 0.75 + bend * 0.3,
-          headY - tangentY * span * 0.55 - sideY * body * 0.75,
+          headX - tangentX * span * 0.52 - sideX * (body * 0.7 - flap) + bend * 0.4,
+          headY - tangentY * span * 0.52 - sideY * (body * 0.85 + flap * 0.5) + twist,
           tailX,
           tailY,
         );
